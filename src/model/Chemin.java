@@ -6,27 +6,30 @@ package model;
  */
 public class Chemin {
 
-  //
-  // Fields
-  //
-
-  
-  //
-  // Constructors
-  //
-  public Chemin () { };
-  
-  //
-  // Methods
-  //
+    //
+    // Fields
+    //
 
 
-  //
-  // Accessor methods
-  //
+    //
+    // Constructors
+    //
+    public Chemin() {
+    }
 
-  //
-  // Other methods
-  //
+    ;
+
+    //
+    // Methods
+    //
+
+
+    //
+    // Accessor methods
+    //
+
+    //
+    // Other methods
+    //
 
 }

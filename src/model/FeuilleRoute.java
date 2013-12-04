@@ -5,27 +5,30 @@ package model;
  */
 public class FeuilleRoute {
 
-  //
-  // Fields
-  //
-
-  
-  //
-  // Constructors
-  //
-  public FeuilleRoute () { };
-  
-  //
-  // Methods
-  //
+    //
+    // Fields
+    //
 
 
-  //
-  // Accessor methods
-  //
+    //
+    // Constructors
+    //
+    public FeuilleRoute() {
+    }
 
-  //
-  // Other methods
-  //
+    ;
+
+    //
+    // Methods
+    //
+
+
+    //
+    // Accessor methods
+    //
+
+    //
+    // Other methods
+    //
 
 }

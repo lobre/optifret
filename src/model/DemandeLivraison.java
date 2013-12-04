@@ -5,27 +5,30 @@ package model;
  */
 public class DemandeLivraison {
 
-  //
-  // Fields
-  //
-
-  
-  //
-  // Constructors
-  //
-  public DemandeLivraison () { };
-  
-  //
-  // Methods
-  //
+    //
+    // Fields
+    //
 
 
-  //
-  // Accessor methods
-  //
+    //
+    // Constructors
+    //
+    public DemandeLivraison() {
+    }
 
-  //
-  // Other methods
-  //
+    ;
+
+    //
+    // Methods
+    //
+
+
+    //
+    // Accessor methods
+    //
+
+    //
+    // Other methods
+    //
 
 }

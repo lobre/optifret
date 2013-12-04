@@ -6,61 +6,68 @@ package model;
  */
 public class Heure {
 
-  //
-  // Fields
-  //
+    //
+    // Fields
+    //
 
-  private int heure;
-  private int minute;
-  
-  //
-  // Constructors
-  //
-  public Heure () { };
-  
-  //
-  // Methods
-  //
+    private int heure;
+    private int minute;
+
+    //
+    // Constructors
+    //
+    public Heure() {
+    }
+
+    ;
+
+    //
+    // Methods
+    //
 
 
-  //
-  // Accessor methods
-  //
+    //
+    // Accessor methods
+    //
 
-  /**
-   * Set the value of heure
-   * @param newVar the new value of heure
-   */
-  private void setHeure ( int newVar ) {
-    heure = newVar;
-  }
+    /**
+     * Set the value of heure
+     *
+     * @param newVar the new value of heure
+     */
+    private void setHeure(int newVar) {
+        heure = newVar;
+    }
 
-  /**
-   * Get the value of heure
-   * @return the value of heure
-   */
-  private int getHeure ( ) {
-    return heure;
-  }
+    /**
+     * Get the value of heure
+     *
+     * @return the value of heure
+     */
+    private int getHeure() {
+        return heure;
+    }
 
-  /**
-   * Set the value of minute
-   * @param newVar the new value of minute
-   */
-  private void setMinute ( int newVar ) {
-    minute = newVar;
-  }
+    /**
+     * Set the value of minute
+     *
+     * @param newVar the new value of minute
+     */
+    private void setMinute(int newVar) {
+        minute = newVar;
+    }
 
-  /**
-   * Get the value of minute
-   * @return the value of minute
-   */
-  private int getMinute ( ) {
-    return minute;
-  }
+    /**
+     * Get the value of minute
+     *
+     * @return the value of minute
+     */
+    private int getMinute() {
+        return minute;
+    }
 
-  //
-  // Other methods
-  //
+    //
+    // Other methods
+    //
 
 }
