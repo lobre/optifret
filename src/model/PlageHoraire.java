@@ -14,7 +14,7 @@ public class PlageHoraire {
     //
 
 
-    private Vector leslivraisonsVector = new Vector();
+    private Vector m_lesLivraisons = new Vector();
 
     private Heure m_heureDebut;
 
@@ -38,26 +38,26 @@ public class PlageHoraire {
     //
 
     /**
-     * Add a LesLivraisons object to the leslivraisonsVector List
+     * Add a LesLivraisons object to the m_lesLivraisons List
      */
     private void addLesLivraisons(Livraison new_object) {
-        leslivraisonsVector.add(new_object);
+        m_lesLivraisons.add(new_object);
     }
 
     /**
-     * Remove a LesLivraisons object from leslivraisonsVector List
+     * Remove a LesLivraisons object from m_lesLivraisons List
      */
     private void removeLesLivraisons(Livraison new_object) {
-        leslivraisonsVector.remove(new_object);
+        m_lesLivraisons.remove(new_object);
     }
 
     /**
-     * Get the List of LesLivraisons objects held by leslivraisonsVector
+     * Get the List of LesLivraisons objects held by m_lesLivraisons
      *
-     * @return List of LesLivraisons objects held by leslivraisonsVector
+     * @return List of LesLivraisons objects held by m_lesLivraisons
      */
     private List getLesLivraisonsList() {
-        return (List) leslivraisonsVector;
+        return (List) m_lesLivraisons;
     }
 
 

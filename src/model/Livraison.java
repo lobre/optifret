@@ -9,9 +9,9 @@ public class Livraison {
     // Fields
     //
 
-    private int retard = 0;
-    private int noClient;
-    private boolean effectuee = false;
+    private int m_retard = 0;
+    private int m_noClient;
+    private boolean m_effectuee = false;
 
     private PlageHoraire m_laPlage;
 
@@ -37,57 +37,57 @@ public class Livraison {
     //
 
     /**
-     * Set the value of retard
+     * Set the value of m_retard
      *
-     * @param newVar the new value of retard
+     * @param newVar the new value of m_retard
      */
-    private void setRetard(int newVar) {
-        retard = newVar;
+    private void setM_retard(int newVar) {
+        m_retard = newVar;
     }
 
     /**
-     * Get the value of retard
+     * Get the value of m_retard
      *
-     * @return the value of retard
+     * @return the value of m_retard
      */
-    private int getRetard() {
-        return retard;
+    private int getM_retard() {
+        return m_retard;
     }
 
     /**
-     * Set the value of noClient
+     * Set the value of m_noClient
      *
-     * @param newVar the new value of noClient
+     * @param newVar the new value of m_noClient
      */
-    private void setNoClient(int newVar) {
-        noClient = newVar;
+    private void setM_noClient(int newVar) {
+        m_noClient = newVar;
     }
 
     /**
-     * Get the value of noClient
+     * Get the value of m_noClient
      *
-     * @return the value of noClient
+     * @return the value of m_noClient
      */
-    private int getNoClient() {
-        return noClient;
+    private int getM_noClient() {
+        return m_noClient;
     }
 
     /**
-     * Set the value of effectuee
+     * Set the value of m_effectuee
      *
-     * @param newVar the new value of effectuee
+     * @param newVar the new value of m_effectuee
      */
-    private void setEffectuee(boolean newVar) {
-        effectuee = newVar;
+    private void setM_effectuee(boolean newVar) {
+        m_effectuee = newVar;
     }
 
     /**
-     * Get the value of effectuee
+     * Get the value of m_effectuee
      *
-     * @return the value of effectuee
+     * @return the value of m_effectuee
      */
-    private boolean getEffectuee() {
-        return effectuee;
+    private boolean getM_effectuee() {
+        return m_effectuee;
     }
 
     /**

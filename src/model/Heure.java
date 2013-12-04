@@ -10,8 +10,8 @@ public class Heure {
     // Fields
     //
 
-    private int heure;
-    private int minute;
+    private int m_heure;
+    private int m_minute;
 
     //
     // Constructors
@@ -31,39 +31,39 @@ public class Heure {
     //
 
     /**
-     * Set the value of heure
+     * Set the value of m_heure
      *
-     * @param newVar the new value of heure
+     * @param newVar the new value of m_heure
      */
-    private void setHeure(int newVar) {
-        heure = newVar;
+    private void setM_heure(int newVar) {
+        m_heure = newVar;
     }
 
     /**
-     * Get the value of heure
+     * Get the value of m_heure
      *
-     * @return the value of heure
+     * @return the value of m_heure
      */
-    private int getHeure() {
-        return heure;
+    private int getM_heure() {
+        return m_heure;
     }
 
     /**
-     * Set the value of minute
+     * Set the value of m_minute
      *
-     * @param newVar the new value of minute
+     * @param newVar the new value of m_minute
      */
-    private void setMinute(int newVar) {
-        minute = newVar;
+    private void setM_minute(int newVar) {
+        m_minute = newVar;
     }
 
     /**
-     * Get the value of minute
+     * Get the value of m_minute
      *
-     * @return the value of minute
+     * @return the value of m_minute
      */
-    private int getMinute() {
-        return minute;
+    private int getM_minute() {
+        return m_minute;
     }
 
     //
