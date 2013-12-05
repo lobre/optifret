@@ -24,10 +24,13 @@ public class Noeud {
     private int m_y;
     private ArrayList<Troncon> m_troncons;
 
+    Livraison m_livraison;
+
     //
     // Constructors
     //
     public Noeud() {
+        m_livraison = null;
         m_troncons = new ArrayList<Troncon>();
     }
 
@@ -40,76 +43,39 @@ public class Noeud {
     // Accessor methods
     //
 
-    /**
-     * Set the value of m_id
-     *
-     * @param newVar the new value of m_id
-     */
     public void setM_id(int newVar) {
         m_id = newVar;
     }
-
-    /**
-     * Get the value of m_id
-     *
-     * @return the value of m_id
-     */
     public int getM_id() {
         return m_id;
     }
 
-    /**
-     * Set the value of m_x
-     *
-     * @param newVar the new value of m_x
-     */
     public void setM_x(int newVar) {
         m_x = newVar;
     }
-
-    /**
-     * Get the value of m_x
-     *
-     * @return the value of m_x
-     */
     public int getM_x() {
         return m_x;
     }
 
-    /**
-     * Set the value of m_y
-     *
-     * @param newVar the new value of m_y
-     */
     public void setM_y(int newVar) {
         m_y = newVar;
     }
-
-    /**
-     * Get the value of m_y
-     *
-     * @return the value of m_y
-     */
     public int getM_y() {
         return m_y;
     }
 
-    /**
-     * Set the value of m_troncons
-     *
-     * @param newVar the new value of m_troncons
-     */
     public void setM_troncons(ArrayList<Troncon> newVar) {
         m_troncons = newVar;
     }
-
-    /**
-     * Get the value of m_troncons
-     *
-     * @return the value of m_troncons
-     */
     public ArrayList<Troncon> getM_troncons() {
         return m_troncons;
+    }
+
+    public void setM_livraison(Livraison m_livraison) {
+        this.m_livraison = m_livraison;
+    }
+    public Livraison getM_livraison() {
+        return m_livraison;
     }
 
     //

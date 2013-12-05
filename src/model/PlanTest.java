@@ -29,7 +29,7 @@ public class PlanTest {
         }
         */
 
-        File xmlFile = new File("/home/ahmed/workspace/optifret/xml_data/plan10x10.xml");
+        File xmlFile = new File("xml_data/plan10x10.xml");
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = null;
