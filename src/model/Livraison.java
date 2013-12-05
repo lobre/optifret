@@ -8,7 +8,7 @@ public class Livraison {
     //
     // Fields
     //
-
+    private int m_id;
     private int m_retard = 0;
     private int m_noClient;
     private boolean m_effectuee = false;
@@ -25,7 +25,11 @@ public class Livraison {
     public Livraison() {
     }
 
-    ;
+    public Livraison(int id,int client, Noeud adresse) {
+        this.m_id = id;
+        this.m_noClient = client;
+        this.m_adresse = adresse;
+    }
 
     //
     // Methods
@@ -95,7 +99,7 @@ public class Livraison {
      *
      * @param newVar the new value of m_laPlage
      */
-    private void setLaPlage(PlageHoraire newVar) {
+    public void setLaPlage(PlageHoraire newVar) {
         m_laPlage = newVar;
     }
 

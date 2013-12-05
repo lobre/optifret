@@ -34,7 +34,7 @@ public class Heure {
      *
      * @param newVar the new value of m_heures
      */
-    private void setM_heures(int newVar) {
+    public void setM_heures(int newVar) {
         m_heures = newVar;
     }
 
@@ -43,7 +43,7 @@ public class Heure {
      *
      * @return the value of m_heures
      */
-    private int getM_heures() {
+    public int getM_heures() {
         return m_heures;
     }
 
@@ -52,7 +52,7 @@ public class Heure {
      *
      * @param newVar the new value of m_minutes
      */
-    private void setM_minutes(int newVar) {
+    public void setM_minutes(int newVar) {
         m_minutes = newVar;
     }
 
@@ -61,7 +61,7 @@ public class Heure {
      *
      * @return the value of m_minutes
      */
-    private int getM_minutes() {
+    public int getM_minutes() {
         return m_minutes;
     }
 
@@ -70,7 +70,7 @@ public class Heure {
      *
      * @param newVar the new value of m_secondes
      */
-    private void setM_secondes(int newVar) {
+    public void setM_secondes(int newVar) {
         m_secondes = newVar;
     }
 
@@ -79,11 +79,23 @@ public class Heure {
      *
      * @return the value of m_secondes
      */
-    private int getM_secondes() {
+    public int getM_secondes() {
         return m_secondes;
     }
     //
     // Other methods
     //
 
+    public boolean estAvant(Heure h){
+        if (this.getM_heures() < h.getM_heures()) {
+            return true;
+        }
+        if (this.getM_heures() == h.getM_heures()) {
+
+            if (this.getM_minutes() < h.getM_minutes()) {
+                return  true;
+            }
+        }
+        return false;
+    }
 }
