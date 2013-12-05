@@ -28,6 +28,7 @@ public class Noeud {
     // Constructors
     //
     public Noeud() {
+        m_troncons = new ArrayList<Troncon>();
     }
 
     //
