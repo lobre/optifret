@@ -5,6 +5,7 @@ import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Class Plan
@@ -46,7 +47,7 @@ public class Plan {
     }
 
 
-    public ArrayList<Noeud> getM_noeuds() {
+    public List<Noeud> getM_noeuds() {
         return m_noeuds;
     }
 
