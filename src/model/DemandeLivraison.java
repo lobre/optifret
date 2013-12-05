@@ -14,46 +14,44 @@ public class DemandeLivraison {
     static public int PARSE_OK = 0;
 
     protected Plan m_plan;
-    protected Noeud entrepot;
-    protected ArrayList<PlageHoraire> plagesHoraires;
-
-
+    protected Noeud m_entrepot;
+    protected ArrayList<PlageHoraire> m_plagesHoraires;
 
 
     //
     // Constructors
     //
     public DemandeLivraison() {
-
     }
-
 
     //
     // Accessor methods
     //
-    public Noeud getEntrepot() {
-        return entrepot;
+    public Noeud getM_Entrepot() {
+        return m_entrepot;
+    }
+    public void setM_entrepot(Noeud entrepot) {
+        m_entrepot = entrepot;
     }
 
-    public ArrayList<PlageHoraire> getPlagesHoraires() {
-        return plagesHoraires;
+
+    public ArrayList<PlageHoraire> getM_plagesHoraires() {
+        return m_plagesHoraires;
     }
 
-    public void setEntrepot(Noeud entrepot) {
-        this.entrepot = entrepot;
+    public void setM_plagesHoraires(ArrayList<PlageHoraire> plagesHoraires) {
+        m_plagesHoraires = plagesHoraires;
     }
+
 
     private void ajouterPlageH(PlageHoraire plage) {
-        plagesHoraires.add(plage);
+        m_plagesHoraires.add(plage);
     }
 
     private void supprimerPlageH(PlageHoraire plage) {
-        plagesHoraires.remove(plage);
+        m_plagesHoraires.remove(plage);
     }
 
-    public void setPlagesHoraires(ArrayList<PlageHoraire> plagesHoraires) {
-        this.plagesHoraires = plagesHoraires;
-    }
     //
     // Other methods
     //
@@ -65,7 +63,7 @@ public class DemandeLivraison {
         }
 
         String adresse = ((Element) entre.item(0)).getAttribute("adresse");
-        entrepot = m_plan.getNoeudParID(Integer.parseInt(adresse));
+        m_entrepot = m_plan.getNoeudParID(Integer.parseInt(adresse));
 
         NodeList n_plages = racineXML.getElementsByTagName("PlagesHoraires");
         if (n_plages.getLength() != 1) {
@@ -83,9 +81,7 @@ public class DemandeLivraison {
             this.ajouterPlageH(plage);
         }
 
-
-
-        return Plan.PARSE_OK;
+        return DemandeLivraison.PARSE_OK;
 
     }
 }

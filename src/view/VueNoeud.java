@@ -1,12 +1,9 @@
 package view;
 
 import model.Noeud;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 
 public class VueNoeud {
 
@@ -14,10 +11,18 @@ public class VueNoeud {
     private Color m_couleur;
     private Noeud m_noeud;
 
+    private static Color COULEUR_DEFAUT = new Color(80, 80, 80);
+    private static Color COULEUR_ENTREPOT = new Color(211, 5, 188);
+    private static Color COULEUR_LIVRAISON = new Color(52, 148, 232);
+
+    private static int RAYON_DEFAUT = 10;
+    private static int RAYON_ENTREPOT = 25;
+    private static int RAYON_LIVRAISON = 20;
+
     public VueNoeud (Noeud noeud) {
         m_noeud = noeud;
-        m_couleur = new Color(80, 80, 80);
-        m_rayon = 10;
+        m_couleur = VueNoeud.COULEUR_DEFAUT;
+        m_rayon = VueNoeud.RAYON_DEFAUT;
     }
     
     public VueNoeud(){
@@ -38,6 +43,10 @@ public class VueNoeud {
 
     public Color getM_couleur() {
         return m_couleur;
+    }
+
+    public void mousePressed(MouseEvent e) {
+        System.out.println("Mouse pressed at : (" + e.getX() + ", " + e.getY() + ")");
     }
  
 }
