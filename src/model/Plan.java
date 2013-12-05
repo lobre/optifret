@@ -48,7 +48,7 @@ public class Plan {
     // Other methods
     //
 
-    public int fromXMLNode(Element racineXML) {
+    public int fromXML(Element racineXML) {
         HashMap<Integer, Noeud> noeuds = new HashMap<Integer, Noeud>();
 
         NodeList liste_noeuds = racineXML.getElementsByTagName("Noeud");

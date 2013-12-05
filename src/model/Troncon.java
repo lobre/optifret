@@ -151,6 +151,8 @@ public class Troncon {
             return Troncon.PARSE_ERROR;
         }
 
+        System.out.println("    Troncon : " + m_nom + "; Depart: " + m_depart.getM_id() + "; Arrivee: " + m_arrivee.getM_id());
+
         return Troncon.PARSE_OK;
 
     }

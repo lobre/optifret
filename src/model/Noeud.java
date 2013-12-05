@@ -120,6 +120,7 @@ public class Noeud {
             m_id = Integer.parseInt(noeud_xml.getAttribute("id"));
             m_x = Integer.parseInt(noeud_xml.getAttribute("x"));
             m_y = Integer.parseInt(noeud_xml.getAttribute("y"));
+            System.out.println("Parsed node : id = " + m_id + "; x = " + m_x + " ; y = " + m_y);
         }
         catch (NullPointerException ne) {
             return Noeud.PARSE_ERROR;
@@ -132,6 +133,9 @@ public class Noeud {
     public int tronconsFromXML(Element noeud_xml, HashMap<Integer, Noeud> noeuds) {
         m_troncons = new ArrayList<Troncon>();
         NodeList liste_troncons_xml = noeud_xml.getElementsByTagName("TronconSortant");
+
+
+        System.out.println("Node " + m_id + " has Troncons :");
 
         for (int i = 0; i < liste_troncons_xml.getLength(); i++) {
             Element troncon_xml = (Element) liste_troncons_xml.item(i);
