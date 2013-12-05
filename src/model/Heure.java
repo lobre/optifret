@@ -10,16 +10,15 @@ public class Heure {
     // Fields
     //
 
-    private int m_heure;
-    private int m_minute;
+    private int m_heures;
+    private int m_minutes;
+    private int m_secondes;
 
     //
     // Constructors
     //
     public Heure() {
     }
-
-    ;
 
     //
     // Methods
@@ -31,41 +30,58 @@ public class Heure {
     //
 
     /**
-     * Set the value of m_heure
+     * Set the value of m_heures
      *
-     * @param newVar the new value of m_heure
+     * @param newVar the new value of m_heures
      */
-    private void setM_heure(int newVar) {
-        m_heure = newVar;
+    private void setM_heures(int newVar) {
+        m_heures = newVar;
     }
 
     /**
-     * Get the value of m_heure
+     * Get the value of m_heures
      *
-     * @return the value of m_heure
+     * @return the value of m_heures
      */
-    private int getM_heure() {
-        return m_heure;
+    private int getM_heures() {
+        return m_heures;
     }
 
     /**
-     * Set the value of m_minute
+     * Set the value of m_minutes
      *
-     * @param newVar the new value of m_minute
+     * @param newVar the new value of m_minutes
      */
-    private void setM_minute(int newVar) {
-        m_minute = newVar;
+    private void setM_minutes(int newVar) {
+        m_minutes = newVar;
     }
 
     /**
-     * Get the value of m_minute
+     * Get the value of m_minutes
      *
-     * @return the value of m_minute
+     * @return the value of m_minutes
      */
-    private int getM_minute() {
-        return m_minute;
+    private int getM_minutes() {
+        return m_minutes;
     }
 
+    /**
+     * Set the value of m_secondes
+     *
+     * @param newVar the new value of m_secondes
+     */
+    private void setM_secondes(int newVar) {
+        m_secondes = newVar;
+    }
+
+    /**
+     * Get the value of m_secondes
+     *
+     * @return the value of m_secondes
+     */
+    private int getM_secondes() {
+        return m_secondes;
+    }
     //
     // Other methods
     //
