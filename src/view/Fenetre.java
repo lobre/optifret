@@ -1,21 +1,28 @@
 package view;
 
 import libs.ExampleFileFilter;
+import model.Plan;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 import javax.swing.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 
 public class Fenetre {
 
 	private JFrame cadre;
 	private JFileChooser jFileChooserXML;
-    private VuePlan m_plan;
+    private VuePlan m_vuePlan;
 
 	public static void main(String[] args) {
 		new Fenetre(800,600);
@@ -34,9 +41,9 @@ public class Fenetre {
         });
 		creeMenus();
 		creeBoutons(largeur, hauteur);
-		m_plan =  new VuePlan(0,0,largeur,hauteur-80, Color.gray);
-		cadre.getContentPane().add(m_plan);
-		m_plan.repaint();
+		m_vuePlan =  new VuePlan(0,0,largeur,hauteur-80, Color.gray);
+		cadre.getContentPane().add(m_vuePlan);
+		m_vuePlan.repaint();
 		cadre.setVisible(true);
 	}
 
@@ -54,22 +61,22 @@ public class Fenetre {
 		JMenu menuCouleurs = new JMenu("Changer la couleur");
 		ActionListener a1 = new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				m_plan.setM_couleurArrierePlan(Color.blue);
-				m_plan.repaint();
+				m_vuePlan.setM_couleurArrierePlan(Color.blue);
+				m_vuePlan.repaint();
 			}
 		};
 		ajoutItem("Bleu", menuCouleurs, a1);
 		ActionListener a2 = new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				m_plan.setM_couleurArrierePlan(Color.red);
-				m_plan.repaint();
+				m_vuePlan.setM_couleurArrierePlan(Color.red);
+				m_vuePlan.repaint();
 			}
 		};
 		ajoutItem("Rouge", menuCouleurs, a2);
 		ActionListener a3 = new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				m_plan.setM_couleurArrierePlan(Color.green);
-				m_plan.repaint();
+				m_vuePlan.setM_couleurArrierePlan(Color.green);
+				m_vuePlan.repaint();
 			}
 		};
 		ajoutItem("Vert", menuCouleurs, a3);
@@ -92,8 +99,8 @@ public class Fenetre {
 		// Creation de deux boutons et association d'un ecouteur d'action a chaque bouton
 		ActionListener a1 = new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				m_plan.addBouleAleatoire(); 
-				m_plan.repaint();
+				m_vuePlan.addBouleAleatoire(); 
+				m_vuePlan.repaint();
 			}
 		};
 		cadre.getContentPane().add(creeBouton("AjouterBoule",0,hauteur-80,largeur/2,40,a1));
@@ -112,7 +119,31 @@ public class Fenetre {
 	}
 
 	public void lireDepuisFichierXML(){
-        // TODO : utiliser PlanTest pour implémenter cette méthode
+        File fichierXML = ouvrirFichier();
+
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = null;
+        try {
+            dBuilder = dbFactory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        Document doc = null;
+        try {
+            doc = dBuilder.parse(fichierXML);
+            doc.getDocumentElement().normalize();
+        } catch (SAXException | NullPointerException | IOException e) {
+            e.printStackTrace();
+        }
+
+        Plan plan = new Plan();
+        int status = plan.fromXML(doc.getDocumentElement());
+
+        if (status != Plan.PARSE_OK) {
+            // TODO : afficher un message d'erreur
+        }
+
+        m_vuePlan.setM_plan(plan);
 	}
 
 	private File ouvrirFichier(){
@@ -133,10 +164,10 @@ public class Fenetre {
 	private int ConstruireToutAPartirDeDOMXML(Element vueCadreDOMElement) {
 
            /*
-            if (m_plan.construireAPartirDeDOMXML(vueCadreDOMElement) != Dessin.PARSE_OK) {
+            if (m_vuePlan.construireAPartirDeDOMXML(vueCadreDOMElement) != Dessin.PARSE_OK) {
 	            return Dessin.PARSE_ERROR;
 	        }
-	        m_plan.repaint();
+	        m_vuePlan.repaint();
 	        */
 	        return 0; // Dessin.PARSE_OK
 	    }

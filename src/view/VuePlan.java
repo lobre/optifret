@@ -1,17 +1,16 @@
 package view;
 
 import model.Noeud;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
+import model.Plan;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Vector;
 
 public class VuePlan extends JPanel{
-	
+
+    private Plan m_plan;
+
 	private Vector<VueNoeud> m_noeuds;
 	private int m_largeur;
 	private int m_hauteur;
@@ -63,6 +62,17 @@ public class VuePlan extends JPanel{
 
 		m_noeuds.addElement(vueNoeud);
 	}
+
+    public void setM_plan(Plan plan) {
+        m_plan = plan;
+        m_noeuds = new Vector<VueNoeud>();
+        for (Noeud n : plan.getM_noeuds()) {
+            VueNoeud vueNoeud = new VueNoeud(n);
+            m_noeuds.add(vueNoeud);
+        }
+
+        repaint();
+    }
 
 
 	
