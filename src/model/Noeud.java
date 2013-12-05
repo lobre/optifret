@@ -46,6 +46,7 @@ public class Noeud {
     public void setM_id(int newVar) {
         m_id = newVar;
     }
+
     public int getM_id() {
         return m_id;
     }
@@ -53,6 +54,7 @@ public class Noeud {
     public void setM_x(int newVar) {
         m_x = newVar;
     }
+
     public int getM_x() {
         return m_x;
     }
@@ -60,6 +62,7 @@ public class Noeud {
     public void setM_y(int newVar) {
         m_y = newVar;
     }
+
     public int getM_y() {
         return m_y;
     }
@@ -67,6 +70,7 @@ public class Noeud {
     public void setM_troncons(ArrayList<Troncon> newVar) {
         m_troncons = newVar;
     }
+
     public ArrayList<Troncon> getM_troncons() {
         return m_troncons;
     }
@@ -74,6 +78,7 @@ public class Noeud {
     public void setM_livraison(Livraison m_livraison) {
         this.m_livraison = m_livraison;
     }
+
     public Livraison getM_livraison() {
         return m_livraison;
     }
@@ -88,8 +93,7 @@ public class Noeud {
             m_x = Integer.parseInt(noeud_xml.getAttribute("x"));
             m_y = Integer.parseInt(noeud_xml.getAttribute("y"));
             System.out.println("Parsed node : id = " + m_id + "; x = " + m_x + " ; y = " + m_y);
-        }
-        catch (NullPointerException ne) {
+        } catch (NullPointerException ne) {
             return Noeud.PARSE_ERROR;
         }
 

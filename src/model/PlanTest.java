@@ -1,7 +1,6 @@
 package model;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -42,18 +41,12 @@ public class PlanTest {
         try {
             doc = dBuilder.parse(xmlFile);
             doc.getDocumentElement().normalize();
-        } catch (Exception E) {
-            Exception e;
-            if (E instanceof IOException){
-                e = (IOException) E;
-                e.printStackTrace();
-            } else if (E instanceof NullPointerException) {
-                e = (NullPointerException) E;
-                e.printStackTrace();
-            } else if (E instanceof SAXException) {
-                e = (SAXException) E;
-                e.printStackTrace();
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
         }
         Plan plan = new Plan();
         plan.fromXML(doc.getDocumentElement());

@@ -1,6 +1,7 @@
 package model;
 
 import org.w3c.dom.Element;
+
 import java.util.HashMap;
 
 /**
@@ -146,8 +147,7 @@ public class Troncon {
             if (m_nom.isEmpty()) {
                 return Troncon.PARSE_ERROR;
             }
-        }
-        catch (NullPointerException ne) {
+        } catch (NullPointerException ne) {
             return Troncon.PARSE_ERROR;
         }
 
