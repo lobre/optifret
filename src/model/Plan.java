@@ -50,6 +50,10 @@ public class Plan {
         return m_noeuds;
     }
 
+    public Noeud getNoeudParID(int id) {
+        return m_noeuds.get(id);
+    }
+
     public void setM_noeuds(ArrayList<Noeud> m_noeuds) {
         this.m_noeuds = m_noeuds;
     }
