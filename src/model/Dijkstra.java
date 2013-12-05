@@ -14,12 +14,20 @@ public class Dijkstra {
     //Sortie : chemin (objet chemin)
 
     public Chemin dijkstra_c(Noeud depart, Noeud arrivee, Plan plan){
-        LinkedList<Noeud>  noeudsVisites;
-        LinkedList<Noeud> noeudsNonVisites = (LinkedList)plan.getM_noeuds();
+        LinkedList<WeightedNode> noeudsVisites = new LinkedList<WeightedNode>();
+        LinkedList<WeightedNode> noeudsNonVisites;
+        //On remplit la liste des noeuds non visités
+        for (Noeud noeud : plan.getM_noeuds()) {
+            noeudsNonVisites.addLast(new WeightedNode(noeud));
+        }
+        //On visite les noeuds non visités jusqu'à visiter le noeud cible
+        Integer dernierNoeudVisite = -1;
+        while (dernierNoeudVisite != arrivee.getM_id()){
+            //On met à jour la distance des noeuds accessibles
+            for();
+            //On cherche le noeud accessible le plus proche
 
-        //Visiting new nodes
-        while (){
-              //Finding the closest node
+            //On choisit le noeud le plus proche
 
         }
     }
