@@ -8,13 +8,13 @@ package model;
  * To change this template use File | Settings | File Templates.
  */
 
-public class WeightedNode {
+public class NoeudPondere {
     private static Noeud m_noeud;
     private static Double m_weight;
     private static Integer m_previous;
 
     //Constructor
-    WeightedNode(Noeud noeud){
+    NoeudPondere(Noeud noeud){
         this.m_noeud = noeud;
         this.m_previous = -1;
         this.m_weight = Double.POSITIVE_INFINITY;
@@ -23,6 +23,6 @@ public class WeightedNode {
     //Getter-setter
 
     public static void setM_weight(Double m_weight) {
-        WeightedNode.m_weight = m_weight;
+        NoeudPondere.m_weight = m_weight;
     }
 }

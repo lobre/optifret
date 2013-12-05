@@ -14,11 +14,11 @@ public class Dijkstra {
     //Sortie : chemin (objet chemin)
 
     public Chemin dijkstra_c(Noeud depart, Noeud arrivee, Plan plan){
-        LinkedList<WeightedNode> noeudsVisites = new LinkedList<WeightedNode>();
-        LinkedList<WeightedNode> noeudsNonVisites;
+        LinkedList<NoeudPondere> noeudsVisites = new LinkedList<NoeudPondere>();
+        LinkedList<NoeudPondere> noeudsNonVisites;
         //On remplit la liste des noeuds non visités
         for (Noeud noeud : plan.getM_noeuds()) {
-            noeudsNonVisites.addLast(new WeightedNode(noeud));
+            noeudsNonVisites.addLast(new NoeudPondere(noeud));
         }
         //On visite les noeuds non visités jusqu'à visiter le noeud cible
         Integer dernierNoeudVisite = -1;
