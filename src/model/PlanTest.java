@@ -42,10 +42,19 @@ public class PlanTest {
         try {
             doc = dBuilder.parse(xmlFile);
             doc.getDocumentElement().normalize();
-        } catch (SAXException | NullPointerException | IOException e) {
-            e.printStackTrace();
+        } catch (Exception E) {
+            Exception e;
+            if (E instanceof IOException){
+                e = (IOException) E;
+                e.printStackTrace();
+            } else if (E instanceof NullPointerException) {
+                e = (NullPointerException) E;
+                e.printStackTrace();
+            } else if (E instanceof SAXException) {
+                e = (SAXException) E;
+                e.printStackTrace();
+            }
         }
-
         Plan plan = new Plan();
         plan.fromXML(doc.getDocumentElement());
 
