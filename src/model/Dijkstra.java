@@ -2,6 +2,13 @@ package model;
 
 import java.util.LinkedList;
 
+/**
+ * Created with IntelliJ IDEA.
+ * User: karimalaoui
+ * Date: 05/12/2013
+ * Time: 12:57
+ * To change this template use File | Settings | File Templates.
+ */
 public class Dijkstra {
     //Entrée : noeud départ, noeud arrivée, plan
     //Sortie : chemin (objet chemin)
@@ -17,14 +24,12 @@ public class Dijkstra {
         Integer dernierNoeudVisite = -1;
         while (dernierNoeudVisite != arrivee.getM_id()){
             //On met à jour la distance des noeuds accessibles
-            // for();
+            //for();
             //On cherche le noeud accessible le plus proche
 
             //On choisit le noeud le plus proche
 
         }
-
-        // TODO : Change this. Added only to compile the rest of the app.
         return null;
     }
 

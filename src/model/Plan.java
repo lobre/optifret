@@ -52,7 +52,13 @@ public class Plan {
     }
 
     public Noeud getNoeudParID(int id) {
-        return m_noeuds.get(id);
+        for (Noeud n : m_noeuds) {
+            if (n.getM_id() == id) {
+                return n;
+            }
+        }
+        return null;
+
     }
 
     public void setM_noeuds(ArrayList<Noeud> m_noeuds) {

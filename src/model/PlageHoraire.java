@@ -24,9 +24,14 @@ public class PlageHoraire {
     // Constructors
     //
     public PlageHoraire() {
+        m_heureDebut = new Heure();
+        m_heureFin = new Heure();
     }
 
-    ;
+    public PlageHoraire(Heure hDebut, Heure hFin) {
+        this.m_heureDebut = hDebut;
+        this.m_heureFin = hFin;
+    }
 
     //
     // Methods
@@ -40,7 +45,7 @@ public class PlageHoraire {
     /**
      * Add a LesLivraisons object to the m_lesLivraisons List
      */
-    private void addLesLivraisons(Livraison new_object) {
+    public void addLesLivraisons(Livraison new_object) {
         m_lesLivraisons.add(new_object);
     }
 
