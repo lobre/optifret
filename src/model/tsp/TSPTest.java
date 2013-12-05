@@ -1,11 +1,13 @@
-package tsp;
-import static org.junit.Assert.*;
+package model.tsp;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 public class TSPTest {
 	/**
-	 * Checks that <code>tsp.getTotalCost()</code> is equal to the cost of the tour defined by <code>tsp.getPos()</code>
+	 * Checks that <code>model.tsp.getTotalCost()</code> is equal to the cost of the tour defined by <code>model.tsp.getPos()</code>
 	 */
 	@Test
 	public void testCost(){
@@ -28,7 +30,7 @@ public class TSPTest {
 	}
 
 	/**
-	 * Checks (with a Branch and Bound algorithm) that <code>tsp.getTotalCost()</code> is the best solution
+	 * Checks (with a Branch and Bound algorithm) that <code>model.tsp.getTotalCost()</code> is the best solution
 	 */
 	@Test
 	public void testBestSol(){
