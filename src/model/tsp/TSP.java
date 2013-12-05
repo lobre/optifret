@@ -1,4 +1,4 @@
-package tsp;
+package model.tsp;
 
 import solver.ResolutionPolicy;
 import solver.Solver;
