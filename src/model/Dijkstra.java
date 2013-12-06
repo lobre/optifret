@@ -17,7 +17,7 @@ public class Dijkstra {
         LinkedList<NoeudPondere> noeudsVisites = new LinkedList<NoeudPondere>();
         LinkedList<NoeudPondere> noeudsNonVisites = new LinkedList<NoeudPondere>();
         //On remplit la liste des noeuds non visités
-        for (Noeud noeud : plan.getM_noeuds()) {
+        for (Noeud noeud : plan.getM_noeuds().values()) {
             noeudsNonVisites.addLast(new NoeudPondere(noeud));
         }
         //On initialise le noeud de départ

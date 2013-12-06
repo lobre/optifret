@@ -14,12 +14,10 @@ public class ZoneNotification extends JFormattedTextField {
         m_font = new Font("Arial", Font.BOLD, 14);
         setFont(m_font);
         setForeground(Color.white);
-
-        setInfoMessage("Bienvenue sur l'application Optifret !");
     }
 
     public void setSuccessMessage(String text) {
-        setBackground(new Color(144, 230, 76));
+        setBackground(new Color(80, 230, 86));
         setValue("  " + text);
     }
 

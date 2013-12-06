@@ -1,6 +1,7 @@
 package view;
 
 import libs.ExampleFileFilter;
+import model.DemandeLivraison;
 import model.Noeud;
 import model.Plan;
 import org.w3c.dom.Document;
@@ -21,6 +22,7 @@ public class GUI {
     private JButton calculerButton;
     private VuePlan vuePlan;
     private JFrame m_frame;
+    private JMenu m_menu;
 
     public static void main(String[] args) {
         new GUI(1000, 700);
@@ -35,6 +37,7 @@ public class GUI {
 
         // Redimensionnement de la zone de notification
         zoneNotification.setPreferredSize(new Dimension(800, 35));
+        zoneNotification.setInfoMessage("Bienvenue sur l'application Optifret");
 
         // Création du menu
         creerMenus();
@@ -53,7 +56,6 @@ public class GUI {
 
         // Initialisation de la zone de notification
         zoneNotification = new ZoneNotification();
-        zoneNotification.setInfoMessage("Bienvenue sur l'appliation Optifret !");
         zoneNotification.setPreferredSize(new Dimension(800, 35));
     }
 
@@ -61,24 +63,27 @@ public class GUI {
         // Creation de deux menus, chaque menu ayant plusieurs items
         // et association d'un ecouteur d'action a chacun de ces items
 
-        JMenu menuFichier = new JMenu("Fichier");
+        m_menu = new JMenu("Fichier");
         ActionListener actionChargerPlan = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 chargerPlan();
             }
         };
-        ajoutItem("Charger un plan (.xml)", menuFichier, actionChargerPlan);
+        ajoutItem("Charger un plan (.xml)", m_menu, actionChargerPlan);
 
         ActionListener actionChargerDemandeLivraison = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 chargerDemandeLivraison();
             }
         };
-        ajoutItem("Charger une demande de livraison (.xml)", menuFichier, actionChargerDemandeLivraison);
+        ajoutItem("Charger une demande de livraison (.xml)", m_menu, actionChargerDemandeLivraison);
+
+        // Désactive le menu "Charger une demande de livraison" par défaut
+        m_menu.getItem(1).setEnabled(false);
 
         JMenuBar barreDeMenu = new JMenuBar();
 
-        barreDeMenu.add(menuFichier);
+        barreDeMenu.add(m_menu);
         m_frame.setJMenuBar(barreDeMenu);
     }
 
@@ -139,10 +144,38 @@ public class GUI {
         }
 
         vuePlan.setM_plan(plan);
+
+        zoneNotification.setSuccessMessage("Le plan '" + fichierXML.getName() + "' a été chargé avec succès !");
+
+        // Active le menu "Charger une demande de livraison"
+        m_menu.getItem(1).setEnabled(true);
     }
 
     public void chargerDemandeLivraison() {
-        // TODO : Intégrer le parseur de demande de livraison
+
+        if (vuePlan.getM_plan() == null) {
+            zoneNotification.setErrorMessage("Veuillez d'abord charger un plan avant de charger une demande de livraison.");
+            return;
+        }
+
+        File fichierXML = ouvrirFichier();
+
+        if (fichierXML == null) {
+            return;
+        }
+
+        Document doc = lireDepuisXML(fichierXML);
+
+        DemandeLivraison demandeLivraison = new DemandeLivraison(vuePlan.getM_plan());
+        int status = demandeLivraison.fromXML(doc.getDocumentElement());
+
+        if (status != DemandeLivraison.PARSE_OK) {
+            zoneNotification.setErrorMessage("Erreur: impossible de parser le fichier XML sélectionné.");
+            return;
+        }
+
+        zoneNotification.setSuccessMessage("La demande de livraison  '" + fichierXML.getName() + "' a été chargée avec succès !");
+
     }
 
 }

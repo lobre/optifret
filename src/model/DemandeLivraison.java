@@ -20,8 +20,9 @@ public class DemandeLivraison {
     //
     // Constructors
     //
-    public DemandeLivraison() {
+    public DemandeLivraison(Plan plan) {
         this.plagesHoraires = new ArrayList<PlageHoraire>();
+        m_plan = plan;
     }
 
     //
@@ -110,6 +111,10 @@ public class DemandeLivraison {
                 int client = Integer.parseInt(eLivraison.getAttribute("client"));
                 int adNoeud = Integer.parseInt(eLivraison.getAttribute("adresse"));
                 Noeud noeud = m_plan.getNoeudParID(adNoeud);
+
+                if (noeud == null) {
+                    return DemandeLivraison.PARSE_ERROR;
+                }
 
                 Livraison livraison = new Livraison(id,client,noeud);
                 livraison.setLaPlage(plage);

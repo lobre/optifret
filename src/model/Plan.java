@@ -20,7 +20,7 @@ public class Plan {
     static public int PARSE_OK = 0;
 
     private Noeud m_racine;
-    private ArrayList<Noeud> m_noeuds;
+    private HashMap<Integer, Noeud> m_noeuds;
 
 
     //
@@ -47,21 +47,16 @@ public class Plan {
     }
 
 
-    public List<Noeud> getM_noeuds() {
+    public HashMap<Integer, Noeud> getM_noeuds() {
         return m_noeuds;
     }
 
     public Noeud getNoeudParID(int id) {
-        for (Noeud n : m_noeuds) {
-            if (n.getM_id() == id) {
-                return n;
-            }
-        }
-        return null;
+        return m_noeuds.containsKey(id) ? m_noeuds.get(id) : null;
 
     }
 
-    public void setM_noeuds(ArrayList<Noeud> m_noeuds) {
+    public void setM_noeuds(HashMap<Integer, Noeud> m_noeuds) {
         this.m_noeuds = m_noeuds;
     }
 
@@ -103,7 +98,7 @@ public class Plan {
 
         }
 
-        m_noeuds = new ArrayList<Noeud>(noeuds.values());
+        m_noeuds = noeuds;
         m_racine = noeuds.get(0);
 
         return Plan.PARSE_OK;

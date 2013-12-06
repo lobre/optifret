@@ -6,7 +6,7 @@
     </constraints>
     <properties/>
     <border type="empty">
-      <size top="10" left="10" bottom="10" right="10"/>
+      <size top="5" left="5" bottom="5" right="5"/>
     </border>
     <children>
       <component id="ff803" class="view.ZoneNotification" binding="zoneNotification">

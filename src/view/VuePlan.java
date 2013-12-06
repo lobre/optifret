@@ -135,21 +135,24 @@ public class VuePlan extends JPanel {
         m_x_max = -1;
         m_y_max = -1;
 
-        for (Noeud n : m_plan.getM_noeuds()) {
+        for (Noeud n : m_plan.getM_noeuds().values()) {
             VueNoeud vueNoeud = new VueNoeud(n);
             m_noeuds.add(vueNoeud);
 
             m_x_max = n.getM_x() + vueNoeud.getM_rayon() > m_x_max ? n.getM_x() + vueNoeud.getM_rayon() : m_x_max;
-            m_y_max = n.getM_x() > m_y_max + vueNoeud.getM_rayon() ? n.getM_x() + vueNoeud.getM_rayon() : m_y_max;
+            m_y_max = n.getM_y() + vueNoeud.getM_rayon() > m_y_max ? n.getM_y() + vueNoeud.getM_rayon() : m_y_max;
         }
 
         // Redimensionnement du panel
-        setSize(m_x_max + 10, m_y_max + 10);
+        setSize((int) ((m_x_max + 10) * m_zoom) , (int) ((m_y_max + 10) * m_zoom));
 
         // Centrage du panel
         setLocation((getParent().getWidth() - getWidth()) / 2, (getParent().getHeight() - getHeight()) / 2);
 
         repaint();
+    }
+    public Plan getM_plan() {
+        return m_plan;
     }
 
     public float getM_zoom() {
