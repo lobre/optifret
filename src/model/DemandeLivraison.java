@@ -17,16 +17,12 @@ public class DemandeLivraison {
     private Noeud entrepot;
     private ArrayList<PlageHoraire> plagesHoraires;
 
-
-
-
     //
     // Constructors
     //
     public DemandeLivraison() {
         this.plagesHoraires = new ArrayList<PlageHoraire>();
     }
-
 
     //
     // Accessor methods
@@ -63,34 +59,6 @@ public class DemandeLivraison {
     // Other methods
     //
 
-    private int heureFromString(Heure heure, String string) {
-
-        String[] parts = string.split(":");
-        if (parts.length != 3) {
-            return DemandeLivraison.PARSE_ERROR;
-        }
-
-        int h = Integer.parseInt(parts[0]);
-        if (h < 0 || h > 23) {
-            return DemandeLivraison.PARSE_ERROR;
-        }
-        heure.setM_heures(h);
-
-        int m = Integer.parseInt(parts[1]);
-        if (h < 0 || h > 59) {
-            return DemandeLivraison.PARSE_ERROR;
-        }
-        heure.setM_minutes(m);
-
-        int s = Integer.parseInt(parts[2]);
-        if (h < 0 || h > 59) {
-            return DemandeLivraison.PARSE_ERROR;
-        }
-        heure.setM_secondes(s);
-
-        return DemandeLivraison.PARSE_OK;
-    }
-
     public int fromXML(Element racineXML) {
 
         //récupération de l'entrepôt
@@ -124,7 +92,7 @@ public class DemandeLivraison {
             Heure hDepart = new Heure();
             Heure hFin = new Heure();
 
-            if (heureFromString(hDepart, h1) == PARSE_ERROR || heureFromString(hFin, h2) == PARSE_ERROR || !hDepart.estAvant(hFin)) {
+            if (hDepart.fromString(h1) == PARSE_ERROR || hFin.fromString(h2) == PARSE_ERROR || !hDepart.estAvant(hFin)) {
                 return DemandeLivraison.PARSE_ERROR;
             }
             PlageHoraire plage = new PlageHoraire(hDepart,hFin);
@@ -132,7 +100,7 @@ public class DemandeLivraison {
             //récupération des livraisons de la plage horaire
             NodeList livraisons = e_plage.getElementsByTagName("Livraisons");
             if (livraisons.getLength() != 1) {
-                return PARSE_ERROR;
+                return DemandeLivraison.PARSE_ERROR;
             }
 
             NodeList listeLivraisons = ((Element) livraisons.item(0)).getElementsByTagName("Livraison");
@@ -150,7 +118,7 @@ public class DemandeLivraison {
             this.ajouterPlageH(plage);
         }
 
-        return Plan.PARSE_OK;
+        return DemandeLivraison.PARSE_OK;
 
     }
 }

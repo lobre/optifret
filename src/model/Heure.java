@@ -14,6 +14,9 @@ public class Heure {
     private int m_minutes;
     private int m_secondes;
 
+    public static int PARSE_OK = 0;
+    public static int PARSE_ERROR = -1;
+
     //
     // Constructors
     //
@@ -29,56 +32,23 @@ public class Heure {
     // Accessor methods
     //
 
-    /**
-     * Set the value of m_heures
-     *
-     * @param newVar the new value of m_heures
-     */
     public void setM_heures(int newVar) {
         m_heures = newVar;
     }
-
-    /**
-     * Get the value of m_heures
-     *
-     * @return the value of m_heures
-     */
     public int getM_heures() {
         return m_heures;
     }
 
-    /**
-     * Set the value of m_minutes
-     *
-     * @param newVar the new value of m_minutes
-     */
     public void setM_minutes(int newVar) {
         m_minutes = newVar;
     }
-
-    /**
-     * Get the value of m_minutes
-     *
-     * @return the value of m_minutes
-     */
     public int getM_minutes() {
         return m_minutes;
     }
 
-    /**
-     * Set the value of m_secondes
-     *
-     * @param newVar the new value of m_secondes
-     */
     public void setM_secondes(int newVar) {
         m_secondes = newVar;
     }
-
-    /**
-     * Get the value of m_secondes
-     *
-     * @return the value of m_secondes
-     */
     public int getM_secondes() {
         return m_secondes;
     }
@@ -97,5 +67,33 @@ public class Heure {
             }
         }
         return false;
+    }
+
+    public int fromString(String string) {
+
+        String[] parts = string.split(":");
+        if (parts.length != 3) {
+            return Heure.PARSE_ERROR;
+        }
+
+        int h = Integer.parseInt(parts[0]);
+        if (h < 0 || h > 23) {
+            return Heure.PARSE_ERROR;
+        }
+        m_heures = h;
+
+        int m = Integer.parseInt(parts[1]);
+        if (h < 0 || h > 59) {
+            return Heure.PARSE_ERROR;
+        }
+        m_minutes = m;
+
+        int s = Integer.parseInt(parts[2]);
+        if (h < 0 || h > 59) {
+            return Heure.PARSE_ERROR;
+        }
+        m_secondes = s;
+
+        return Heure.PARSE_OK;
     }
 }

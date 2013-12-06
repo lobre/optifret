@@ -34,6 +34,7 @@ public class InfosNoeud {
         idTextField.setText(Integer.toString(m_noeud.getM_id()));
         positionTextField.setText("(" + m_noeud.getM_x() + ", " + m_noeud.getM_y() + ")");
 
+        // TODO : Une fois les livraisons intégrées, ce test sera inutile (seuls les noeuds avec livraison doivent être affichés)
         if (m_noeud.getM_livraison() == null) {
             clientTextField.setVisible(false);
             labelClient.setVisible(false);

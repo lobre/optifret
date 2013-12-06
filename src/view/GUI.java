@@ -27,7 +27,6 @@ public class GUI {
     }
 
     public GUI(int largeur, int hauteur) {
-
         // Initialisation de la fenêtre
         m_frame = new JFrame("Application Optifret");
         m_frame.setContentPane(this.mainPanel);
@@ -42,7 +41,8 @@ public class GUI {
                 System.out.println("Mouse pressed at : (" + e.getX() + ", " + e.getY() + ")");
                 Noeud clickedNoeud = vuePlan.getClickedNoeud(e.getX(), e.getY());
                 if (clickedNoeud != null) {
-                    System.out.println("Clicked on noeud: " + clickedNoeud.getM_id());
+                    // TODO : Normalement, on ne devrait ouvrir la fenêtre d'info que si le noeud a déjà une livraison
+                    new InfosNoeud(clickedNoeud);
                 }
             }
         });
