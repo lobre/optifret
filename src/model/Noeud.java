@@ -34,6 +34,15 @@ public class Noeud {
         m_troncons = new ArrayList<Troncon>();
     }
 
+    public Noeud(int id, int x, int y) {
+        m_livraison = null;
+        m_troncons = new ArrayList<Troncon>();
+
+        m_id = id;
+        m_x = x;
+        m_y = y;
+    }
+
     //
     // Methods
     //

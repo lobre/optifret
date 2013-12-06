@@ -3,7 +3,6 @@ package view;
 import model.Noeud;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
 
 public class VueNoeud {
 
@@ -29,6 +28,10 @@ public class VueNoeud {
 
     }
 
+    public Noeud getM_noeud() {
+        return m_noeud;
+    }
+
     public int getM_x() {
         return m_noeud.getM_x();
     }
@@ -45,9 +48,6 @@ public class VueNoeud {
         return m_couleur;
     }
 
-    public void mousePressed(MouseEvent e) {
-        System.out.println("Mouse pressed at : (" + e.getX() + ", " + e.getY() + ")");
-    }
  
 }
 

@@ -1,6 +1,7 @@
 package view;
 
 import libs.ExampleFileFilter;
+import model.Noeud;
 import model.Plan;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -39,6 +40,10 @@ public class GUI {
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 System.out.println("Mouse pressed at : (" + e.getX() + ", " + e.getY() + ")");
+                Noeud clickedNoeud = vuePlan.getClickedNoeud(e.getX(), e.getY());
+                if (clickedNoeud != null) {
+                    System.out.println("Clicked on noeud: " + clickedNoeud.getM_id());
+                }
             }
         });
         mainPanel.addMouseMotionListener(new MouseMotionAdapter() {

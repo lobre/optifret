@@ -93,6 +93,26 @@ public class VuePlan extends JPanel {
         return new Dimension(m_largeur, m_hauteur);
     }
 
+    public Noeud getClickedNoeud(int c_x, int c_y) {
+
+        // On convertit les coordonées vers des coordonnées du plan (hors zoom et offset)
+        int x = (int) ((c_x - m_x_off) / m_zoom);
+        int y = (int) ((c_y - m_y_off) / m_zoom);
+
+        for (VueNoeud vueNoeud : m_noeuds) {
+            int n_x = vueNoeud.getM_x();
+            int n_y = vueNoeud.getM_y();
+            int r = vueNoeud.getM_rayon();
+
+            if (x >= n_x - r && x <= n_x + r && y >= n_y - r && y <= n_y + r) {
+                return vueNoeud.getM_noeud();
+            }
+        }
+
+        return null;
+
+    }
+
 
 	
 }
