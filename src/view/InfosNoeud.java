@@ -46,7 +46,7 @@ public class InfosNoeud {
         // Initialisation de la fenêtre
         m_frame = new JFrame("Informations: Noeud " + m_noeud.getM_id());
         m_frame.setContentPane(this.mainPanel);
-        m_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        m_frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         m_frame.pack();
 
         // Bouton "fermer"

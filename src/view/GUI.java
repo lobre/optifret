@@ -33,29 +33,6 @@ public class GUI {
         m_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         m_frame.setSize(largeur, hauteur);
 
-        // Mouse listener
-        vuePlan.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                System.out.println("Mouse pressed at : (" + e.getX() + ", " + e.getY() + ")");
-                Noeud clickedNoeud = vuePlan.getClickedNoeud(e.getX(), e.getY());
-                if (clickedNoeud != null) {
-                    // TODO : Normalement, on ne devrait ouvrir la fenêtre d'info que si le noeud a déjà une livraison
-                    new InfosNoeud(clickedNoeud);
-                }
-            }
-        });
-        mainPanel.addMouseMotionListener(new MouseMotionAdapter() {
-            // TODO : retravailler cette partie
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                super.mouseDragged(e);
-                System.out.println("Mouse dragged to : (" + e.getX() + ", " + e.getY() + ")");
-                vuePlan.setLocation(e.getX() - vuePlan.getWidth() / 2, e.getY() - vuePlan.getHeight() / 2);
-            }
-        });
-
         // Redimensionnement de la zone de notification
         zoneNotification.setPreferredSize(new Dimension(800, 35));
 
@@ -65,11 +42,13 @@ public class GUI {
         // Affichage de la fenêtre
         m_frame.setVisible(true);
 
+
+
     }
 
     private void createUIComponents() {
         // Intialisation de la vu du Plan
-        vuePlan = new VuePlan(800, 600);
+        vuePlan = new VuePlan();
         vuePlan.repaint();
 
         // Initialisation de la zone de notification
@@ -122,14 +101,7 @@ public class GUI {
         return null;
     }
 
-    public Document lireDepuisXML() {
-        File fichierXML = ouvrirFichier();
-
-        if (fichierXML == null) {
-            zoneNotification.setErrorMessage("Aucun fichier selectionné");
-            return null;
-        }
-
+    public Document lireDepuisXML(File fichierXML) {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = null;
         try {
@@ -149,13 +121,20 @@ public class GUI {
     }
 
     public void chargerPlan() {
-        Document doc = lireDepuisXML();
+        File fichierXML = ouvrirFichier();
+
+        if (fichierXML == null) {
+            zoneNotification.setErrorMessage("Aucun fichier selectionné");
+            return;
+        }
+
+        Document doc = lireDepuisXML(fichierXML);
 
         Plan plan = new Plan();
         int status = plan.fromXML(doc.getDocumentElement());
 
         if (status != Plan.PARSE_OK) {
-            zoneNotification.setErrorMessage("Erreur XML: impossible de parser le fichier choisi.");
+            zoneNotification.setErrorMessage("Erreur XML: impossible de parser le fichier sélectionné.");
             return;
         }
 
@@ -165,6 +144,5 @@ public class GUI {
     public void chargerDemandeLivraison() {
         // TODO : Intégrer le parseur de demande de livraison
     }
-
 
 }
