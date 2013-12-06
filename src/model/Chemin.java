@@ -13,14 +13,11 @@ public class Chemin {
     //
     // Fields
     //
-    private final Collection<Troncon> listeTroncons ;
+    private final Collection<Troncon> listeTroncons = new LinkedList<Troncon>() ;
 
     //
     // Constructors
     //
-    public Chemin() {
-        listeTroncons = new LinkedList<Troncon>();
-    }
 
     ;
 
@@ -28,6 +25,10 @@ public class Chemin {
     // Methods
     //
 
+    public void ajouterTroncon(Troncon troncon){
+        //Vérifier que le troncon est bien ajoute a la fin (le type de liste peut etre a changer)
+        listeTroncons.add(troncon);
+    }
 
     //
     // Accessor methods

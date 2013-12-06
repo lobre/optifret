@@ -63,6 +63,9 @@ public class Dijkstra {
             //On met à jour le dernier noeud visité
             dernierNoeudVisite = plusProche;
         }
+        //TODO
+        //On reconstruit le chemin
+        Chemin retour = new Chemin();
         return null;
     }
 
