@@ -40,111 +40,53 @@ public class Livraison {
     // Accessor methods
     //
 
-    /**
-     * Set the value of m_retard
-     *
-     * @param newVar the new value of m_retard
-     */
-    private void setM_retard(int newVar) {
-        m_retard = newVar;
+
+    public void setM_id(int m_id) {
+        this.m_id = m_id;
+    }
+    public int getM_id() {
+        return m_id;
     }
 
-    /**
-     * Get the value of m_retard
-     *
-     * @return the value of m_retard
-     */
-    private int getM_retard() {
+    public void setM_retard(int newVar) {
+        m_retard = newVar;
+    }
+    public int getM_retard() {
         return m_retard;
     }
 
-    /**
-     * Set the value of m_noClient
-     *
-     * @param newVar the new value of m_noClient
-     */
-    private void setM_noClient(int newVar) {
+    public void setM_noClient(int newVar) {
         m_noClient = newVar;
     }
-
-    /**
-     * Get the value of m_noClient
-     *
-     * @return the value of m_noClient
-     */
-    private int getM_noClient() {
+    public int getM_noClient() {
         return m_noClient;
     }
 
-    /**
-     * Set the value of m_effectuee
-     *
-     * @param newVar the new value of m_effectuee
-     */
-    private void setM_effectuee(boolean newVar) {
+    public void setM_effectuee(boolean newVar) {
         m_effectuee = newVar;
     }
-
-    /**
-     * Get the value of m_effectuee
-     *
-     * @return the value of m_effectuee
-     */
-    private boolean getM_effectuee() {
+    public boolean getM_effectuee() {
         return m_effectuee;
     }
 
-    /**
-     * Set the value of m_laPlage
-     *
-     * @param newVar the new value of m_laPlage
-     */
     public void setLaPlage(PlageHoraire newVar) {
         m_laPlage = newVar;
     }
-
-    /**
-     * Get the value of m_laPlage
-     *
-     * @return the value of m_laPlage
-     */
-    private PlageHoraire getLaPlage() {
+    public PlageHoraire getLaPlage() {
         return m_laPlage;
     }
 
-    /**
-     * Set the value of m_adresse
-     *
-     * @param newVar the new value of m_adresse
-     */
-    private void setAdresse(Noeud newVar) {
+    public void setM_adresse(Noeud newVar) {
         m_adresse = newVar;
     }
-
-    /**
-     * Get the value of m_adresse
-     *
-     * @return the value of m_adresse
-     */
-    private Noeud getAdresse() {
+    public Noeud getM_adresse() {
         return m_adresse;
     }
 
-    /**
-     * Set the value of m_heureLivraison
-     *
-     * @param newVar the new value of m_heureLivraison
-     */
-    public void setHeureLivraison(Heure newVar) {
+    public void setM_heureLivraison(Heure newVar) {
         m_heureLivraison = newVar;
     }
-
-    /**
-     * Get the value of m_heureLivraison
-     *
-     * @return the value of m_heureLivraison
-     */
-    public Heure getHeureLivraison() {
+    public Heure getM_heureLivraison() {
         return m_heureLivraison;
     }
 
