@@ -19,9 +19,7 @@ public class Troncon {
     private String m_nom;
     private float m_longueur;
     private float m_vitesse;
-
     private Noeud m_arrivee;
-
     private Noeud m_depart;
 
     //
@@ -62,7 +60,7 @@ public class Troncon {
      *
      * @param newVar the new value of m_longueur
      */
-    private void setM_longueur(float newVar) {
+    public void setM_longueur(float newVar) {
         m_longueur = newVar;
     }
 
@@ -71,7 +69,7 @@ public class Troncon {
      *
      * @return the value of m_longueur
      */
-    private float getM_longueur() {
+    public float getM_longueur() {
         return m_longueur;
     }
 
@@ -80,7 +78,7 @@ public class Troncon {
      *
      * @param newVar the new value of m_vitesse
      */
-    private void setM_vitesse(float newVar) {
+    public void setM_vitesse(float newVar) {
         m_vitesse = newVar;
     }
 
@@ -89,7 +87,7 @@ public class Troncon {
      *
      * @return the value of m_vitesse
      */
-    private float getM_vitesse() {
+    public float getM_vitesse() {
         return m_vitesse;
     }
 
@@ -98,7 +96,7 @@ public class Troncon {
      *
      * @param newVar the new value of m_arrivee
      */
-    private void setArrivee(Noeud newVar) {
+    public void setArrivee(Noeud newVar) {
         m_arrivee = newVar;
     }
 
@@ -107,7 +105,7 @@ public class Troncon {
      *
      * @return the value of m_arrivee
      */
-    private Noeud getArrivee() {
+    public Noeud getArrivee() {
         return m_arrivee;
     }
 
@@ -116,7 +114,7 @@ public class Troncon {
      *
      * @param newVar the new value of m_depart
      */
-    private void setDepart(Noeud newVar) {
+    public void setDepart(Noeud newVar) {
         m_depart = newVar;
     }
 
@@ -125,7 +123,7 @@ public class Troncon {
      *
      * @return the value of m_depart
      */
-    private Noeud getDepart() {
+    public Noeud getDepart() {
         return m_depart;
     }
 

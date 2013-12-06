@@ -9,20 +9,36 @@ package model;
  */
 
 public class NoeudPondere {
-    private static Noeud m_noeud;
-    private static Double m_weight;
-    private static Integer m_previous;
+    private final Noeud m_noeud;
+    private Double m_poids;
+    private Noeud m_precedent;
 
     //Constructor
     NoeudPondere(Noeud noeud){
         this.m_noeud = noeud;
-        this.m_previous = -1;
-        this.m_weight = Double.POSITIVE_INFINITY;
+        this.m_precedent = null;
+        this.m_poids = Double.POSITIVE_INFINITY;  //infini comme valeur par défaut, pour Dikjstra
     }
 
     //Getter-setter
 
-    public static void setM_weight(Double m_weight) {
-        NoeudPondere.m_weight = m_weight;
+    public void setM_poids(Double m_poids) {
+        this.m_poids = m_poids;
+    }
+
+    public void setM_precedent(Noeud m_precedent) {
+        this.m_precedent = m_precedent;
+    }
+
+    public int get_id(){
+        return this.m_noeud.getM_id();
+    }
+
+    public Noeud getM_noeud() {
+        return m_noeud;
+    }
+
+    public Double getM_poids() {
+        return m_poids;
     }
 }
