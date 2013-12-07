@@ -69,10 +69,11 @@ public class DemandeLivraison {
         }
 
         String ad = ((Element) entre.item(0)).getAttribute("adresse");
-        this.entrepot = m_plan.getNoeudParID(Integer.parseInt(ad));
+        entrepot = m_plan.getNoeudParID(Integer.parseInt(ad));
         if (entrepot == null) {
             return DemandeLivraison.PARSE_ERROR;
         }
+        entrepot.setM_entrepot(true);
 
         //récupération des plages horaires
         NodeList n_plages = racineXML.getElementsByTagName("PlagesHoraires");
@@ -115,8 +116,7 @@ public class DemandeLivraison {
                 if (noeud == null) {
                     return DemandeLivraison.PARSE_ERROR;
                 }
-
-                Livraison livraison = new Livraison(id,client,noeud);
+                Livraison livraison = new Livraison(id, client, noeud);
                 livraison.setLaPlage(plage);
                 plage.addLesLivraisons(livraison);
             }

@@ -26,9 +26,10 @@ public class Livraison {
     }
 
     public Livraison(int id,int client, Noeud adresse) {
-        this.m_id = id;
-        this.m_noClient = client;
-        this.m_adresse = adresse;
+        m_id = id;
+        m_noClient = client;
+        m_adresse = adresse;
+        m_adresse.setM_livraison(this);
     }
 
     //

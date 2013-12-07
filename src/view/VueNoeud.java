@@ -7,7 +7,6 @@ import java.awt.*;
 public class VueNoeud {
 
     private int m_rayon;
-    private Color m_couleur;
     private Noeud m_noeud;
 
     private static Color COULEUR_DEFAUT = new Color(80, 80, 80);
@@ -15,12 +14,11 @@ public class VueNoeud {
     private static Color COULEUR_LIVRAISON = new Color(52, 148, 232);
 
     private static int RAYON_DEFAUT = 10;
-    private static int RAYON_ENTREPOT = 25;
-    private static int RAYON_LIVRAISON = 20;
+    private static int RAYON_ENTREPOT = 18;
+    private static int RAYON_LIVRAISON = 13;
 
     public VueNoeud (Noeud noeud) {
         m_noeud = noeud;
-        m_couleur = VueNoeud.COULEUR_DEFAUT;
         m_rayon = VueNoeud.RAYON_DEFAUT;
     }
     
@@ -41,11 +39,27 @@ public class VueNoeud {
     }
 
     public int getM_rayon() {
-        return m_rayon;
+        if (m_noeud.isM_entrepot()) {
+            return RAYON_ENTREPOT;
+        }
+        else if (m_noeud.hasLivraison()) {
+            return RAYON_LIVRAISON;
+        }
+        else {
+            return RAYON_DEFAUT;
+        }
     }
 
     public Color getM_couleur() {
-        return m_couleur;
+        if (m_noeud.isM_entrepot()) {
+            return COULEUR_ENTREPOT;
+        }
+        else if (m_noeud.hasLivraison()) {
+            return COULEUR_LIVRAISON;
+        }
+        else {
+            return COULEUR_DEFAUT;
+        }
     }
 
  

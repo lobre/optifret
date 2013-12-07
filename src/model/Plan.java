@@ -21,7 +21,7 @@ public class Plan {
 
     private Noeud m_racine;
     private HashMap<Integer, Noeud> m_noeuds;
-
+    private ArrayList<Troncon> m_troncons;
 
     //
     // Constructors
@@ -66,6 +66,7 @@ public class Plan {
 
     public int fromXML(Element racineXML) {
         HashMap<Integer, Noeud> noeuds = new HashMap<Integer, Noeud>();
+        ArrayList<Troncon> troncons = new ArrayList<Troncon>();
 
         NodeList liste_noeuds = racineXML.getElementsByTagName("Noeud");
 
@@ -82,6 +83,8 @@ public class Plan {
             if (status != Noeud.PARSE_OK) {
                 return Plan.PARSE_ERROR;
             }
+
+            troncons.addAll(noeud.getM_troncons());
 
             noeuds.put(noeud.getM_id(), noeud);
         }
@@ -100,6 +103,7 @@ public class Plan {
 
         m_noeuds = noeuds;
         m_racine = noeuds.get(0);
+        m_troncons = troncons;
 
         return Plan.PARSE_OK;
 

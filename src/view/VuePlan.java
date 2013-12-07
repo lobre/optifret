@@ -1,5 +1,6 @@
 package view;
 
+import model.DemandeLivraison;
 import model.Noeud;
 import model.Plan;
 
@@ -11,6 +12,7 @@ import java.util.Vector;
 public class VuePlan extends JPanel {
 
     private Plan m_plan;
+    private DemandeLivraison m_demande_livraison;
 
 	private Vector<VueNoeud> m_noeuds;
 	private int m_largeur;
@@ -39,7 +41,8 @@ public class VuePlan extends JPanel {
 	}
 
     public VuePlan () {
-    	// Creation d'un panneau pour dessiner les boules
+        m_plan = null;
+    	m_demande_livraison = null;
 
         m_largeur = 1;
         m_hauteur = 1;
@@ -119,6 +122,14 @@ public class VuePlan extends JPanel {
     }
     public Plan getM_plan() {
         return m_plan;
+    }
+
+    public void setM_demande_livraison(DemandeLivraison m_demande_livraison) {
+        this.m_demande_livraison = m_demande_livraison;
+        this.repaint();
+    }
+    public DemandeLivraison getM_demande_livraison() {
+        return m_demande_livraison;
     }
 
     public float getM_zoom() {

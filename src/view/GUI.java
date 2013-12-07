@@ -97,7 +97,7 @@ public class GUI {
     }
 
     private File ouvrirFichier() {
-        JFileChooser jFileChooserXML = new JFileChooser();
+        JFileChooser jFileChooserXML = new JFileChooser(".");
         ExampleFileFilter filter = new ExampleFileFilter();
         filter.addExtension("xml");
         filter.setDescription("Fichier XML");
@@ -178,6 +178,7 @@ public class GUI {
         }
 
         zoneNotification.setSuccessMessage("La demande de livraison  '" + fichierXML.getName() + "' a été chargée avec succès !");
+        vuePlan.setM_demande_livraison(demandeLivraison);
 
     }
 

@@ -22,6 +22,7 @@ public class Noeud {
     private int m_id;
     private int m_x;
     private int m_y;
+    private boolean m_entrepot;
     private ArrayList<Troncon> m_troncons;
 
     Livraison m_livraison;
@@ -31,6 +32,7 @@ public class Noeud {
     //
     public Noeud() {
         m_livraison = null;
+        m_entrepot = false;
         m_troncons = new ArrayList<Troncon>();
     }
 
@@ -87,21 +89,30 @@ public class Noeud {
     public void setM_livraison(Livraison m_livraison) {
         this.m_livraison = m_livraison;
     }
-
     public Livraison getM_livraison() {
         return m_livraison;
+    }
+
+    public void setM_entrepot(boolean m_entrepot) {
+        this.m_entrepot = m_entrepot;
+    }
+    public boolean isM_entrepot() {
+        return m_entrepot;
     }
 
     //
     // Other methods
     //
 
+    public boolean hasLivraison() {
+        return m_livraison != null;
+    }
+
     public int fromXML(Element noeud_xml) {
         try {
             m_id = Integer.parseInt(noeud_xml.getAttribute("id"));
             m_x = Integer.parseInt(noeud_xml.getAttribute("x"));
             m_y = Integer.parseInt(noeud_xml.getAttribute("y"));
-            System.out.println("Parsed node : id = " + m_id + "; x = " + m_x + " ; y = " + m_y);
         } catch (NullPointerException ne) {
             return Noeud.PARSE_ERROR;
         }
@@ -113,9 +124,6 @@ public class Noeud {
     public int tronconsFromXML(Element noeud_xml, HashMap<Integer, Noeud> noeuds) {
         m_troncons = new ArrayList<Troncon>();
         NodeList liste_troncons_xml = noeud_xml.getElementsByTagName("TronconSortant");
-
-
-        System.out.println("Node " + m_id + " has Troncons :");
 
         for (int i = 0; i < liste_troncons_xml.getLength(); i++) {
             Element troncon_xml = (Element) liste_troncons_xml.item(i);
