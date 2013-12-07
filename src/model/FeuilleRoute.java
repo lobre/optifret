@@ -10,13 +10,8 @@ public class FeuilleRoute {
     //
 
 
-    //
-    // Constructors
-    //
     public FeuilleRoute() {
     }
-
-    ;
 
     //
     // Methods
@@ -26,6 +21,7 @@ public class FeuilleRoute {
     //
     // Accessor methods
     //
+
 
     //
     // Other methods

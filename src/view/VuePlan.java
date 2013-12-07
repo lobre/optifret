@@ -33,15 +33,15 @@ public class VuePlan extends JPanel {
     
     @Override
 	public void paintComponent(Graphics g) {
-        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setBackground(COULEUR_BACKGROUND);
+
+        super.paintComponent(g2);
 
         if (m_plan == null) {
             return;
         }
-
-        Graphics2D g2 = (Graphics2D) g;
-
-        g2.setBackground(COULEUR_BACKGROUND);
 
         g2.setColor(VueTroncon.COULEUR_DEFAUT);
         g2.setStroke(new BasicStroke(5 * m_zoom));
@@ -55,11 +55,11 @@ public class VuePlan extends JPanel {
         }
 
         for (VueNoeud n : m_noeuds.values()) {
-            g.setColor(n.getM_couleur());
+            g2.setColor(n.getM_couleur());
             int x = (int) ( m_zoom * (n.getM_x() - n.getM_rayon()));
             int y = (int) ( m_zoom * (n.getM_y() - n.getM_rayon()));
 
-            g.fillOval(x, y, (int) (2 * n.getM_rayon() * m_zoom), (int) (2 * n.getM_rayon() * m_zoom));
+            g2.fillOval(x, y, (int) (2 * n.getM_rayon() * m_zoom), (int) (2 * n.getM_rayon() * m_zoom));
         }
 
 
