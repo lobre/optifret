@@ -46,18 +46,21 @@ public class Plan {
         this.m_racine = m_racine;
     }
 
-
+    public Noeud getNoeudParID(int id) {
+        return m_noeuds.containsKey(id) ? m_noeuds.get(id) : null;
+    }
     public HashMap<Integer, Noeud> getM_noeuds() {
         return m_noeuds;
     }
-
-    public Noeud getNoeudParID(int id) {
-        return m_noeuds.containsKey(id) ? m_noeuds.get(id) : null;
-
-    }
-
     public void setM_noeuds(HashMap<Integer, Noeud> m_noeuds) {
         this.m_noeuds = m_noeuds;
+    }
+
+    public void setM_troncons(ArrayList<Troncon> m_troncons) {
+        this.m_troncons = m_troncons;
+    }
+    public ArrayList<Troncon> getM_troncons() {
+        return m_troncons;
     }
 
     //
@@ -79,12 +82,9 @@ public class Plan {
             Element noeud_xml = (Element) liste_noeuds.item(i);
             Noeud noeud = new Noeud();
             int status = noeud.fromXML(noeud_xml);
-
             if (status != Noeud.PARSE_OK) {
                 return Plan.PARSE_ERROR;
             }
-
-            troncons.addAll(noeud.getM_troncons());
 
             noeuds.put(noeud.getM_id(), noeud);
         }
@@ -92,12 +92,15 @@ public class Plan {
         // Une fois le parsing des noeuds complétés, on rajoute à chaque noeud ses tronçons
         for (int i = 0; i < liste_noeuds.getLength(); i++) {
             Element noeud_xml = (Element) liste_noeuds.item(i);
+
             Noeud noeud = noeuds.get(i);
             int status = noeud.tronconsFromXML(noeud_xml, noeuds);
-
             if (status != Noeud.PARSE_OK) {
                 return Plan.PARSE_ERROR;
             }
+
+            // Mise à jour de la liste de tous les tronçons
+            troncons.addAll(noeud.getM_troncons());
 
         }
 

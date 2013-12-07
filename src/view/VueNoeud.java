@@ -9,13 +9,13 @@ public class VueNoeud {
     private int m_rayon;
     private Noeud m_noeud;
 
-    private static Color COULEUR_DEFAUT = new Color(80, 80, 80);
+    private static Color COULEUR_DEFAUT = new Color(131, 114, 97);
     private static Color COULEUR_ENTREPOT = new Color(211, 5, 188);
     private static Color COULEUR_LIVRAISON = new Color(52, 148, 232);
 
-    private static int RAYON_DEFAUT = 10;
-    private static int RAYON_ENTREPOT = 18;
-    private static int RAYON_LIVRAISON = 13;
+    private static int RAYON_DEFAUT = 5;
+    private static int RAYON_LIVRAISON = 7;
+    private static int RAYON_ENTREPOT = 9;
 
     public VueNoeud (Noeud noeud) {
         m_noeud = noeud;

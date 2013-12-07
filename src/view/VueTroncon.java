@@ -1,0 +1,30 @@
+package view;
+
+import model.Troncon;
+
+import java.awt.*;
+
+public class VueTroncon {
+
+    private Troncon m_troncon;
+
+    public static Color COULEUR_DEFAUT = new Color(244, 236, 195);
+
+    public VueTroncon(Troncon troncon) {
+        m_troncon = troncon;
+    }
+
+    // Accessors:
+    public Troncon getM_troncon() {
+        return m_troncon;
+    }
+    public void setM_troncon(Troncon m_troncon) {
+        this.m_troncon = m_troncon;
+    }
+
+    // Other methods:
+    public Color getColor() {
+        return COULEUR_DEFAUT;
+    }
+
+}

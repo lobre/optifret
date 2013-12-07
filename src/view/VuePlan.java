@@ -3,18 +3,22 @@ package view;
 import model.DemandeLivraison;
 import model.Noeud;
 import model.Plan;
+import model.Troncon;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.HashMap;
 import java.util.Vector;
 
 public class VuePlan extends JPanel {
 
+    static private Color COULEUR_BACKGROUND = new Color(50, 80, 180);
+
     private Plan m_plan;
     private DemandeLivraison m_demande_livraison;
 
-	private Vector<VueNoeud> m_noeuds;
+	private HashMap<Integer, VueNoeud> m_noeuds;
 	private int m_largeur;
 	private int m_hauteur;
     private int m_x_max;
@@ -29,15 +33,36 @@ public class VuePlan extends JPanel {
     
     @Override
 	public void paintComponent(Graphics g) {
-		// methode appelee a chaque fois que le dessin doit etre redessine
-		super.paintComponent(g);
-        for (VueNoeud n : m_noeuds) {
-            g.setColor(n.getM_couleur());
-            int x = (int) ( m_zoom * n.getM_x());
-            int y = (int) ( m_zoom * n.getM_y());
+        super.paintComponent(g);
 
-            g.fillOval(x, y, (int) (n.getM_rayon() * m_zoom), (int) (n.getM_rayon() * m_zoom));
+        if (m_plan == null) {
+            return;
         }
+
+        Graphics2D g2 = (Graphics2D) g;
+
+        g2.setBackground(COULEUR_BACKGROUND);
+
+        g2.setColor(VueTroncon.COULEUR_DEFAUT);
+        g2.setStroke(new BasicStroke(5 * m_zoom));
+        for (Troncon troncon : m_plan.getM_troncons()) {
+            int x1 = (int) ( troncon.getArrivee().getM_x() * m_zoom);
+            int y1 = (int) ( troncon.getArrivee().getM_y() * m_zoom);
+            int x2 = (int) ( troncon.getDepart().getM_x() * m_zoom);
+            int y2 = (int) ( troncon.getDepart().getM_y() * m_zoom);
+
+            g2.drawLine(x1, y1, x2, y2);
+        }
+
+        for (VueNoeud n : m_noeuds.values()) {
+            g.setColor(n.getM_couleur());
+            int x = (int) ( m_zoom * (n.getM_x() - n.getM_rayon()));
+            int y = (int) ( m_zoom * (n.getM_y() - n.getM_rayon()));
+
+            g.fillOval(x, y, (int) (2 * n.getM_rayon() * m_zoom), (int) (2 * n.getM_rayon() * m_zoom));
+        }
+
+
 	}
 
     public VuePlan () {
@@ -51,10 +76,10 @@ public class VuePlan extends JPanel {
         m_y_max = m_hauteur;
 
         m_zoom = 1;
-        m_noeuds = new Vector<VueNoeud>();
+        m_noeuds = new HashMap<Integer, VueNoeud>();
 
         // Drag attributes
-        m_last_click = null;
+        m_last_click = getLocation();
         m_last_position = getLocation();
 
         // Mouse listeners
@@ -64,7 +89,7 @@ public class VuePlan extends JPanel {
                 super.mouseClicked(e);
                 System.out.println("Mouse pressed at : (" + e.getX() + ", " + e.getY() + ")");
 
-                m_last_click = getParent().getMousePosition();
+                m_last_click = MouseInfo.getPointerInfo().getLocation();
                 m_last_position = getLocation();
 
                 Noeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
@@ -79,7 +104,10 @@ public class VuePlan extends JPanel {
             @Override
             public void mouseDragged(MouseEvent e) {
                 super.mouseDragged(e);
-                Point p = getParent().getMousePosition();
+                Point p = MouseInfo.getPointerInfo().getLocation();
+                m_last_position.getX();
+                p.getX();
+                m_last_click.getX();
 
                 int x = (int) (m_last_position.getX() + p.getX() - m_last_click.getX());
                 int y = (int) (m_last_position.getY() + p.getY() - m_last_click.getY());
@@ -99,17 +127,25 @@ public class VuePlan extends JPanel {
 
     public void setM_plan(Plan plan) {
         m_plan = plan;
-        m_noeuds = new Vector<VueNoeud>();
+        m_noeuds = new HashMap<Integer, VueNoeud>();
 
         m_x_max = -1;
         m_y_max = -1;
 
         for (Noeud n : m_plan.getM_noeuds().values()) {
             VueNoeud vueNoeud = new VueNoeud(n);
-            m_noeuds.add(vueNoeud);
+            m_noeuds.put(n.getM_id(), vueNoeud);
+        }
 
-            m_x_max = n.getM_x() + vueNoeud.getM_rayon() > m_x_max ? n.getM_x() + vueNoeud.getM_rayon() : m_x_max;
-            m_y_max = n.getM_y() + vueNoeud.getM_rayon() > m_y_max ? n.getM_y() + vueNoeud.getM_rayon() : m_y_max;
+        updateSize();
+
+    }
+
+    private void updateSize() {
+
+        for (VueNoeud n : m_noeuds.values()) {
+            m_x_max = n.getM_x() + n.getM_rayon() > m_x_max ? n.getM_x() + n.getM_rayon() : m_x_max;
+            m_y_max = n.getM_y() + n.getM_rayon() > m_y_max ? n.getM_y() + n.getM_rayon() : m_y_max;
         }
 
         // Redimensionnement du panel
@@ -120,6 +156,7 @@ public class VuePlan extends JPanel {
 
         repaint();
     }
+
     public Plan getM_plan() {
         return m_plan;
     }
@@ -137,7 +174,7 @@ public class VuePlan extends JPanel {
     }
     public void setM_zoom(float m_zoom) {
         this.m_zoom = m_zoom;
-        this.repaint();
+        updateSize();
     }
 
     @Override
@@ -147,7 +184,7 @@ public class VuePlan extends JPanel {
 
     public Noeud getClickedNoeud(int x, int y) {
 
-        for (VueNoeud vueNoeud : m_noeuds) {
+        for (VueNoeud vueNoeud : m_noeuds.values()) {
             int n_x = (int) (m_zoom * vueNoeud.getM_x());
             int n_y = (int) (m_zoom * vueNoeud.getM_y());
             float r = vueNoeud.getM_rayon() * m_zoom;

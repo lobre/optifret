@@ -97,7 +97,7 @@ public class GUI {
     }
 
     private File ouvrirFichier() {
-        JFileChooser jFileChooserXML = new JFileChooser(".");
+        JFileChooser jFileChooserXML = new JFileChooser("./xml_data");
         ExampleFileFilter filter = new ExampleFileFilter();
         filter.addExtension("xml");
         filter.setDescription("Fichier XML");
