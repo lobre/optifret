@@ -106,4 +106,11 @@ public class PlageHoraire {
     // Other methods
     //
 
+
+    @Override
+    public String toString() {
+        return  "[" + m_heureDebut.toString() +
+                "] -> [" + m_heureFin.toString() +
+                ']';
+    }
 }

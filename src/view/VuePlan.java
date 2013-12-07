@@ -95,7 +95,7 @@ public class VuePlan extends JPanel {
                 Noeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
                 if (clickedNoeud != null) {
                     // TODO : Normalement, on ne devrait ouvrir la fenêtre d'info que si le noeud a déjà une livraison
-                    new InfosNoeud(clickedNoeud);
+                    new AjoutLivraison(clickedNoeud,m_demande_livraison);
                 }
             }
         });

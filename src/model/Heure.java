@@ -23,6 +23,8 @@ public class Heure {
     public Heure() {
     }
 
+
+
     //
     // Methods
     //
@@ -69,6 +71,7 @@ public class Heure {
         return false;
     }
 
+    //format hh:mm:ss
     public int fromString(String string) {
 
         String[] parts = string.split(":");
@@ -95,5 +98,10 @@ public class Heure {
         m_secondes = s;
 
         return Heure.PARSE_OK;
+    }
+
+    @Override
+    public String toString() {
+        return  String.format("%02d",m_heures) + ":" + String.format("%02d",m_minutes) + ":" + String.format("%02d",m_secondes) ;
     }
 }
