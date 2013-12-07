@@ -2,7 +2,6 @@ package view;
 
 import libs.ExampleFileFilter;
 import model.DemandeLivraison;
-import model.Noeud;
 import model.Plan;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -25,6 +24,10 @@ public class GUI {
     private JMenu m_menu;
 
     public static void main(String[] args) {
+        // enable anti-aliasing
+        System.setProperty("awt.useSystemAAFontSettings","on");
+        System.setProperty("swing.aatext", "true");
+
         new GUI(1000, 700);
     }
 
@@ -32,7 +35,7 @@ public class GUI {
         // Initialisation de la fenêtre
         m_frame = new JFrame("Application Optifret");
         m_frame.setContentPane(this.mainPanel);
-        m_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        m_frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         m_frame.setSize(largeur, hauteur);
 
         // Redimensionnement de la zone de notification

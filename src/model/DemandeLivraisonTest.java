@@ -33,18 +33,13 @@ public class DemandeLivraisonTest {
             docPlan.getDocumentElement().normalize();
             docDemande = dBuilder.parse(xmlDemande);
             docDemande.getDocumentElement().normalize();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
+        } catch (IOException | NullPointerException | SAXException e) {
             e.printStackTrace();
         }
         Plan plan = new Plan();
         plan.fromXML(docPlan.getDocumentElement());
 
-        DemandeLivraison demande = new DemandeLivraison();
-        demande.setM_plan(plan);
+        DemandeLivraison demande = new DemandeLivraison(plan);
         demande.fromXML(docDemande.getDocumentElement());
 
     }

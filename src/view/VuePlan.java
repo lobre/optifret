@@ -22,12 +22,8 @@ public class VuePlan extends JPanel {
     private float m_zoom;
 
     // Attributs utilisés pour "dragger" la VuePlan
-    private MouseEvent m_last_click;
-    private int m_last_x;
-    private int m_last_y;
-
-    static public int PARSE_ERROR = -1;
-    static public int PARSE_OK = 1;
+    private Point m_last_click;
+    private Point m_last_position;
     
     @Override
 	public void paintComponent(Graphics g) {
@@ -56,19 +52,17 @@ public class VuePlan extends JPanel {
 
         // Drag attributes
         m_last_click = null;
-        m_last_x = 0;
-        m_last_y = 0;
+        m_last_position = getLocation();
 
         // Mouse listeners
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
+                super.mouseClicked(e);
                 System.out.println("Mouse pressed at : (" + e.getX() + ", " + e.getY() + ")");
 
-                m_last_click = e;
-                m_last_x = getX();
-                m_last_y = getY();
+                m_last_click = getParent().getMousePosition();
+                m_last_position = getLocation();
 
                 Noeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
                 if (clickedNoeud != null) {
@@ -79,14 +73,13 @@ public class VuePlan extends JPanel {
         });
 
         addMouseMotionListener(new MouseMotionAdapter() {
-            // TODO : Vibre toujours un petit peu
             @Override
             public void mouseDragged(MouseEvent e) {
                 super.mouseDragged(e);
-                System.out.println("Mouse dragged to : (" + e.getX() + ", " + e.getY() + ")");
+                Point p = getParent().getMousePosition();
 
-                int x = m_last_x + (e.getX() - m_last_click.getX());
-                int y = m_last_y + (e.getY() - m_last_click.getY());
+                int x = (int) (m_last_position.getX() + p.getX() - m_last_click.getX());
+                int y = (int) (m_last_position.getY() + p.getY() - m_last_click.getY());
                 setLocation(x, y);
             }
         });
@@ -95,33 +88,6 @@ public class VuePlan extends JPanel {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
                 setM_zoom(m_zoom * (1 - (float) e.getWheelRotation() / 10));
-            }
-        });
-
-        addMouseListener( new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                //To change body of implemented methods use File | Settings | File Templates.
             }
         });
 
