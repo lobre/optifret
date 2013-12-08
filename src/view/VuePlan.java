@@ -12,6 +12,7 @@ import java.util.HashMap;
 public class VuePlan extends JPanel {
 
     static private Color COULEUR_BACKGROUND = new Color(50, 80, 180);
+    static private int STROKE_SIZE  = 5;
 
     private Plan m_plan;
     private DemandeLivraison m_demande_livraison;
@@ -61,15 +62,14 @@ public class VuePlan extends JPanel {
             m_noeuds.put(n.getM_id(), vueNoeud);
         }
 
-        updateSize();
+        updateSize(m_zoom,(Point) null);
     }
     public Plan getM_plan() {
         return m_plan;
     }
 
-    public void setM_zoom(float m_zoom) {
-        this.m_zoom = m_zoom;
-        updateSize();
+    public void setM_zoom(float zoom,Point position) {
+        updateSize(zoom,position);
     }
     public float getM_zoom() {
         return m_zoom;
@@ -92,8 +92,9 @@ public class VuePlan extends JPanel {
 
     // Other methods
 
-    private void updateSize() {
-
+    private void updateSize(float zoom,Point position) {
+         float deltaZoom=zoom-m_zoom;
+        m_zoom=zoom;
         for (VueNoeud n : m_noeuds.values()) {
             m_x_max = n.getM_x() + n.getM_rayon() > m_x_max ? n.getM_x() + n.getM_rayon() : m_x_max;
             m_y_max = n.getM_y() + n.getM_rayon() > m_y_max ? n.getM_y() + n.getM_rayon() : m_y_max;
@@ -103,7 +104,17 @@ public class VuePlan extends JPanel {
         setSize((int) ((m_x_max + 10) * m_zoom) , (int) ((m_y_max + 10) * m_zoom));
 
         // Centrage du panel
-        setLocation((getParent().getWidth() - getWidth()) / 2, (getParent().getHeight() - getHeight()) / 2);
+      if (position==null){
+          setLocation((getParent().getWidth() - getWidth()) / 2, (getParent().getHeight() - getHeight()) / 2);
+          //System.out.print("position Null");
+      }
+        else {
+          /////ATTENTION DANGEREUX
+          setLocation((int)( this.getX()-(deltaZoom)*(position.getX())),(int)(this.getY()-(deltaZoom)*(position.getY())));
+         // setLocation((int)( this.getX()+(getParent().getWidth()/2-position.getX())),(int)(this.getY()+getParent().getHeight()/2-position.getY()));
+          System.out.println(m_zoom);
+          System.out.println(deltaZoom);
+      }
 
         repaint();
     }
@@ -137,13 +148,12 @@ public class VuePlan extends JPanel {
         g2.setBackground(COULEUR_BACKGROUND);
 
         super.paintComponent(g2);
-
         if (m_plan == null) {
             return;
         }
 
         g2.setColor(VueTroncon.COULEUR_DEFAUT);
-        g2.setStroke(new BasicStroke(5 * m_zoom));
+        g2.setStroke(new BasicStroke(STROKE_SIZE * m_zoom));
         for (Troncon troncon : m_plan.getM_troncons()) {
             int x1 = (int) ( troncon.getArrivee().getM_x() * m_zoom);
             int y1 = (int) ( troncon.getArrivee().getM_y() * m_zoom);
@@ -157,6 +167,8 @@ public class VuePlan extends JPanel {
             g2.setColor(n.getM_couleur());
             int x = (int) ( m_zoom * (n.getM_x() - n.getM_rayon()));
             int y = (int) ( m_zoom * (n.getM_y() - n.getM_rayon()));
+            //int x = (int) ( m_zoom * (n.getM_x() - n.getM_rayon()));
+            //int y = (int) ( m_zoom * (n.getM_y() - n.getM_rayon()));
 
             g2.fillOval(x, y, (int) (2 * n.getM_rayon() * m_zoom), (int) (2 * n.getM_rayon() * m_zoom));
         }

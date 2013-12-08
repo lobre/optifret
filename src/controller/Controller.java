@@ -44,7 +44,7 @@ public class Controller {
 
     private void initListeners() {
         VuePlan vuePlan = m_window.getM_vuePlan();
-
+        vuePlan.setBackground(new Color(46, 98, 255));
         // Mouse listeners
         vuePlan.addMouseListener(new MouseAdapter() {
             @Override
@@ -93,7 +93,7 @@ public class Controller {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
                 VuePlan vuePlan = m_window.getM_vuePlan();
-                vuePlan.setM_zoom(vuePlan.getM_zoom() * (1 - (float) e.getWheelRotation() / 10));
+                vuePlan.setM_zoom(vuePlan.getM_zoom() * (1 - (float) e.getWheelRotation() / 10),e.getPoint());
             }
         });
 
