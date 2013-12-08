@@ -9,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 
+import static com.sun.org.apache.xalan.internal.lib.ExsltMath.abs;
+
 public class VuePlan extends JPanel {
 
     static private Color COULEUR_BACKGROUND = new Color(50, 80, 180);
@@ -110,7 +112,7 @@ public class VuePlan extends JPanel {
       }
         else {
           /////ATTENTION DANGEREUX
-          setLocation((int)( this.getX()-(deltaZoom)*(position.getX())),(int)(this.getY()-(deltaZoom)*(position.getY())));
+          setLocation((int)( this.getX()-(0.1*(deltaZoom/abs(deltaZoom))*(position.getX()))),(int)(this.getY()-(0.1*(deltaZoom/abs(deltaZoom)))*(position.getY())));
          // setLocation((int)( this.getX()+(getParent().getWidth()/2-position.getX())),(int)(this.getY()+getParent().getHeight()/2-position.getY()));
           System.out.println(m_zoom);
           System.out.println(deltaZoom);
