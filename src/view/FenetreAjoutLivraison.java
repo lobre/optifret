@@ -1,13 +1,16 @@
 package view;
 
 import com.sun.xml.internal.fastinfoset.util.StringArray;
+import controller.Controleur;
 import model.DemandeLivraison;
+import model.Livraison;
 import model.Noeud;
 import model.PlageHoraire;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,13 +30,16 @@ public class FenetreAjoutLivraison {
     private JButton annulerButton;
     private JPanel addPanel;
 
-    public FenetreAjoutLivraison(Noeud noeud, DemandeLivraison demande) {
-    m_noeud = noeud;
+    private Controleur m_controleur;
+    private DemandeLivraison m_demandeLivraison;
 
-    StringArray listePlagesHoraire= new StringArray();
-    for (PlageHoraire p :demande.getPlagesHoraires())
+    public FenetreAjoutLivraison(Noeud noeud, DemandeLivraison demandeLivraison, Controleur controleur) {
+    m_noeud = noeud;
+    m_demandeLivraison = demandeLivraison;
+    m_controleur = controleur;
+
+    for (PlageHoraire p :m_demandeLivraison.getM_plagesHoraires())
     {
-        System.out.print(p.toString());
          plageHoraireComboBox.addItem(p.toString());
     }
 
@@ -59,7 +65,18 @@ public class FenetreAjoutLivraison {
         ajouterLivraisonButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // TODO : Implémenter l'action "Ajouter noeud", via le contrôleur
+            try {
+                PlageHoraire ph = m_demandeLivraison.getM_plagesHoraires().get(plageHoraireComboBox.getSelectedIndex());
+                int client = Integer.parseInt(numéroClientTextField.getText());
+                Livraison livraison = new Livraison(m_demandeLivraison.getUniqueID(), client, m_noeud, ph);
+                m_controleur.ajouterLivraison(livraison);
+                m_frame.dispose();
+            }
+            catch (NumberFormatException exception) {
+                exception.printStackTrace();
+                // TODO : add a "ZoneNotification" in the window, write alerts in it
+            }
+
         }
     });
 

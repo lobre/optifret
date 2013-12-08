@@ -15,13 +15,13 @@ public class DemandeLivraison {
 
     private Plan m_plan;
     private Noeud entrepot;
-    private ArrayList<PlageHoraire> plagesHoraires;
+    private ArrayList<PlageHoraire> m_plagesHoraires;
 
     //
     // Constructors
     //
     public DemandeLivraison(Plan plan) {
-        this.plagesHoraires = new ArrayList<PlageHoraire>();
+        this.m_plagesHoraires = new ArrayList<PlageHoraire>();
         m_plan = plan;
     }
 
@@ -32,8 +32,8 @@ public class DemandeLivraison {
         return entrepot;
     }
 
-    public ArrayList<PlageHoraire> getPlagesHoraires() {
-        return plagesHoraires;
+    public ArrayList<PlageHoraire> getM_plagesHoraires() {
+        return m_plagesHoraires;
     }
 
     public void setEntrepot(Noeud entrepot) {
@@ -41,24 +41,55 @@ public class DemandeLivraison {
     }
 
     private void ajouterPlageH(PlageHoraire plage) {
-        plagesHoraires.add(plage);
+        m_plagesHoraires.add(plage);
     }
 
     private void supprimerPlageH(PlageHoraire plage) {
-        plagesHoraires.remove(plage);
+        m_plagesHoraires.remove(plage);
     }
 
-    public void setPlagesHoraires(ArrayList<PlageHoraire> plagesHoraires) {
-        this.plagesHoraires = plagesHoraires;
+    public void setM_plagesHoraires(ArrayList<PlageHoraire> m_plagesHoraires) {
+        this.m_plagesHoraires = m_plagesHoraires;
     }
 
     public void setM_plan(Plan m_plan) {
         this.m_plan = m_plan;
     }
 
+    // TODO : Il faudra remettre à zéro la feuille de route de la DemandeLivraison à l'ajout/suppression d'une livraison
+
+    public void ajouterLivraison(Livraison livraison) {
+        for (PlageHoraire ph : m_plagesHoraires) {
+            if (ph == livraison.getM_plage()) {
+                ph.addLivraison(livraison);
+                return;
+            }
+        }
+    }
+
+    public void supprimerLivraison(Livraison livraison) {
+        for (PlageHoraire ph : m_plagesHoraires) {
+            if (ph == livraison.getM_plage()) {
+                ph.removeLivraison(livraison);
+                return;
+            }
+        }
+    }
+
     //
     // Other methods
     //
+
+    public int getUniqueID() {
+        int maxID = 0;
+        for (PlageHoraire ph : m_plagesHoraires) {
+            for (Livraison livraison : ph.getM_livraisons()) {
+                maxID = livraison.getM_id() > maxID ? livraison.getM_id() : maxID;
+            }
+        }
+
+        return maxID + 1;
+    }
 
     public int fromXML(Element racineXML) {
 
@@ -116,8 +147,7 @@ public class DemandeLivraison {
                 if (noeud == null) {
                     return DemandeLivraison.PARSE_ERROR;
                 }
-                Livraison livraison = new Livraison(id, client, noeud);
-                livraison.setLaPlage(plage);
+                Livraison livraison = new Livraison(id, client, noeud, plage);
                 plage.addLivraison(livraison);
             }
             this.ajouterPlageH(plage);

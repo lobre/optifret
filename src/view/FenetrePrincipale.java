@@ -67,6 +67,12 @@ public class FenetrePrincipale {
         return m_calculerButton;
     }
 
+    public void setM_controleur(Controleur m_controleur) {
+        this.m_controleur = m_controleur;
+    }
+    public Controleur getM_controleur() {
+        return m_controleur;
+    }
 
     // Other methods
     private void creerMenus() {
