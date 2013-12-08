@@ -1,7 +1,6 @@
 package model;
 
 
-import java.util.Collection;
 import java.util.LinkedList;
 
 /**
@@ -13,7 +12,7 @@ public class Chemin {
     //
     // Fields
     //
-    private final Collection<Troncon> listeTroncons = new LinkedList<Troncon>() ;
+    private final LinkedList<Troncon> listeTroncons = new LinkedList<Troncon>() ;
 
     //
     // Constructors
@@ -25,9 +24,12 @@ public class Chemin {
     // Methods
     //
 
-    public void ajouterTroncon(Troncon troncon){
-        //Vérifier que le troncon est bien ajoute a la fin (le type de liste peut etre a changer)
-        listeTroncons.add(troncon);
+    public void ajouterTronconFin(Troncon troncon){
+        listeTroncons.addLast(troncon);
+    }
+
+    public void ajouterTronconDebut(Troncon troncon){
+        listeTroncons.addFirst(troncon);
     }
 
     //
