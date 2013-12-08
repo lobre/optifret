@@ -1,6 +1,5 @@
 package view;
 
-import controller.Controller;
 import model.Noeud;
 import model.Plan;
 import model.Troncon;
@@ -25,8 +24,8 @@ public class VuePlan extends JPanel {
     private float m_zoom;
 
     // Attributs utilisés pour "dragger" la VuePlan
-    private Point m_last_click;
-    private Point m_last_position;
+    private Point m_lastClick;
+    private Point m_lastPosition;
 
 
     public VuePlan() {
@@ -43,8 +42,8 @@ public class VuePlan extends JPanel {
         m_noeuds = new HashMap<Integer, VueNoeud>();
 
         // Drag attributes
-        m_last_click = getLocation();
-        m_last_position = getLocation();
+        m_lastClick = getLocation();
+        m_lastPosition = getLocation();
 
     }
 
@@ -74,19 +73,19 @@ public class VuePlan extends JPanel {
         return m_zoom;
     }
 
-    public void setM_last_click(Point m_last_click) {
-        this.m_last_click = m_last_click;
+    public void setM_lastClick(Point m_lastClick) {
+        this.m_lastClick = m_lastClick;
     }
-    public Point getM_last_click() {
-        return m_last_click;
+    public Point getM_lastClick() {
+        return m_lastClick;
     }
 
-    public void setM_last_position(Point m_last_position) {
-        this.m_last_position = m_last_position;
+    public void setM_lastPosition(Point m_lastPosition) {
+        this.m_lastPosition = m_lastPosition;
     }
-    public Point getM_last_position() {
+    public Point getM_lastPosition() {
 
-        return m_last_position;
+        return m_lastPosition;
     }
 
     // Other methods

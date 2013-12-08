@@ -7,10 +7,10 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class MainWindow {
-    private JPanel mainPanel;
-    private ZoneNotification zoneNotification;
-    private JButton calculerButton;
-    private VuePlan vuePlan;
+    private JPanel m_mainPanel;
+    private ZoneNotification m_zoneNotification;
+    private JButton m_calculerButton;
+    private VuePlan m_vuePlan;
     private JFrame m_frame;
     private JMenu m_menu;
 
@@ -22,13 +22,13 @@ public class MainWindow {
 
         // Initialisation de la fenêtre
         m_frame = new JFrame("Application Optifret");
-        m_frame.setContentPane(this.mainPanel);
+        m_frame.setContentPane(this.m_mainPanel);
         m_frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         m_frame.setSize(1000, 700);
 
         // Redimensionnement de la zone de notification
-        zoneNotification.setPreferredSize(new Dimension(800, 35));
-        zoneNotification.setInfoMessage("Bienvenue sur l'application Optifret");
+        m_zoneNotification.setPreferredSize(new Dimension(800, 35));
+        m_zoneNotification.setInfoMessage("Bienvenue sur l'application Optifret");
 
         // Création du menu
         creerMenus();
@@ -40,35 +40,32 @@ public class MainWindow {
     // Appelé à la création de l'interface
     private void createUIComponents() {
         // Intialisation de la vu du Plan
-        vuePlan = new VuePlan();
-        vuePlan.repaint();
+        m_vuePlan = new VuePlan();
+        m_vuePlan.repaint();
 
         // Initialisation de la zone de notification
-        zoneNotification = new ZoneNotification();
-        zoneNotification.setPreferredSize(new Dimension(800, 35));
+        m_zoneNotification = new ZoneNotification();
+        m_zoneNotification.setPreferredSize(new Dimension(800, 35));
     }
 
 
     // Accessors
-    public ZoneNotification getZoneNotification() {
-        return zoneNotification;
+    public ZoneNotification getM_zoneNotification() {
+        return m_zoneNotification;
     }
-    public VuePlan getVuePlan() {
-        return vuePlan;
+    public VuePlan getM_vuePlan() {
+        return m_vuePlan;
     }
     public JMenu getM_menu() {
         return m_menu;
     }
-    public JButton getCalculerButton() {
-        return calculerButton;
+    public JButton getM_calculerButton() {
+        return m_calculerButton;
     }
 
 
     // Other methods
     private void creerMenus() {
-        // Creation de deux menus, chaque menu ayant plusieurs items
-        // et association d'un ecouteur d'action a chacun de ces items
-
         m_menu = new JMenu("Fichier");
         ActionListener actionChargerPlan = new ActionListener() {
             public void actionPerformed(ActionEvent e) {

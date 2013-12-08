@@ -118,7 +118,7 @@ public class DemandeLivraison {
                 }
                 Livraison livraison = new Livraison(id, client, noeud);
                 livraison.setLaPlage(plage);
-                plage.addLesLivraisons(livraison);
+                plage.addLivraison(livraison);
             }
             this.ajouterPlageH(plage);
         }

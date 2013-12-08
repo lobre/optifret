@@ -13,7 +13,7 @@ public class Livraison {
     private int m_noClient;
     private boolean m_effectuee = false;
 
-    private PlageHoraire m_laPlage;
+    private PlageHoraire m_plage;
 
     private Noeud m_adresse;
 
@@ -71,10 +71,10 @@ public class Livraison {
     }
 
     public void setLaPlage(PlageHoraire newVar) {
-        m_laPlage = newVar;
+        m_plage = newVar;
     }
     public PlageHoraire getLaPlage() {
-        return m_laPlage;
+        return m_plage;
     }
 
     public void setM_adresse(Noeud newVar) {

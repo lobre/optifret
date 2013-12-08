@@ -25,7 +25,7 @@ public class Controller {
     private MainWindow m_window;
 
     private Plan m_plan;
-    private DemandeLivraison m_demande_livraison;
+    private DemandeLivraison m_demandeLivraison;
 
 
     // Point d'entrée de l'application:
@@ -36,64 +36,64 @@ public class Controller {
 
     public Controller() {
         m_plan = null;
-        m_demande_livraison = null;
+        m_demandeLivraison = null;
 
         m_window = new MainWindow(this);
         initListeners();
     }
 
     private void initListeners() {
-        VuePlan vue_plan = m_window.getVuePlan();
+        VuePlan vuePlan = m_window.getM_vuePlan();
 
         // Mouse listeners
-        vue_plan.addMouseListener(new MouseAdapter() {
+        vuePlan.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mouseClicked(e);
 
-                VuePlan vue_plan = m_window.getVuePlan();
+                VuePlan vuePlan = m_window.getM_vuePlan();
                 // Mise à jour de valeurs utiles pour le déplacement par "drag" de la vue
-                vue_plan.setM_last_click(MouseInfo.getPointerInfo().getLocation());
-                vue_plan.setM_last_position(vue_plan.getLocation());
+                vuePlan.setM_lastClick(MouseInfo.getPointerInfo().getLocation());
+                vuePlan.setM_lastPosition(vuePlan.getLocation());
 
-                if (m_demande_livraison == null) {
+                if (m_demandeLivraison == null) {
                     return;
                 }
 
-                Noeud clickedNoeud = vue_plan.getClickedNoeud(e.getX(), e.getY());
+                Noeud clickedNoeud = vuePlan.getClickedNoeud(e.getX(), e.getY());
                 if (clickedNoeud != null) {
                     if (clickedNoeud.hasLivraison()) {
                         new FenetreInfosLivraison(clickedNoeud.getM_livraison());
 
                     } else if (!clickedNoeud.isM_entrepot()) {
-                        new FenetreAjoutLivraison(clickedNoeud, m_demande_livraison);
+                        new FenetreAjoutLivraison(clickedNoeud, m_demandeLivraison);
                     }
                 }
             }
         });
 
-        vue_plan.addMouseMotionListener(new MouseMotionAdapter() {
+        vuePlan.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
                 super.mouseDragged(e);
-                VuePlan vue_plan = m_window.getVuePlan();
+                VuePlan vuePlan = m_window.getM_vuePlan();
 
                 Point p = MouseInfo.getPointerInfo().getLocation();
-                vue_plan.getM_last_position().getX();
+                vuePlan.getM_lastPosition().getX();
                 p.getX();
-                vue_plan.getM_last_click().getX();
+                vuePlan.getM_lastClick().getX();
 
-                int x = (int) (vue_plan.getM_last_position().getX() + p.getX() - vue_plan.getM_last_click().getX());
-                int y = (int) (vue_plan.getM_last_position().getY() + p.getY() - vue_plan.getM_last_click().getY());
-                vue_plan.setLocation(x, y);
+                int x = (int) (vuePlan.getM_lastPosition().getX() + p.getX() - vuePlan.getM_lastClick().getX());
+                int y = (int) (vuePlan.getM_lastPosition().getY() + p.getY() - vuePlan.getM_lastClick().getY());
+                vuePlan.setLocation(x, y);
             }
         });
 
-        vue_plan.addMouseWheelListener(new MouseWheelListener() {
+        vuePlan.addMouseWheelListener(new MouseWheelListener() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
-                VuePlan vue_plan = m_window.getVuePlan();
-                vue_plan.setM_zoom(vue_plan.getM_zoom() * (1 - (float) e.getWheelRotation() / 10));
+                VuePlan vuePlan = m_window.getM_vuePlan();
+                vuePlan.setM_zoom(vuePlan.getM_zoom() * (1 - (float) e.getWheelRotation() / 10));
             }
         });
 
@@ -118,7 +118,7 @@ public class Controller {
         try {
             dBuilder = dbFactory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
-            m_window.getZoneNotification().setErrorMessage("Impossible d'instantier le parseur XML");
+            m_window.getM_zoneNotification().setErrorMessage("Impossible d'instantier le parseur XML");
         }
 
         try {
@@ -126,7 +126,7 @@ public class Controller {
             doc.getDocumentElement().normalize();
             return doc;
         } catch (SAXException | IOException | NullPointerException e) {
-            m_window.getZoneNotification().setErrorMessage("Impossible d'ouvrir le fichier XML demandé");
+            m_window.getM_zoneNotification().setErrorMessage("Impossible d'ouvrir le fichier XML demandé");
             return null;
         }
     }
@@ -144,13 +144,13 @@ public class Controller {
         int status = m_plan.fromXML(doc.getDocumentElement());
 
         if (status != Plan.PARSE_OK) {
-            m_window.getZoneNotification().setErrorMessage("Erreur: impossible de charger le plan demandé.");
+            m_window.getM_zoneNotification().setErrorMessage("Erreur: impossible de charger le plan demandé.");
             return;
         }
 
-        m_window.getVuePlan().setM_plan(m_plan);
+        m_window.getM_vuePlan().setM_plan(m_plan);
 
-        m_window.getZoneNotification().setSuccessMessage("Le plan '" + fichierXML.getName() + "' a été chargé avec succès !");
+        m_window.getM_zoneNotification().setSuccessMessage("Le plan '" + fichierXML.getName() + "' a été chargé avec succès !");
 
 
         // Active le menu "Charger une demande de livraison"
@@ -159,8 +159,8 @@ public class Controller {
 
     public void chargerDemandeLivraison() {
 
-        if (m_window.getVuePlan().getM_plan() == null) {
-            m_window.getZoneNotification().setErrorMessage("Veuillez d'abord charger un plan avant de charger une demande de livraison.");
+        if (m_window.getM_vuePlan().getM_plan() == null) {
+            m_window.getM_zoneNotification().setErrorMessage("Veuillez d'abord charger un plan avant de charger une demande de livraison.");
             return;
         }
 
@@ -174,16 +174,16 @@ public class Controller {
         m_plan.resetNoeuds();
 
         // On parse la demande de livraison
-        m_demande_livraison = new DemandeLivraison(m_window.getVuePlan().getM_plan());
-        int status = m_demande_livraison.fromXML(doc.getDocumentElement());
+        m_demandeLivraison = new DemandeLivraison(m_window.getM_vuePlan().getM_plan());
+        int status = m_demandeLivraison.fromXML(doc.getDocumentElement());
 
         if (status != DemandeLivraison.PARSE_OK) {
-            m_window.getZoneNotification().setErrorMessage("Erreur: impossible de charger la demande de livraison demandée.");
+            m_window.getM_zoneNotification().setErrorMessage("Erreur: impossible de charger la demande de livraison demandée.");
             return;
         }
 
-        m_window.getZoneNotification().setSuccessMessage("La demande de livraison  '" + fichierXML.getName() + "' a été chargée avec succès !");
-        m_window.getVuePlan().repaint();
+        m_window.getM_zoneNotification().setSuccessMessage("La demande de livraison  '" + fichierXML.getName() + "' a été chargée avec succès !");
+        m_window.getM_vuePlan().repaint();
 
     }
 

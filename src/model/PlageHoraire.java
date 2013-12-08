@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -12,23 +13,22 @@ public class PlageHoraire {
     //
     // Fields
     //
-
-
-    private Vector m_lesLivraisons = new Vector();
+    private ArrayList<Livraison> m_livraisons;
 
     private Heure m_heureDebut;
-
     private Heure m_heureFin;
 
     //
     // Constructors
     //
     public PlageHoraire() {
+        m_livraisons = new ArrayList<Livraison>();
         m_heureDebut = new Heure();
         m_heureFin = new Heure();
     }
 
     public PlageHoraire(Heure hDebut, Heure hFin) {
+        m_livraisons = new ArrayList<Livraison>();
         this.m_heureDebut = hDebut;
         this.m_heureFin = hFin;
     }
@@ -41,63 +41,28 @@ public class PlageHoraire {
     //
     // Accessor methods
     //
-
-    /**
-     * Add a LesLivraisons object to the m_lesLivraisons List
-     */
-    public void addLesLivraisons(Livraison new_object) {
-        m_lesLivraisons.add(new_object);
+    public void addLivraison(Livraison livraison) {
+        m_livraisons.add(livraison);
     }
-
-    /**
-     * Remove a LesLivraisons object from m_lesLivraisons List
-     */
-    private void removeLesLivraisons(Livraison new_object) {
-        m_lesLivraisons.remove(new_object);
+    private void removeLivraison(Livraison livraison) {
+        m_livraisons.remove(livraison);
     }
-
-    /**
-     * Get the List of LesLivraisons objects held by m_lesLivraisons
-     *
-     * @return List of LesLivraisons objects held by m_lesLivraisons
-     */
-    private List getLesLivraisonsList() {
-        return (List) m_lesLivraisons;
+    private List getM_livraison() {
+        return m_livraisons;
     }
 
 
-    /**
-     * Set the value of m_heureDebut
-     *
-     * @param newVar the new value of m_heureDebut
-     */
     private void setHeureDebut(Heure newVar) {
         m_heureDebut = newVar;
     }
-
-    /**
-     * Get the value of m_heureDebut
-     *
-     * @return the value of m_heureDebut
-     */
     private Heure getHeureDebut() {
         return m_heureDebut;
     }
 
-    /**
-     * Set the value of m_heureFin
-     *
-     * @param newVar the new value of m_heureFin
-     */
+
     private void setHeureFin(Heure newVar) {
         m_heureFin = newVar;
     }
-
-    /**
-     * Get the value of m_heureFin
-     *
-     * @return the value of m_heureFin
-     */
     private Heure getHeureFin() {
         return m_heureFin;
     }
@@ -105,12 +70,8 @@ public class PlageHoraire {
     //
     // Other methods
     //
-
-
     @Override
     public String toString() {
-        return  "[" + m_heureDebut.toString() +
-                "] -> [" + m_heureFin.toString() +
-                ']';
+        return  "[" + m_heureDebut.toString() + "] -> [" + m_heureFin.toString() + "]";
     }
 }
