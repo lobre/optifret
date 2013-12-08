@@ -2,7 +2,6 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 
 /**
@@ -47,7 +46,7 @@ public class PlageHoraire {
     private void removeLivraison(Livraison livraison) {
         m_livraisons.remove(livraison);
     }
-    private List getM_livraison() {
+    public List getM_livraison() {
         return m_livraisons;
     }
 
