@@ -34,7 +34,8 @@ public class Dijkstra {
                     if (noeudsNonVisite.get_id() == troncon.getArrivee().getM_id()){
                         NoeudPondere tampon = noeudsNonVisite;
                         noeudsNonVisites.remove(noeudsNonVisite);
-                        tampon.setM_poids(dernierNoeudVisite.getM_poids()+troncon.getM_longueur());
+                        tampon.setM_poids(dernierNoeudVisite.getM_poids() + troncon.getM_longueur());
+                        tampon.setM_rejointDepuis(troncon);
                         noeudsVisites.addLast(tampon);
                     }
                 }
@@ -43,8 +44,9 @@ public class Dijkstra {
                     if (noeudsVisite.get_id() == troncon.getArrivee().getM_id()){
                         //Dans le cas où la nouvelle facon d'acceder au noeud est plus efficace
                         if (dernierNoeudVisite.getM_poids()+troncon.getM_longueur() < noeudsVisite.getM_poids()){
-                            noeudsVisite.setM_precedent(dernierNoeudVisite.getM_noeud());
+                            //noeudsVisite.setM_precedent(dernierNoeudVisite.getM_noeud());
                             noeudsVisite.setM_poids(dernierNoeudVisite.getM_poids()+troncon.getM_longueur());
+                            noeudsVisite.setM_rejointDepuis(troncon);
                         }
                     }
                 }
@@ -63,12 +65,18 @@ public class Dijkstra {
             //On met à jour le dernier noeud visité
             dernierNoeudVisite = plusProche;
         }
-        //TODO
+
         //On reconstruit le chemin
         Chemin pcchemin = new Chemin();
         NoeudPondere noeudParcouru = dernierNoeudVisite;
         while (noeudParcouru.get_id() != depart.get_id()){
-            pcchemin.ajouterTronconDebut();
+            pcchemin.ajouterTronconDebut(dernierNoeudVisite.getM_rejointDepuis());
+            //TODO : Améliorer la recherche du prochain noeud pondéré
+            for (NoeudPondere noeudsVisite : noeudsVisites) {
+                if (noeudsVisite.get_id() == dernierNoeudVisite.getM_rejointDepuis().getDepart().getM_id()){
+                    noeudParcouru = noeudsVisite;
+                }
+            }
         }
         return pcchemin;
     }
