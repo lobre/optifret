@@ -105,7 +105,7 @@ public class Noeud {
     //
 
     public boolean hasLivraison() {
-        return m_livraison != null;
+        return (m_livraison != null);
     }
 
     public int fromXML(Element noeud_xml) {
@@ -138,8 +138,7 @@ public class Noeud {
         return Noeud.PARSE_OK;
     }
 
-    //
-    // Other methods
-    //
-
+    public String toString() {
+        return "[x=" + m_x + ", y=" + m_y + "]";
+    }
 }

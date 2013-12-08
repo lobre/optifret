@@ -5,7 +5,6 @@ import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Class Plan
@@ -23,10 +22,13 @@ public class Plan {
     private HashMap<Integer, Noeud> m_noeuds;
     private ArrayList<Troncon> m_troncons;
 
+
     //
     // Constructors
     //
     public Plan() {
+        m_noeuds = new HashMap<Integer, Noeud>();
+        m_troncons = new ArrayList<Troncon>();
     }
 
     //
@@ -41,7 +43,6 @@ public class Plan {
     public Noeud getM_racine() {
         return m_racine;
     }
-
     public void setM_racine(Noeud m_racine) {
         this.m_racine = m_racine;
     }
@@ -66,6 +67,13 @@ public class Plan {
     //
     // Other methods
     //
+
+    public void resetNoeuds() {
+        for (Noeud n : m_noeuds.values()) {
+            n.setM_entrepot(false);
+            n.setM_livraison(null);
+        }
+    }
 
     public int fromXML(Element racineXML) {
         HashMap<Integer, Noeud> noeuds = new HashMap<Integer, Noeud>();

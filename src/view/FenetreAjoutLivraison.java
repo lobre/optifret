@@ -8,7 +8,6 @@ import model.PlageHoraire;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,7 +16,7 @@ import java.util.ArrayList;
  * Time: 12:16
  * To change this template use File | Settings | File Templates.
  */
-public class AjoutLivraison {
+public class FenetreAjoutLivraison {
     Noeud m_noeud;
     JFrame m_frame;
 
@@ -28,14 +27,14 @@ public class AjoutLivraison {
     private JButton annulerButton;
     private JPanel addPanel;
 
-    public AjoutLivraison(Noeud noeud, DemandeLivraison demande) {
+    public FenetreAjoutLivraison(Noeud noeud, DemandeLivraison demande) {
     m_noeud = noeud;
 
     StringArray listePlagesHoraire= new StringArray();
     for (PlageHoraire p :demande.getPlagesHoraires())
     {
         System.out.print(p.toString());
-        plageHoraireComboBox.addItem(p.toString());
+         plageHoraireComboBox.addItem(p.toString());
     }
 
     adresseDeLivraisonTextField.setText(Integer.toString(m_noeud.getM_id()));
@@ -43,7 +42,7 @@ public class AjoutLivraison {
 
 
     // Initialisation de la fenêtre
-    m_frame = new JFrame("Ajouter livraison");
+    m_frame = new JFrame("Ajouter une livraison");
     m_frame.setContentPane(this.addPanel);
     m_frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     m_frame.pack();   //?

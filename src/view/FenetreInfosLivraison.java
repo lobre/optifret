@@ -1,5 +1,6 @@
 package view;
 
+import model.Livraison;
 import model.Noeud;
 
 import javax.swing.*;
@@ -13,7 +14,7 @@ import java.awt.event.ActionListener;
  * Time: 13:03
  * To change this template use File | Settings | File Templates.
  */
-public class InfosNoeud {
+public class FenetreInfosLivraison {
     private JTextField positionTextField;
     private JPanel mainPanel;
     private JTextField idTextField;
@@ -23,28 +24,25 @@ public class InfosNoeud {
     private JButton supprimerButton;
     private JButton fermerButton;
     private JLabel labelClient;
+    private JLabel labelPlageHoraire;
+    private JTextField plageTextField;
 
     private JFrame m_frame;
     private Noeud m_noeud;
+    private Livraison m_livraison;
 
-    public InfosNoeud(Noeud noeud) {
+    public FenetreInfosLivraison(Livraison livraison) {
 
-        m_noeud = noeud;
+        m_livraison = livraison;
+        m_noeud = m_livraison.getM_adresse();
 
         idTextField.setText(Integer.toString(m_noeud.getM_id()));
-        positionTextField.setText("(" + m_noeud.getM_x() + ", " + m_noeud.getM_y() + ")");
-
-        // TODO : Une fois les livraisons intégrées, ce test sera inutile (seuls les noeuds avec livraison doivent être affichés)
-        if (m_noeud.getM_livraison() == null) {
-            clientTextField.setVisible(false);
-            labelClient.setVisible(false);
-        }
-        else {
-            clientTextField.setText(Integer.toString(m_noeud.getM_livraison().getM_noClient()));
-        }
+        positionTextField.setText(m_noeud.toString());
+        clientTextField.setText(Integer.toString(m_noeud.getM_livraison().getM_noClient()));
+        plageTextField.setText(m_livraison.getLaPlage().toString());
 
         // Initialisation de la fenêtre
-        m_frame = new JFrame("Informations: Noeud " + m_noeud.getM_id());
+        m_frame = new JFrame("Informations sur la livraison " + m_livraison.getM_id());
         m_frame.setContentPane(this.mainPanel);
         m_frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         m_frame.pack();
@@ -61,20 +59,12 @@ public class InfosNoeud {
         supprimerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO : Implémenter l'action "Supprimer noeud", via le contrôleur
+                // TODO : Implémenter l'action "Supprimer noeud", et bouger ça niveau contrôleur
             }
         });
 
         m_frame.setVisible(true);
 
-
-
-    }
-
-    public static void main(String[] args) {
-        Noeud noeud = new Noeud(20, 32, 40);
-
-        new InfosNoeud(noeud);
     }
 
 }
