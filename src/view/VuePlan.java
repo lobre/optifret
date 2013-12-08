@@ -10,7 +10,8 @@ import java.util.HashMap;
 
 public class VuePlan extends JPanel {
 
-    static private Color COULEUR_BACKGROUND = new Color(50, 80, 180);
+    static public Color COULEUR_BACKGROUND = new Color(50, 80, 180);
+    static public Color COULEUR_BACKGROUND_LIGHT = new Color(55, 86, 221);
 
     private Plan m_plan;
 
@@ -29,6 +30,8 @@ public class VuePlan extends JPanel {
 
 
     public VuePlan() {
+
+        setBackground(COULEUR_BACKGROUND);
 
         m_plan = null;
 
@@ -132,7 +135,6 @@ public class VuePlan extends JPanel {
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setBackground(COULEUR_BACKGROUND);
 
         super.paintComponent(g2);
 

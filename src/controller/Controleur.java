@@ -8,7 +8,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import view.FenetreAjoutLivraison;
 import view.FenetreInfosLivraison;
-import view.MainWindow;
+import view.FenetrePrincipale;
 import view.VuePlan;
 
 import javax.swing.*;
@@ -20,9 +20,9 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
-public class Controller {
+public class Controleur {
 
-    private MainWindow m_window;
+    private FenetrePrincipale m_window;
 
     private Plan m_plan;
     private DemandeLivraison m_demandeLivraison;
@@ -30,15 +30,15 @@ public class Controller {
 
     // Point d'entrée de l'application:
     public static void main(String[] args) {
-        new Controller();
+        new Controleur();
     }
 
 
-    public Controller() {
+    public Controleur() {
         m_plan = null;
         m_demandeLivraison = null;
 
-        m_window = new MainWindow(this);
+        m_window = new FenetrePrincipale(this);
         initListeners();
     }
 

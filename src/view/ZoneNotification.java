@@ -17,7 +17,7 @@ public class ZoneNotification extends JFormattedTextField {
     }
 
     public void setSuccessMessage(String text) {
-        setBackground(new Color(80, 230, 86));
+        setBackground(new Color(42, 210, 48));
         setValue("  " + text);
     }
 
@@ -27,7 +27,7 @@ public class ZoneNotification extends JFormattedTextField {
     }
 
     public void setInfoMessage(String text) {
-        setBackground(new Color(230, 180, 0));
+        setBackground(new Color(60, 140, 235));
         setValue("  " + text);
     }
 

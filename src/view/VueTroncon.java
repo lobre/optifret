@@ -8,7 +8,7 @@ public class VueTroncon {
 
     private Troncon m_troncon;
 
-    public static Color COULEUR_DEFAUT = new Color(244, 236, 195);
+    public static Color COULEUR_DEFAUT = new Color(89, 147, 221);
 
     public VueTroncon(Troncon troncon) {
         m_troncon = troncon;
