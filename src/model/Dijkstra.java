@@ -65,8 +65,12 @@ public class Dijkstra {
         }
         //TODO
         //On reconstruit le chemin
-        Chemin retour = new Chemin();
-        return null;
+        Chemin pcchemin = new Chemin();
+        NoeudPondere noeudParcouru = dernierNoeudVisite;
+        while (noeudParcouru.get_id() != depart.get_id()){
+            pcchemin.ajouterTronconDebut();
+        }
+        return pcchemin;
     }
 
 }
