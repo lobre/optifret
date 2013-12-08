@@ -36,6 +36,11 @@ public class Chemin {
     // Accessor methods
     //
 
+    public LinkedList<Troncon> getListeTroncons() {
+        return listeTroncons;
+    }
+
+
     //
     // Other methods
     //

@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -12,14 +13,16 @@ import java.util.LinkedList;
 public class Dijkstra {
     //Entrée : noeud départ, noeud arrivée, plan
     //Sortie : chemin (objet chemin)
+    //Cette version ne prend pas en compte la vitesse, mais seulement la distance
 
-    public Chemin dijkstra_c(Noeud n_depart, Noeud n_arrivee, Plan plan){
+    public static Chemin dijkstra_c(Noeud n_depart, Noeud n_arrivee, Plan plan){
         LinkedList<NoeudPondere> noeudsVisites = new LinkedList<NoeudPondere>();
         LinkedList<NoeudPondere> noeudsNonVisites = new LinkedList<NoeudPondere>();
         //On remplit la liste des noeuds non visités
         for (Noeud noeud : plan.getM_noeuds().values()) {
             noeudsNonVisites.addLast(new NoeudPondere(noeud));
         }
+
         //On initialise le noeud de départ
         NoeudPondere depart = new NoeudPondere(n_depart);
         depart.setM_poids(0.);
@@ -30,23 +33,12 @@ public class Dijkstra {
             //On met à jour la distance des noeuds accessibles depuis le dernier noeud accédé
             for (Troncon troncon : dernierNoeudVisite.getM_noeud().getM_troncons()) {
                 //Cas des noeuds pas encore visités
-                for (NoeudPondere noeudsNonVisite : noeudsNonVisites) {
-                    if (noeudsNonVisite.get_id() == troncon.getArrivee().getM_id()){
-                        NoeudPondere tampon = noeudsNonVisite;
-                        noeudsNonVisites.remove(noeudsNonVisite);
-                        tampon.setM_poids(dernierNoeudVisite.getM_poids() + troncon.getM_longueur());
-                        tampon.setM_rejointDepuis(troncon);
-                        noeudsVisites.addLast(tampon);
-                    }
-                }
-                //Cas des noeuds déjà visités
-                for (NoeudPondere noeudsVisite : noeudsVisites) {
-                    if (noeudsVisite.get_id() == troncon.getArrivee().getM_id()){
-                        //Dans le cas où la nouvelle facon d'acceder au noeud est plus efficace
-                        if (dernierNoeudVisite.getM_poids()+troncon.getM_longueur() < noeudsVisite.getM_poids()){
-                            //noeudsVisite.setM_precedent(dernierNoeudVisite.getM_noeud());
-                            noeudsVisite.setM_poids(dernierNoeudVisite.getM_poids()+troncon.getM_longueur());
-                            noeudsVisite.setM_rejointDepuis(troncon);
+                for (NoeudPondere noeudNonVisite : noeudsNonVisites) {
+                    if (noeudNonVisite.get_id() == troncon.getArrivee().getM_id()){
+                        //On met à jour la distance si elle est meilleure que l'ancienne
+                        if (dernierNoeudVisite.getM_poids()+troncon.getM_longueur() < noeudNonVisite.getM_poids()){
+                            noeudNonVisite.setM_poids(dernierNoeudVisite.getM_poids()+troncon.getM_longueur());
+                            noeudNonVisite.setM_rejointDepuis(troncon);
                         }
                     }
                 }
@@ -70,11 +62,15 @@ public class Dijkstra {
         Chemin pcchemin = new Chemin();
         NoeudPondere noeudParcouru = dernierNoeudVisite;
         while (noeudParcouru.get_id() != depart.get_id()){
-            pcchemin.ajouterTronconDebut(dernierNoeudVisite.getM_rejointDepuis());
-            //TODO : Améliorer la recherche du prochain noeud pondéré
-            for (NoeudPondere noeudsVisite : noeudsVisites) {
-                if (noeudsVisite.get_id() == dernierNoeudVisite.getM_rejointDepuis().getDepart().getM_id()){
-                    noeudParcouru = noeudsVisite;
+            pcchemin.ajouterTronconDebut(noeudParcouru.getM_rejointDepuis());
+            int idOrigine = noeudParcouru.getM_rejointDepuis().getDepart().getM_id();
+
+            //On recherche le noeud qui a mené au noeudParcouru
+            Iterator<NoeudPondere> it = noeudsVisites.iterator();
+            while (it.hasNext()) {
+                NoeudPondere x = it.next();
+                if (x.get_id() == idOrigine){
+                    noeudParcouru = x;
                 }
             }
         }
