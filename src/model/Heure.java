@@ -100,7 +100,7 @@ public class Heure {
         return Heure.PARSE_OK;
     }
 
-    @Override
+    @Override     //format hh:mm:ss
     public String toString() {
         return  String.format("%02d",m_heures) + ":" + String.format("%02d",m_minutes) + ":" + String.format("%02d",m_secondes) ;
     }

@@ -1,5 +1,6 @@
 package view;
 
+import model.DemandeLivraison;
 import model.Noeud;
 import model.Plan;
 import model.Troncon;
@@ -13,6 +14,7 @@ public class VuePlan extends JPanel {
     static private Color COULEUR_BACKGROUND = new Color(50, 80, 180);
 
     private Plan m_plan;
+    private DemandeLivraison m_demande_livraison;
 
 	private HashMap<Integer, VueNoeud> m_noeuds;
 	private int m_largeur;
