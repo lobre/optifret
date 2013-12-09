@@ -14,8 +14,10 @@ public class HistoriqueCommandes {
 
     public void executer(Commande commande) {
         // TODO : Vérifier si on garde bien les commandes qu'il faut / S'il y a une meilleure méthode
-        if (m_derniere_commande != -1 && m_derniere_commande < m_commandes.size()) {
-            m_commandes = new ArrayList<Commande>(m_commandes.subList(0, m_derniere_commande));
+        // Si on a annulé quelques commandes avant d'exécuter la commande
+        // On enlève ces dernières de la liste des commandes
+        if (m_derniere_commande != -1 && m_derniere_commande < m_commandes.size() - 1) {
+            m_commandes = new ArrayList<Commande>(m_commandes.subList(0, m_derniere_commande + 1));
         }
 
         commande.executer();
@@ -23,22 +25,23 @@ public class HistoriqueCommandes {
         m_derniere_commande += 1;
     }
 
+    // Annule la dernière commande exécutée
     public void annuler() {
-        System.out.println("m_derniere_commande = " + m_derniere_commande);
         if (m_derniere_commande < 0) {
             return;
         }
 
         m_commandes.get(m_derniere_commande).annuler();
-        System.out.println("Vient d'annuler l'action : " + m_commandes.get(m_derniere_commande).getClass());
         m_derniere_commande -= 1;
     }
 
+    // Réexécute la dernière commande annulée
     public void reexecuter() {
-        if ((m_derniere_commande == m_commandes.size() - 1) || m_derniere_commande == -1) {
+        if (m_commandes.size() == 0 || (m_derniere_commande == m_commandes.size() - 1)) {
             return;
         }
         m_derniere_commande += 1;
         m_commandes.get(m_derniere_commande).executer();
     }
+
 }

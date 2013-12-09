@@ -62,7 +62,13 @@ public class FenetrePrincipale {
         m_frame.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_Z) {
+                if (e.getKeyCode() == KeyEvent.VK_P) {
+                    m_controleur.chargerPlan();
+                }
+                else if (e.getKeyCode() == KeyEvent.VK_D) {
+                    m_controleur.chargerDemandeLivraison();
+                }
+                else if (e.getKeyCode() == KeyEvent.VK_Z) {
                     m_controleur.annuler();
                 }
                 else if (e.getKeyCode() == KeyEvent.VK_Y) {

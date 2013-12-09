@@ -148,10 +148,10 @@ public class Controleur {
     }
 
     public void reexecuter() {
-        //m_commandes.reexecuter();
+        m_commandes.reexecuter();
+        m_window.getM_vuePlan().repaint();
     }
     public void annuler() {
-        System.out.println("Annuler !");
         m_commandes.annuler();
         m_window.getM_vuePlan().repaint();
     }
