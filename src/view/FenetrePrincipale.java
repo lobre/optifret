@@ -26,6 +26,7 @@ public class FenetrePrincipale {
         m_frame.setContentPane(this.m_mainPanel);
         m_frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         m_frame.setSize(1000, 700);
+        m_frame.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
 
         // Redimensionnement de la zone de notification
         m_zoneNotification.setPreferredSize(new Dimension(800, 35));
@@ -37,6 +38,8 @@ public class FenetrePrincipale {
         m_frame.getContentPane().setBackground(VuePlan.COULEUR_BACKGROUND);
         planWrapper.setBackground(VuePlan.COULEUR_BACKGROUND);
 
+        initKeyListeners();
+
         // Affichage de la fenêtre
         m_frame.setVisible(true);
     }
@@ -44,13 +47,33 @@ public class FenetrePrincipale {
     // Appelé à la création de l'interface
     private void createUIComponents() {
         // Intialisation de la vu du Plan
-        m_vuePlan = new VuePlan();
+        m_vuePlan = new VuePlan(m_controleur);
         m_vuePlan.repaint();
 
         // Initialisation de la zone de notification
         m_zoneNotification = new ZoneNotification();
         m_zoneNotification.setPreferredSize(new Dimension(800, 35));
     }
+
+    private void initKeyListeners() {
+
+        m_frame.setFocusable(true);
+
+        m_frame.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_Z) {
+                    m_controleur.annuler();
+                }
+                else if (e.getKeyCode() == KeyEvent.VK_Y) {
+                    m_controleur.reexecuter();
+                }
+            }
+        });
+
+
+    }
+
 
 
     // Accessors
@@ -100,10 +123,15 @@ public class FenetrePrincipale {
         m_frame.setJMenuBar(barreDeMenu);
     }
 
+
     private void ajoutItem(String intitule, JMenu menu, ActionListener a) {
         JMenuItem item = new JMenuItem(intitule);
         menu.add(item);
         item.addActionListener(a);
     }
 
+    // Getters/Setters
+    public JFrame getM_frame() {
+        return m_frame;
+    }
 }

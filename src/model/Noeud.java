@@ -99,8 +99,7 @@ public class Noeud {
     public boolean isM_entrepot() {
         return m_entrepot;
     }
-
-    //
+//
     // Other methods
     //
 

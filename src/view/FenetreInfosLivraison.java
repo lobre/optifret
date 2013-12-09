@@ -5,16 +5,10 @@ import model.Livraison;
 import model.Noeud;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- * Created with IntelliJ IDEA.
- * User: ahmed
- * Date: 06/12/13
- * Time: 13:03
- * To change this template use File | Settings | File Templates.
- */
 public class FenetreInfosLivraison {
     private JTextField m_positionTextField;
     private JPanel m_mainPanel;
@@ -27,6 +21,7 @@ public class FenetreInfosLivraison {
     private JLabel m_labelClient;
     private JLabel m_labelPlageHoraire;
     private JTextField m_plageTextField;
+    private ZoneNotification m_zoneNotification;
 
     private JFrame m_frame;
     private Noeud m_noeud;
@@ -37,6 +32,9 @@ public class FenetreInfosLivraison {
         m_controleur = controleur;
         m_livraison = livraison;
         m_noeud = m_livraison.getM_adresse();
+
+        m_zoneNotification.setPreferredSize(new Dimension(500, 35));
+        m_zoneNotification.setInfoMessage("Informations sur la livraison n°" + m_livraison.getM_id());
 
         m_idTextField.setText(Integer.toString(m_noeud.getM_id()));
         m_positionTextField.setText(m_noeud.toString());
@@ -67,6 +65,8 @@ public class FenetreInfosLivraison {
         });
 
         m_frame.setVisible(true);
+        m_frame.setResizable(false);
+
 
     }
 

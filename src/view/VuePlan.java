@@ -1,12 +1,13 @@
 package view;
 
-import model.DemandeLivraison;
+import controller.Controleur;
 import model.Noeud;
 import model.Plan;
 import model.Troncon;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.util.HashMap;
 
 import static com.sun.org.apache.xalan.internal.lib.ExsltMath.abs;
@@ -15,13 +16,13 @@ public class VuePlan extends JPanel {
 
     static public Color COULEUR_BACKGROUND = new Color(50, 80, 180);
     static public Color COULEUR_BACKGROUND_LIGHT = new Color(55, 86, 221);
-    static private int STROKE_SIZE  = 5;
-    
+    static private int STROKE_SIZE = 5;
+
     private Plan m_plan;
 
-	private HashMap<Integer, VueNoeud> m_noeuds;
-	private int m_largeur;
-	private int m_hauteur;
+    private HashMap<Integer, VueNoeud> m_noeuds;
+    private int m_largeur;
+    private int m_hauteur;
     private int m_x_max;
     private int m_y_max;
 
@@ -32,13 +33,17 @@ public class VuePlan extends JPanel {
     private Point m_lastClick;
     private Point m_lastPosition;
 
+    private Controleur m_controleur;
 
-    public VuePlan() {
+    //gère la selection
+    private Noeud m_SelectedNoeud;
+
+    public VuePlan(Controleur controleur) {
 
         setBackground(COULEUR_BACKGROUND);
 
         m_plan = null;
-
+        m_controleur = controleur;
         m_largeur = 1;
         m_hauteur = 1;
 
@@ -52,6 +57,10 @@ public class VuePlan extends JPanel {
         m_lastClick = getLocation();
         m_lastPosition = getLocation();
 
+        //selection
+        m_SelectedNoeud=null;
+
+        initListeners();
     }
 
     public void setM_plan(Plan plan) {
@@ -66,29 +75,41 @@ public class VuePlan extends JPanel {
             m_noeuds.put(n.getM_id(), vueNoeud);
         }
 
-        updateSize(m_zoom,(Point) null);
+        updateSize(m_zoom, (Point) null);
     }
+
     public Plan getM_plan() {
         return m_plan;
+    }
+
+    public int getM_y_max() {
+        return m_y_max;
+    }
+
+    public int getM_x_max() {
+        return m_x_max;
     }
 
     public void setM_zoom(float zoom,Point position) {
         updateSize(zoom,position);
     }
+
     public float getM_zoom() {
         return m_zoom;
     }
 
-    public void setM_lastClick(Point m_lastClick) {
-        this.m_lastClick = m_lastClick;
+    public void setM_lastClick(Point lastClick) {
+        this.m_lastClick = lastClick;
     }
+
     public Point getM_lastClick() {
         return m_lastClick;
     }
 
-    public void setM_lastPosition(Point m_lastPosition) {
-        this.m_lastPosition = m_lastPosition;
+    public void setM_lastPosition(Point lastPosition) {
+        this.m_lastPosition = lastPosition;
     }
+
     public Point getM_lastPosition() {
 
         return m_lastPosition;
@@ -96,9 +117,11 @@ public class VuePlan extends JPanel {
 
     // Other methods
 
-    private void updateSize(float zoom,Point position) {
-         float deltaZoom=zoom-m_zoom;
-        m_zoom=zoom;
+    private void updateSize(float zoom, Point position) {
+        float deltaZoom = zoom - m_zoom;
+
+        m_zoom = zoom;
+
         for (VueNoeud n : m_noeuds.values()) {
             m_x_max = n.getM_x() + n.getM_rayon() > m_x_max ? n.getM_x() + n.getM_rayon() : m_x_max;
             m_y_max = n.getM_y() + n.getM_rayon() > m_y_max ? n.getM_y() + n.getM_rayon() : m_y_max;
@@ -110,14 +133,9 @@ public class VuePlan extends JPanel {
         // Centrage du panel
       if (position==null){
           setLocation((getParent().getWidth() - getWidth()) / 2, (getParent().getHeight() - getHeight()) / 2);
-          //System.out.print("position Null");
       }
         else {
-          /////ATTENTION DANGEREUX
           setLocation((int)( this.getX()-(0.1*(deltaZoom/abs(deltaZoom))*(position.getX()))),(int)(this.getY()-(0.1*(deltaZoom/abs(deltaZoom)))*(position.getY())));
-         // setLocation((int)( this.getX()+(getParent().getWidth()/2-position.getX())),(int)(this.getY()+getParent().getHeight()/2-position.getY()));
-          System.out.println(m_zoom);
-          System.out.println(deltaZoom);
       }
 
         repaint();
@@ -144,6 +162,81 @@ public class VuePlan extends JPanel {
 
     }
 
+    private void initListeners() {
+        // Mouse listeners
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mouseClicked(e);
+
+                // Mise à jour de valeurs utiles pour le déplacement par "drag" de la vue
+                setM_lastClick(MouseInfo.getPointerInfo().getLocation());
+                setM_lastPosition(getLocation());
+
+                if (m_controleur.getM_demandeLivraison() == null) {
+                    return;
+                }
+                if (e.getClickCount() == 2) {
+                    Noeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
+                    if (clickedNoeud != null) {
+                        if (clickedNoeud.hasLivraison()) {
+                            new FenetreInfosLivraison(clickedNoeud.getM_livraison(), m_controleur);
+
+                        } else if (!clickedNoeud.isM_entrepot()) {
+                            new FenetreAjoutLivraison(clickedNoeud, m_controleur.getM_demandeLivraison(), m_controleur);
+                        }
+                    }
+                }
+            }
+        });
+
+        addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                super.mouseDragged(e);
+
+                Point p = MouseInfo.getPointerInfo().getLocation();
+                getM_lastPosition().getX();
+                p.getX();
+                getM_lastClick().getX();
+
+                int x = (int) (getM_lastPosition().getX() + p.getX() - getM_lastClick().getX());
+                int y = (int) (getM_lastPosition().getY() + p.getY() - getM_lastClick().getY());
+                setLocation(x, y);
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                Noeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
+                if (clickedNoeud != null) {
+                    m_SelectedNoeud=clickedNoeud;
+                }
+                else {
+                    m_SelectedNoeud=null;
+                }
+                repaint();
+            }
+        });
+
+        addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                setM_zoom(getM_zoom() * (1 - (float) e.getWheelRotation() / 10), e.getPoint());
+            }
+        });
+        //to prevent the map to disappear when resizing the main windows
+        addComponentListener(new ComponentAdapter(){
+            @Override
+            public void componentResized(ComponentEvent e) {
+                // Redimensionnement du panel
+                setSize((int) ((getM_x_max() + 10) * getM_zoom()) , (int) ((getM_y_max() + 10) * getM_zoom()));
+                repaint();
+            }
+        });
+
+    };
+
+
     // Fonction de dessin du plan
     @Override
     public void paintComponent(Graphics g) {
@@ -168,13 +261,20 @@ public class VuePlan extends JPanel {
         }
 
         for (VueNoeud n : m_noeuds.values()) {
-            g2.setColor(n.getM_couleur());
-            int x = (int) ( m_zoom * (n.getM_x() - n.getM_rayon()));
-            int y = (int) ( m_zoom * (n.getM_y() - n.getM_rayon()));
-            //int x = (int) ( m_zoom * (n.getM_x() - n.getM_rayon()));
-            //int y = (int) ( m_zoom * (n.getM_y() - n.getM_rayon()));
+            if(n.getM_noeud()==m_SelectedNoeud){
+                g2.setColor(n.getM_couleur());
+                int x = (int) ( m_zoom * (n.getM_x() - n.getM_rayon()*2));
+                int y = (int) ( m_zoom * (n.getM_y() - n.getM_rayon()*2));
 
-            g2.fillOval(x, y, (int) (2 * n.getM_rayon() * m_zoom), (int) (2 * n.getM_rayon() * m_zoom));
+                g2.fillOval(x, y, (int) (2 * n.getM_rayon() * m_zoom*2), (int) (2 * n.getM_rayon() * m_zoom*2));
+            }
+            else{
+                g2.setColor(n.getM_couleur());
+                int x = (int) ( m_zoom * (n.getM_x() - n.getM_rayon()));
+                int y = (int) ( m_zoom * (n.getM_y() - n.getM_rayon()));
+
+                g2.fillOval(x, y, (int) (2 * n.getM_rayon() * m_zoom), (int) (2 * n.getM_rayon() * m_zoom));
+            }
         }
     }
 
