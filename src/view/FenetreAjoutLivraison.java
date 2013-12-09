@@ -91,12 +91,12 @@ public class FenetreAjoutLivraison {
         });
 
     // Bouton "Supprimer"
-        ajouterLivraisonButton.addActionListener(new ActionListener() {
+        m_ajouterLivraisonButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                PlageHoraire ph = m_demandeLivraison.getM_plagesHoraires().get(plageHoraireComboBox.getSelectedIndex());
-                int client = Integer.parseInt(numéroClientTextField.getText());
+                PlageHoraire ph = m_demandeLivraison.getM_plagesHoraires().get(m_plageHoraireComboBox.getSelectedIndex());
+                int client = Integer.parseInt(m_numéroClientTextField.getText());
                 Livraison livraison = new Livraison(m_demandeLivraison.getUniqueID(), client, m_noeud, ph);
                 m_controleur.ajouterLivraison(livraison);
                 m_frame.dispose();
