@@ -1,6 +1,7 @@
 package view;
 
 import controller.Controleur;
+import model.DemandeLivraison;
 import model.Noeud;
 import model.Plan;
 import model.Troncon;
@@ -16,13 +17,14 @@ public class VuePlan extends JPanel {
 
     static public Color COULEUR_BACKGROUND = new Color(50, 80, 180);
     static public Color COULEUR_BACKGROUND_LIGHT = new Color(55, 86, 221);
-    static private int STROKE_SIZE = 5;
+    static private int STROKE_SIZE  = 5;
+    static private int ZOOM_ON_OVER = 2;
 
     private Plan m_plan;
 
-    private HashMap<Integer, VueNoeud> m_noeuds;
-    private int m_largeur;
-    private int m_hauteur;
+	private HashMap<Integer, VueNoeud> m_noeuds;
+	private int m_largeur;
+	private int m_hauteur;
     private int m_x_max;
     private int m_y_max;
 
@@ -37,13 +39,14 @@ public class VuePlan extends JPanel {
 
     //gère la selection
     private Noeud m_SelectedNoeud;
+    private Noeud m_FocusedNoeud;
 
     public VuePlan(Controleur controleur) {
 
         setBackground(COULEUR_BACKGROUND);
 
         m_plan = null;
-        m_controleur = controleur;
+        m_controleur= controleur;
         m_largeur = 1;
         m_hauteur = 1;
 
@@ -59,7 +62,7 @@ public class VuePlan extends JPanel {
 
         //selection
         m_SelectedNoeud=null;
-
+        m_FocusedNoeud=null;
         initListeners();
     }
 
@@ -75,9 +78,8 @@ public class VuePlan extends JPanel {
             m_noeuds.put(n.getM_id(), vueNoeud);
         }
 
-        updateSize(m_zoom, (Point) null);
+        updateSize(m_zoom,(Point) null);
     }
-
     public Plan getM_plan() {
         return m_plan;
     }
@@ -93,7 +95,6 @@ public class VuePlan extends JPanel {
     public void setM_zoom(float zoom,Point position) {
         updateSize(zoom,position);
     }
-
     public float getM_zoom() {
         return m_zoom;
     }
@@ -101,7 +102,6 @@ public class VuePlan extends JPanel {
     public void setM_lastClick(Point lastClick) {
         this.m_lastClick = lastClick;
     }
-
     public Point getM_lastClick() {
         return m_lastClick;
     }
@@ -109,7 +109,6 @@ public class VuePlan extends JPanel {
     public void setM_lastPosition(Point lastPosition) {
         this.m_lastPosition = lastPosition;
     }
-
     public Point getM_lastPosition() {
 
         return m_lastPosition;
@@ -117,11 +116,9 @@ public class VuePlan extends JPanel {
 
     // Other methods
 
-    private void updateSize(float zoom, Point position) {
-        float deltaZoom = zoom - m_zoom;
-
-        m_zoom = zoom;
-
+    private void updateSize(float zoom,Point position) {
+         float deltaZoom=zoom-m_zoom;
+        m_zoom=zoom;
         for (VueNoeud n : m_noeuds.values()) {
             m_x_max = n.getM_x() + n.getM_rayon() > m_x_max ? n.getM_x() + n.getM_rayon() : m_x_max;
             m_y_max = n.getM_y() + n.getM_rayon() > m_y_max ? n.getM_y() + n.getM_rayon() : m_y_max;
@@ -176,15 +173,18 @@ public class VuePlan extends JPanel {
                 if (m_controleur.getM_demandeLivraison() == null) {
                     return;
                 }
-                if (e.getClickCount() == 2) {
-                    Noeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
-                    if (clickedNoeud != null) {
+                Noeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
+                if (clickedNoeud != null) {
+                    if (e.getClickCount() == 2) {
                         if (clickedNoeud.hasLivraison()) {
                             new FenetreInfosLivraison(clickedNoeud.getM_livraison(), m_controleur);
 
                         } else if (!clickedNoeud.isM_entrepot()) {
                             new FenetreAjoutLivraison(clickedNoeud, m_controleur.getM_demandeLivraison(), m_controleur);
                         }
+                    }
+                    else if (e.getClickCount()==1){
+                        m_SelectedNoeud=clickedNoeud;
                     }
                 }
             }
@@ -209,12 +209,14 @@ public class VuePlan extends JPanel {
             public void mouseMoved(MouseEvent e) {
                 Noeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
                 if (clickedNoeud != null) {
-                    m_SelectedNoeud=clickedNoeud;
+                    m_FocusedNoeud=clickedNoeud;
+                    repaint();
                 }
-                else {
-                    m_SelectedNoeud=null;
+                else if(m_FocusedNoeud!=null) {
+                    m_FocusedNoeud=null;
+                    repaint();
                 }
-                repaint();
+
             }
         });
 
@@ -260,21 +262,21 @@ public class VuePlan extends JPanel {
             g2.drawLine(x1, y1, x2, y2);
         }
 
+        int coefOnOver;
+
         for (VueNoeud n : m_noeuds.values()) {
-            if(n.getM_noeud()==m_SelectedNoeud){
-                g2.setColor(n.getM_couleur());
-                int x = (int) ( m_zoom * (n.getM_x() - n.getM_rayon()*2));
-                int y = (int) ( m_zoom * (n.getM_y() - n.getM_rayon()*2));
-
-                g2.fillOval(x, y, (int) (2 * n.getM_rayon() * m_zoom*2), (int) (2 * n.getM_rayon() * m_zoom*2));
+            if((n.getM_noeud()==m_FocusedNoeud && !m_FocusedNoeud.isM_entrepot()) ||( n.getM_noeud()==m_SelectedNoeud && !m_SelectedNoeud.isM_entrepot())){
+                coefOnOver=ZOOM_ON_OVER;
             }
-            else{
-                g2.setColor(n.getM_couleur());
-                int x = (int) ( m_zoom * (n.getM_x() - n.getM_rayon()));
-                int y = (int) ( m_zoom * (n.getM_y() - n.getM_rayon()));
-
-                g2.fillOval(x, y, (int) (2 * n.getM_rayon() * m_zoom), (int) (2 * n.getM_rayon() * m_zoom));
+            else {
+                coefOnOver=1;
             }
+                g2.setColor(n.getM_couleur());
+                int x = (int) ( m_zoom * (n.getM_x() - n.getM_rayon() * coefOnOver));
+                int y = (int) ( m_zoom * (n.getM_y() - n.getM_rayon() * coefOnOver));
+
+                g2.fillOval(x, y, (int) (2 * n.getM_rayon() * m_zoom * coefOnOver), (int) (2 * n.getM_rayon() * m_zoom * coefOnOver));
+
         }
     }
 
