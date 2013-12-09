@@ -44,6 +44,9 @@ public class Controleur {
         m_window = new FenetrePrincipale(this);
     }
 
+    public FenetrePrincipale getM_window() {
+        return m_window;
+    }
 
     public DemandeLivraison getM_demandeLivraison() {
         return m_demandeLivraison;

@@ -15,7 +15,7 @@ public class VueNoeud {
 
     private static int RAYON_DEFAUT = 5;
     private static int RAYON_LIVRAISON = 7;
-    private static int RAYON_ENTREPOT = 9;
+    private static int RAYON_ENTREPOT = 15;
 
     public VueNoeud (Noeud noeud) {
         m_noeud = noeud;

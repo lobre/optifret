@@ -36,6 +36,9 @@ public class VuePlan extends JPanel {
 
     private Controleur m_controleur;
 
+    //gère la selection
+    private Noeud m_SelectedNoeud;
+
     public VuePlan(Controleur controleur) {
 
         setBackground(COULEUR_BACKGROUND);
@@ -54,6 +57,9 @@ public class VuePlan extends JPanel {
         // Drag attributes
         m_lastClick = getLocation();
         m_lastPosition = getLocation();
+
+        //selection
+        m_SelectedNoeud=null;
 
         initListeners();
     }
@@ -74,6 +80,14 @@ public class VuePlan extends JPanel {
     }
     public Plan getM_plan() {
         return m_plan;
+    }
+
+    public int getM_y_max() {
+        return m_y_max;
+    }
+
+    public int getM_x_max() {
+        return m_x_max;
     }
 
     public void setM_zoom(float zoom,Point position) {
@@ -149,22 +163,22 @@ public class VuePlan extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mouseClicked(e);
-                if (e.getClickCount()==2){
-                    // Mise à jour de valeurs utiles pour le déplacement par "drag" de la vue
-                    setM_lastClick(MouseInfo.getPointerInfo().getLocation());
-                    setM_lastPosition(getLocation());
 
-                    if (m_controleur.getM_demandeLivraison() == null) {
-                        return;
-                    }
+                // Mise à jour de valeurs utiles pour le déplacement par "drag" de la vue
+                setM_lastClick(MouseInfo.getPointerInfo().getLocation());
+                setM_lastPosition(getLocation());
 
+                if (m_controleur.getM_demandeLivraison() == null) {
+                    return;
+                }
+                if (e.getClickCount() == 2) {
                     Noeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
                     if (clickedNoeud != null) {
                         if (clickedNoeud.hasLivraison()) {
                             new FenetreInfosLivraison(clickedNoeud.getM_livraison(), m_controleur);
 
                         } else if (!clickedNoeud.isM_entrepot()) {
-                            new FenetreAjoutLivraison(clickedNoeud, m_controleur.getM_demandeLivraison() , m_controleur);
+                            new FenetreAjoutLivraison(clickedNoeud, m_controleur.getM_demandeLivraison(), m_controleur);
                         }
                     }
                 }
@@ -185,6 +199,18 @@ public class VuePlan extends JPanel {
                 int y = (int) (getM_lastPosition().getY() + p.getY() - getM_lastClick().getY());
                 setLocation(x, y);
             }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                Noeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
+                if (clickedNoeud != null) {
+                    m_SelectedNoeud=clickedNoeud;
+                }
+                else {
+                    m_SelectedNoeud=null;
+                }
+                repaint();
+            }
         });
 
         addMouseWheelListener(new MouseWheelListener() {
@@ -193,31 +219,16 @@ public class VuePlan extends JPanel {
                 setM_zoom(getM_zoom() * (1 - (float) e.getWheelRotation() / 10), e.getPoint());
             }
         });
-
         //to prevent the map to disappear when resizing the main windows
-        addComponentListener(new ComponentListener() {
+        addComponentListener(new ComponentAdapter(){
             @Override
             public void componentResized(ComponentEvent e) {
                 // Redimensionnement du panel
-                setSize((int) ((m_x_max + 10) * m_zoom) , (int) ((m_y_max + 10) * m_zoom));
+                setSize((int) ((getM_x_max() + 10) * getM_zoom()) , (int) ((getM_y_max() + 10) * getM_zoom()));
                 repaint();
             }
-
-            @Override
-            public void componentMoved(ComponentEvent e) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void componentShown(ComponentEvent e) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void componentHidden(ComponentEvent e) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
         });
+
     };
 
 
@@ -245,11 +256,20 @@ public class VuePlan extends JPanel {
         }
 
         for (VueNoeud n : m_noeuds.values()) {
-            g2.setColor(n.getM_couleur());
-            int x = (int) ( m_zoom * (n.getM_x() - n.getM_rayon()));
-            int y = (int) ( m_zoom * (n.getM_y() - n.getM_rayon()));
+            if(n.getM_noeud()==m_SelectedNoeud){
+                g2.setColor(n.getM_couleur());
+                int x = (int) ( m_zoom * (n.getM_x() - n.getM_rayon()*2));
+                int y = (int) ( m_zoom * (n.getM_y() - n.getM_rayon()*2));
 
-            g2.fillOval(x, y, (int) (2 * n.getM_rayon() * m_zoom), (int) (2 * n.getM_rayon() * m_zoom));
+                g2.fillOval(x, y, (int) (2 * n.getM_rayon() * m_zoom*2), (int) (2 * n.getM_rayon() * m_zoom*2));
+            }
+            else{
+                g2.setColor(n.getM_couleur());
+                int x = (int) ( m_zoom * (n.getM_x() - n.getM_rayon()));
+                int y = (int) ( m_zoom * (n.getM_y() - n.getM_rayon()));
+
+                g2.fillOval(x, y, (int) (2 * n.getM_rayon() * m_zoom), (int) (2 * n.getM_rayon() * m_zoom));
+            }
         }
     }
 

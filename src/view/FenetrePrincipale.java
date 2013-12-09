@@ -100,6 +100,7 @@ public class FenetrePrincipale {
         m_frame.setJMenuBar(barreDeMenu);
     }
 
+
     private void ajoutItem(String intitule, JMenu menu, ActionListener a) {
         JMenuItem item = new JMenuItem(intitule);
         menu.add(item);

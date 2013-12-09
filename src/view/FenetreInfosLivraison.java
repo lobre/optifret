@@ -7,6 +7,8 @@ import model.Noeud;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 /**
  * Created with IntelliJ IDEA.
@@ -67,6 +69,7 @@ public class FenetreInfosLivraison {
         });
 
         m_frame.setVisible(true);
+
 
     }
 
