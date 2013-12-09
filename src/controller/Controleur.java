@@ -42,64 +42,11 @@ public class Controleur {
         m_commandes = new HistoriqueCommandes();
 
         m_window = new FenetrePrincipale(this);
-        initListeners();
     }
 
-    private void initListeners() {
-        VuePlan vuePlan = m_window.getM_vuePlan();
-        vuePlan.setBackground(new Color(46, 98, 255));
-        // Mouse listeners
-        vuePlan.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mouseClicked(e);
 
-                VuePlan vuePlan = m_window.getM_vuePlan();
-                // Mise à jour de valeurs utiles pour le déplacement par "drag" de la vue
-                vuePlan.setM_lastClick(MouseInfo.getPointerInfo().getLocation());
-                vuePlan.setM_lastPosition(vuePlan.getLocation());
-
-                if (m_demandeLivraison == null) {
-                    return;
-                }
-
-                Noeud clickedNoeud = vuePlan.getClickedNoeud(e.getX(), e.getY());
-                if (clickedNoeud != null) {
-                    if (clickedNoeud.hasLivraison()) {
-                        new FenetreInfosLivraison(clickedNoeud.getM_livraison(), m_window.getM_controleur());
-
-                    } else if (!clickedNoeud.isM_entrepot()) {
-                        new FenetreAjoutLivraison(clickedNoeud, m_demandeLivraison, m_window.getM_controleur());
-                    }
-                }
-            }
-        });
-
-        vuePlan.addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                super.mouseDragged(e);
-                VuePlan vuePlan = m_window.getM_vuePlan();
-
-                Point p = MouseInfo.getPointerInfo().getLocation();
-                vuePlan.getM_lastPosition().getX();
-                p.getX();
-                vuePlan.getM_lastClick().getX();
-
-                int x = (int) (vuePlan.getM_lastPosition().getX() + p.getX() - vuePlan.getM_lastClick().getX());
-                int y = (int) (vuePlan.getM_lastPosition().getY() + p.getY() - vuePlan.getM_lastClick().getY());
-                vuePlan.setLocation(x, y);
-            }
-        });
-
-        vuePlan.addMouseWheelListener(new MouseWheelListener() {
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                VuePlan vuePlan = m_window.getM_vuePlan();
-                vuePlan.setM_zoom(vuePlan.getM_zoom() * (1 - (float) e.getWheelRotation() / 10),e.getPoint());
-            }
-        });
-
+    public DemandeLivraison getM_demandeLivraison() {
+        return m_demandeLivraison;
     }
 
     private File ouvrirFichier() {

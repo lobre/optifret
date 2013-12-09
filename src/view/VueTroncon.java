@@ -18,8 +18,8 @@ public class VueTroncon {
     public Troncon getM_troncon() {
         return m_troncon;
     }
-    public void setM_troncon(Troncon m_troncon) {
-        this.m_troncon = m_troncon;
+    public void setM_troncon(Troncon troncon) {
+        this.m_troncon = troncon;
     }
 
     // Other methods:

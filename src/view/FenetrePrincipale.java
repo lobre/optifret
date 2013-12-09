@@ -44,7 +44,7 @@ public class FenetrePrincipale {
     // Appelé à la création de l'interface
     private void createUIComponents() {
         // Intialisation de la vu du Plan
-        m_vuePlan = new VuePlan();
+        m_vuePlan = new VuePlan(m_controleur);
         m_vuePlan.repaint();
 
         // Initialisation de la zone de notification

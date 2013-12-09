@@ -1,5 +1,6 @@
 package view;
 
+import controller.Controleur;
 import model.DemandeLivraison;
 import model.Noeud;
 import model.Plan;
@@ -7,6 +8,7 @@ import model.Troncon;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.util.HashMap;
 
 import static com.sun.org.apache.xalan.internal.lib.ExsltMath.abs;
@@ -16,7 +18,7 @@ public class VuePlan extends JPanel {
     static public Color COULEUR_BACKGROUND = new Color(50, 80, 180);
     static public Color COULEUR_BACKGROUND_LIGHT = new Color(55, 86, 221);
     static private int STROKE_SIZE  = 5;
-    
+
     private Plan m_plan;
 
 	private HashMap<Integer, VueNoeud> m_noeuds;
@@ -32,13 +34,14 @@ public class VuePlan extends JPanel {
     private Point m_lastClick;
     private Point m_lastPosition;
 
+    private Controleur m_controleur;
 
-    public VuePlan() {
+    public VuePlan(Controleur controleur) {
 
         setBackground(COULEUR_BACKGROUND);
 
         m_plan = null;
-
+        m_controleur= controleur;
         m_largeur = 1;
         m_hauteur = 1;
 
@@ -52,6 +55,7 @@ public class VuePlan extends JPanel {
         m_lastClick = getLocation();
         m_lastPosition = getLocation();
 
+        initListeners();
     }
 
     public void setM_plan(Plan plan) {
@@ -79,15 +83,15 @@ public class VuePlan extends JPanel {
         return m_zoom;
     }
 
-    public void setM_lastClick(Point m_lastClick) {
-        this.m_lastClick = m_lastClick;
+    public void setM_lastClick(Point lastClick) {
+        this.m_lastClick = lastClick;
     }
     public Point getM_lastClick() {
         return m_lastClick;
     }
 
-    public void setM_lastPosition(Point m_lastPosition) {
-        this.m_lastPosition = m_lastPosition;
+    public void setM_lastPosition(Point lastPosition) {
+        this.m_lastPosition = lastPosition;
     }
     public Point getM_lastPosition() {
 
@@ -116,8 +120,6 @@ public class VuePlan extends JPanel {
           /////ATTENTION DANGEREUX
           setLocation((int)( this.getX()-(0.1*(deltaZoom/abs(deltaZoom))*(position.getX()))),(int)(this.getY()-(0.1*(deltaZoom/abs(deltaZoom)))*(position.getY())));
          // setLocation((int)( this.getX()+(getParent().getWidth()/2-position.getX())),(int)(this.getY()+getParent().getHeight()/2-position.getY()));
-          System.out.println(m_zoom);
-          System.out.println(deltaZoom);
       }
 
         repaint();
@@ -143,6 +145,56 @@ public class VuePlan extends JPanel {
         return null;
 
     }
+
+    private void initListeners() {
+        // Mouse listeners
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mouseClicked(e);
+
+                // Mise à jour de valeurs utiles pour le déplacement par "drag" de la vue
+                setM_lastClick(MouseInfo.getPointerInfo().getLocation());
+                setM_lastPosition(getLocation());
+
+                if (m_controleur.getM_demandeLivraison() == null) {
+                    return;
+                }
+
+                Noeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
+                if (clickedNoeud != null) {
+                    if (clickedNoeud.hasLivraison()) {
+                        new FenetreInfosLivraison(clickedNoeud.getM_livraison(), m_controleur);
+
+                    } else if (!clickedNoeud.isM_entrepot()) {
+                        new FenetreAjoutLivraison(clickedNoeud, m_controleur.getM_demandeLivraison() , m_controleur);
+                    }
+                }
+            }
+        });      addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                super.mouseDragged(e);
+
+                Point p = MouseInfo.getPointerInfo().getLocation();
+                getM_lastPosition().getX();
+                p.getX();
+                getM_lastClick().getX();
+
+                int x = (int) (getM_lastPosition().getX() + p.getX() - getM_lastClick().getX());
+                int y = (int) (getM_lastPosition().getY() + p.getY() - getM_lastClick().getY());
+                setLocation(x, y);
+            }
+        });
+
+        addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                setM_zoom(getM_zoom() * (1 - (float) e.getWheelRotation() / 10), e.getPoint());
+            }
+        });
+    };
+
 
     // Fonction de dessin du plan
     @Override
