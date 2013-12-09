@@ -43,26 +43,27 @@ public class PlageHoraire {
     public void addLivraison(Livraison livraison) {
         m_livraisons.add(livraison);
     }
-    private void removeLivraison(Livraison livraison) {
+    public void removeLivraison(Livraison livraison) {
+        livraison.getM_adresse().setM_livraison(null);
         m_livraisons.remove(livraison);
     }
-    public List getM_livraison() {
+    public ArrayList<Livraison> getM_livraisons() {
         return m_livraisons;
     }
 
 
-    private void setHeureDebut(Heure newVar) {
+    public void setHeureDebut(Heure newVar) {
         m_heureDebut = newVar;
     }
-    private Heure getHeureDebut() {
+    public Heure getHeureDebut() {
         return m_heureDebut;
     }
 
 
-    private void setHeureFin(Heure newVar) {
+    public void setHeureFin(Heure newVar) {
         m_heureFin = newVar;
     }
-    private Heure getHeureFin() {
+    public Heure getHeureFin() {
         return m_heureFin;
     }
 

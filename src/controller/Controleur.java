@@ -2,13 +2,14 @@ package controller;
 
 import libs.ExampleFileFilter;
 import model.DemandeLivraison;
+import model.Livraison;
 import model.Noeud;
 import model.Plan;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import view.FenetreAjoutLivraison;
 import view.FenetreInfosLivraison;
-import view.MainWindow;
+import view.FenetrePrincipale;
 import view.VuePlan;
 
 import javax.swing.*;
@@ -20,25 +21,27 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
-public class Controller {
+public class Controleur {
 
-    private MainWindow m_window;
+    private FenetrePrincipale m_window;
 
     private Plan m_plan;
     private DemandeLivraison m_demandeLivraison;
+    private HistoriqueCommandes m_commandes;
 
 
     // Point d'entrée de l'application:
     public static void main(String[] args) {
-        new Controller();
+        new Controleur();
     }
 
 
-    public Controller() {
+    public Controleur() {
         m_plan = null;
         m_demandeLivraison = null;
+        m_commandes = new HistoriqueCommandes();
 
-        m_window = new MainWindow(this);
+        m_window = new FenetrePrincipale(this);
         initListeners();
     }
 
@@ -63,10 +66,10 @@ public class Controller {
                 Noeud clickedNoeud = vuePlan.getClickedNoeud(e.getX(), e.getY());
                 if (clickedNoeud != null) {
                     if (clickedNoeud.hasLivraison()) {
-                        new FenetreInfosLivraison(clickedNoeud.getM_livraison());
+                        new FenetreInfosLivraison(clickedNoeud.getM_livraison(), m_window.getM_controleur());
 
                     } else if (!clickedNoeud.isM_entrepot()) {
-                        new FenetreAjoutLivraison(clickedNoeud, m_demandeLivraison);
+                        new FenetreAjoutLivraison(clickedNoeud, m_demandeLivraison, m_window.getM_controleur());
                     }
                 }
             }
@@ -185,6 +188,17 @@ public class Controller {
         m_window.getM_zoneNotification().setSuccessMessage("La demande de livraison  '" + fichierXML.getName() + "' a été chargée avec succès !");
         m_window.getM_vuePlan().repaint();
 
+    }
+
+
+    public void ajouterLivraison(Livraison livraison) {
+        m_commandes.executer(new CommandeAjout(m_demandeLivraison, livraison));
+        m_window.getM_vuePlan().repaint();
+    }
+
+    public void supprimerLivraison(Livraison livraison) {
+        m_commandes.executer(new CommandeSuppression(m_demandeLivraison, livraison));
+        m_window.getM_vuePlan().repaint();
     }
 
 

@@ -13,11 +13,11 @@ import static com.sun.org.apache.xalan.internal.lib.ExsltMath.abs;
 
 public class VuePlan extends JPanel {
 
-    static private Color COULEUR_BACKGROUND = new Color(50, 80, 180);
+    static public Color COULEUR_BACKGROUND = new Color(50, 80, 180);
+    static public Color COULEUR_BACKGROUND_LIGHT = new Color(55, 86, 221);
     static private int STROKE_SIZE  = 5;
-
+    
     private Plan m_plan;
-    private DemandeLivraison m_demande_livraison;
 
 	private HashMap<Integer, VueNoeud> m_noeuds;
 	private int m_largeur;
@@ -34,6 +34,8 @@ public class VuePlan extends JPanel {
 
 
     public VuePlan() {
+
+        setBackground(COULEUR_BACKGROUND);
 
         m_plan = null;
 
@@ -147,9 +149,9 @@ public class VuePlan extends JPanel {
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setBackground(COULEUR_BACKGROUND);
 
         super.paintComponent(g2);
+
         if (m_plan == null) {
             return;
         }

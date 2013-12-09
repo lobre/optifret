@@ -25,11 +25,12 @@ public class Livraison {
     public Livraison() {
     }
 
-    public Livraison(int id,int client, Noeud adresse) {
+    public Livraison(int id,int client, Noeud adresse, PlageHoraire plage) {
         m_id = id;
         m_noClient = client;
         m_adresse = adresse;
         m_adresse.setM_livraison(this);
+        m_plage = plage;
     }
 
     //
@@ -70,10 +71,10 @@ public class Livraison {
         return m_effectuee;
     }
 
-    public void setLaPlage(PlageHoraire newVar) {
+    public void setM_plage(PlageHoraire newVar) {
         m_plage = newVar;
     }
-    public PlageHoraire getLaPlage() {
+    public PlageHoraire getM_plage() {
         return m_plage;
     }
 

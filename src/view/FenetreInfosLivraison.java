@@ -1,5 +1,6 @@
 package view;
 
+import controller.Controleur;
 import model.Livraison;
 import model.Noeud;
 
@@ -30,16 +31,17 @@ public class FenetreInfosLivraison {
     private JFrame m_frame;
     private Noeud m_noeud;
     private Livraison m_livraison;
+    private Controleur m_controleur;
 
-    public FenetreInfosLivraison(Livraison livraison) {
-
+    public FenetreInfosLivraison(Livraison livraison, Controleur controleur) {
+        m_controleur = controleur;
         m_livraison = livraison;
         m_noeud = m_livraison.getM_adresse();
 
         m_idTextField.setText(Integer.toString(m_noeud.getM_id()));
         m_positionTextField.setText(m_noeud.toString());
         m_clientTextField.setText(Integer.toString(m_noeud.getM_livraison().getM_noClient()));
-        m_plageTextField.setText(m_livraison.getLaPlage().toString());
+        m_plageTextField.setText(m_livraison.getM_plage().toString());
 
         // Initialisation de la fenêtre
         m_frame = new JFrame("Informations sur la livraison " + m_livraison.getM_id());
@@ -59,7 +61,8 @@ public class FenetreInfosLivraison {
         m_supprimerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO : Implémenter l'action "Supprimer noeud", et bouger ça niveau contrôleur
+                m_controleur.supprimerLivraison(m_livraison);
+                m_frame.dispose();
             }
         });
 

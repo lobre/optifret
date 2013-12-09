@@ -1,24 +1,25 @@
 package view;
 
-import controller.Controller;
+import controller.Controleur;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class MainWindow {
+public class FenetrePrincipale {
     private JPanel m_mainPanel;
     private ZoneNotification m_zoneNotification;
     private JButton m_calculerButton;
     private VuePlan m_vuePlan;
+    private JPanel planWrapper;
     private JFrame m_frame;
     private JMenu m_menu;
 
-    private Controller m_controller;
+    private Controleur m_controleur;
 
     // Constructor(s)
-    public MainWindow(Controller controller) {
-        m_controller = controller;
+    public FenetrePrincipale(Controleur controleur) {
+        m_controleur = controleur;
 
         // Initialisation de la fenêtre
         m_frame = new JFrame("Application Optifret");
@@ -32,6 +33,9 @@ public class MainWindow {
 
         // Création du menu
         creerMenus();
+
+        m_frame.getContentPane().setBackground(VuePlan.COULEUR_BACKGROUND);
+        planWrapper.setBackground(VuePlan.COULEUR_BACKGROUND);
 
         // Affichage de la fenêtre
         m_frame.setVisible(true);
@@ -63,20 +67,26 @@ public class MainWindow {
         return m_calculerButton;
     }
 
+    public void setM_controleur(Controleur m_controleur) {
+        this.m_controleur = m_controleur;
+    }
+    public Controleur getM_controleur() {
+        return m_controleur;
+    }
 
     // Other methods
     private void creerMenus() {
         m_menu = new JMenu("Fichier");
         ActionListener actionChargerPlan = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                m_controller.chargerPlan();
+                m_controleur.chargerPlan();
             }
         };
         ajoutItem("Charger un plan (.xml)", m_menu, actionChargerPlan);
 
         ActionListener actionChargerDemandeLivraison = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                m_controller.chargerDemandeLivraison();
+                m_controleur.chargerDemandeLivraison();
             }
         };
         ajoutItem("Charger une demande de livraison (.xml)", m_menu, actionChargerDemandeLivraison);
