@@ -114,7 +114,6 @@ public class VuePlan extends JPanel {
         // Centrage du panel
       if (position==null){
           setLocation((getParent().getWidth() - getWidth()) / 2, (getParent().getHeight() - getHeight()) / 2);
-          //System.out.print("position Null");
       }
         else {
           setLocation((int)( this.getX()-(0.1*(deltaZoom/abs(deltaZoom))*(position.getX()))),(int)(this.getY()-(0.1*(deltaZoom/abs(deltaZoom)))*(position.getY())));
@@ -150,26 +149,29 @@ public class VuePlan extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mouseClicked(e);
+                if (e.getClickCount()==2){
+                    // Mise à jour de valeurs utiles pour le déplacement par "drag" de la vue
+                    setM_lastClick(MouseInfo.getPointerInfo().getLocation());
+                    setM_lastPosition(getLocation());
 
-                // Mise à jour de valeurs utiles pour le déplacement par "drag" de la vue
-                setM_lastClick(MouseInfo.getPointerInfo().getLocation());
-                setM_lastPosition(getLocation());
+                    if (m_controleur.getM_demandeLivraison() == null) {
+                        return;
+                    }
 
-                if (m_controleur.getM_demandeLivraison() == null) {
-                    return;
-                }
+                    Noeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
+                    if (clickedNoeud != null) {
+                        if (clickedNoeud.hasLivraison()) {
+                            new FenetreInfosLivraison(clickedNoeud.getM_livraison(), m_controleur);
 
-                Noeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
-                if (clickedNoeud != null) {
-                    if (clickedNoeud.hasLivraison()) {
-                        new FenetreInfosLivraison(clickedNoeud.getM_livraison(), m_controleur);
-
-                    } else if (!clickedNoeud.isM_entrepot()) {
-                        new FenetreAjoutLivraison(clickedNoeud, m_controleur.getM_demandeLivraison() , m_controleur);
+                        } else if (!clickedNoeud.isM_entrepot()) {
+                            new FenetreAjoutLivraison(clickedNoeud, m_controleur.getM_demandeLivraison() , m_controleur);
+                        }
                     }
                 }
             }
-        });      addMouseMotionListener(new MouseMotionAdapter() {
+        });
+
+        addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
                 super.mouseDragged(e);
@@ -191,6 +193,8 @@ public class VuePlan extends JPanel {
                 setM_zoom(getM_zoom() * (1 - (float) e.getWheelRotation() / 10), e.getPoint());
             }
         });
+
+        //to prevent the map to disappear when resizing the main windows
         addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -244,8 +248,6 @@ public class VuePlan extends JPanel {
             g2.setColor(n.getM_couleur());
             int x = (int) ( m_zoom * (n.getM_x() - n.getM_rayon()));
             int y = (int) ( m_zoom * (n.getM_y() - n.getM_rayon()));
-            //int x = (int) ( m_zoom * (n.getM_x() - n.getM_rayon()));
-            //int y = (int) ( m_zoom * (n.getM_y() - n.getM_rayon()));
 
             g2.fillOval(x, y, (int) (2 * n.getM_rayon() * m_zoom), (int) (2 * n.getM_rayon() * m_zoom));
         }
