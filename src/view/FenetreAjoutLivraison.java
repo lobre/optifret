@@ -1,6 +1,5 @@
 package view;
 
-import com.sun.xml.internal.fastinfoset.util.StringArray;
 import controller.Controleur;
 import model.DemandeLivraison;
 import model.Livraison;
@@ -10,20 +9,13 @@ import model.PlageHoraire;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
 
-/**
- * Created with IntelliJ IDEA.
- * User: nightwish
- * Date: 07/12/13
- * Time: 12:16
- * To change this template use File | Settings | File Templates.
- */
 public class FenetreAjoutLivraison {
     Noeud m_noeud;
-    JFrame m_frame;
+    JDialog m_dialog;
 
     private JTextField m_numéroClientTextField;
     private JTextField m_adresseDeLivraisonTextField;
@@ -31,31 +23,35 @@ public class FenetreAjoutLivraison {
     private JButton m_ajouterLivraisonButton;
     private JButton m_annulerButton;
     private JPanel m_addPanel;
+    private ZoneNotification m_inputNotification;
 
     private Controleur m_controleur;
     private DemandeLivraison m_demandeLivraison;
 
     public FenetreAjoutLivraison(Noeud noeud, DemandeLivraison demandeLivraison, Controleur controleur) {
-    m_noeud = noeud;
-    m_demandeLivraison = demandeLivraison;
-    m_controleur = controleur;
+        m_noeud = noeud;
+        m_demandeLivraison = demandeLivraison;
+        m_controleur = controleur;
 
-    for (PlageHoraire p :m_demandeLivraison.getM_plagesHoraires())
-    {
-         m_plageHoraireComboBox.addItem(p.toString());
-    }
+        for (PlageHoraire p :m_demandeLivraison.getM_plagesHoraires())
+        {
+             m_plageHoraireComboBox.addItem(p.toString());
+        }
 
-    m_adresseDeLivraisonTextField.setText(Integer.toString(m_noeud.getM_id()));
+        m_adresseDeLivraisonTextField.setText(Integer.toString(m_noeud.getM_id()));
 
+        // Zone de notification
+        m_inputNotification.setVisible(true);
+        m_inputNotification.setPreferredSize(new Dimension(500, 35));
+        m_inputNotification.setInfoMessage("Veuillez entrer les informations relatives à la livraison");
 
+        // Initialisation de la fenêtre
+        m_dialog = new JDialog(m_controleur.getM_window().getM_frame(), "Ajouter une livraison", Dialog.ModalityType.APPLICATION_MODAL);
+        m_dialog.setContentPane(this.m_addPanel);
+        m_dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        m_dialog.pack();
 
-    // Initialisation de la fenêtre
-    m_frame = new JFrame("Ajouter une livraison");
-    m_frame.setContentPane(this.m_addPanel);
-    m_frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    m_frame.pack();   //?
-
-    //numéroclient checker
+        //numéroclient checker
         m_numéroClientTextField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -71,26 +67,25 @@ public class FenetreAjoutLivraison {
             public void changedUpdate(DocumentEvent e) {
                 changed();
             }
-            public void changed(){
-                if (m_numéroClientTextField.getText().equals(""))
-                {
+
+            public void changed() {
+                if (m_numéroClientTextField.getText().equals("")) {
                     m_ajouterLivraisonButton.setEnabled(false);
-                }
-                else{
+                } else {
                     m_ajouterLivraisonButton.setEnabled(true);
                 }
             }
         });
 
-    // Bouton "fermer"
+        // Bouton "fermer"
         m_annulerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                m_frame.dispose();
+                m_dialog.dispose();
             }
         });
 
-    // Bouton "Supprimer"
+        // Bouton "Supprimer"
         m_ajouterLivraisonButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -99,18 +94,21 @@ public class FenetreAjoutLivraison {
                 int client = Integer.parseInt(m_numéroClientTextField.getText());
                 Livraison livraison = new Livraison(m_demandeLivraison.getUniqueID(), client, m_noeud, ph);
                 m_controleur.ajouterLivraison(livraison);
-                m_frame.dispose();
+                m_dialog.dispose();
             }
             catch (NumberFormatException exception) {
-                exception.printStackTrace();
-                // TODO : add a "ZoneNotification" in the window, write alerts in it
+                m_inputNotification.setVisible(true);
+                m_inputNotification.setErrorMessage("N° client invalide !");
             }
 
-        }
-    });
+            }
+        });
 
-    m_frame.setVisible(true);
-
+        m_dialog.setVisible(true);
+        m_dialog.setResizable(false);
     }
 
+    private void createUIComponents() {
+        m_inputNotification = new ZoneNotification();
+    }
 }

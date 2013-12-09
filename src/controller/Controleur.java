@@ -3,21 +3,15 @@ package controller;
 import libs.ExampleFileFilter;
 import model.DemandeLivraison;
 import model.Livraison;
-import model.Noeud;
 import model.Plan;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-import view.FenetreAjoutLivraison;
-import view.FenetreInfosLivraison;
 import view.FenetrePrincipale;
-import view.VuePlan;
 
 import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.awt.*;
-import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -85,6 +79,8 @@ public class Controleur {
     }
 
     public void chargerPlan() {
+        m_demandeLivraison = null;
+
         File fichierXML = ouvrirFichier();
 
         if (fichierXML == null) {
@@ -151,6 +147,12 @@ public class Controleur {
         m_window.getM_vuePlan().repaint();
     }
 
-
-
+    public void reexecuter() {
+        //m_commandes.reexecuter();
+    }
+    public void annuler() {
+        System.out.println("Annuler !");
+        m_commandes.annuler();
+        m_window.getM_vuePlan().repaint();
+    }
 }

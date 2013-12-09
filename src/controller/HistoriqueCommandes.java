@@ -24,11 +24,21 @@ public class HistoriqueCommandes {
     }
 
     public void annuler() {
+        System.out.println("m_derniere_commande = " + m_derniere_commande);
         if (m_derniere_commande < 0) {
             return;
         }
 
         m_commandes.get(m_derniere_commande).annuler();
+        System.out.println("Vient d'annuler l'action : " + m_commandes.get(m_derniere_commande).getClass());
         m_derniere_commande -= 1;
+    }
+
+    public void reexecuter() {
+        if ((m_derniere_commande == m_commandes.size() - 1) || m_derniere_commande == -1) {
+            return;
+        }
+        m_derniere_commande += 1;
+        m_commandes.get(m_derniere_commande).executer();
     }
 }

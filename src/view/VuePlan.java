@@ -1,7 +1,6 @@
 package view;
 
 import controller.Controleur;
-import model.DemandeLivraison;
 import model.Noeud;
 import model.Plan;
 import model.Troncon;
@@ -17,13 +16,13 @@ public class VuePlan extends JPanel {
 
     static public Color COULEUR_BACKGROUND = new Color(50, 80, 180);
     static public Color COULEUR_BACKGROUND_LIGHT = new Color(55, 86, 221);
-    static private int STROKE_SIZE  = 5;
+    static private int STROKE_SIZE = 5;
 
     private Plan m_plan;
 
-	private HashMap<Integer, VueNoeud> m_noeuds;
-	private int m_largeur;
-	private int m_hauteur;
+    private HashMap<Integer, VueNoeud> m_noeuds;
+    private int m_largeur;
+    private int m_hauteur;
     private int m_x_max;
     private int m_y_max;
 
@@ -44,7 +43,7 @@ public class VuePlan extends JPanel {
         setBackground(COULEUR_BACKGROUND);
 
         m_plan = null;
-        m_controleur= controleur;
+        m_controleur = controleur;
         m_largeur = 1;
         m_hauteur = 1;
 
@@ -76,8 +75,9 @@ public class VuePlan extends JPanel {
             m_noeuds.put(n.getM_id(), vueNoeud);
         }
 
-        updateSize(m_zoom,(Point) null);
+        updateSize(m_zoom, (Point) null);
     }
+
     public Plan getM_plan() {
         return m_plan;
     }
@@ -93,6 +93,7 @@ public class VuePlan extends JPanel {
     public void setM_zoom(float zoom,Point position) {
         updateSize(zoom,position);
     }
+
     public float getM_zoom() {
         return m_zoom;
     }
@@ -100,6 +101,7 @@ public class VuePlan extends JPanel {
     public void setM_lastClick(Point lastClick) {
         this.m_lastClick = lastClick;
     }
+
     public Point getM_lastClick() {
         return m_lastClick;
     }
@@ -107,6 +109,7 @@ public class VuePlan extends JPanel {
     public void setM_lastPosition(Point lastPosition) {
         this.m_lastPosition = lastPosition;
     }
+
     public Point getM_lastPosition() {
 
         return m_lastPosition;
@@ -114,9 +117,11 @@ public class VuePlan extends JPanel {
 
     // Other methods
 
-    private void updateSize(float zoom,Point position) {
-         float deltaZoom=zoom-m_zoom;
-        m_zoom=zoom;
+    private void updateSize(float zoom, Point position) {
+        float deltaZoom = zoom - m_zoom;
+
+        m_zoom = zoom;
+
         for (VueNoeud n : m_noeuds.values()) {
             m_x_max = n.getM_x() + n.getM_rayon() > m_x_max ? n.getM_x() + n.getM_rayon() : m_x_max;
             m_y_max = n.getM_y() + n.getM_rayon() > m_y_max ? n.getM_y() + n.getM_rayon() : m_y_max;
