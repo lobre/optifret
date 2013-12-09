@@ -20,16 +20,19 @@ public class Dijkstra {
      * @param n_arrivee le noeud d'arrivée
      * @param plan le plan sur lequel le chemin est calculé
      * @return le plus court chemin entre les deux noeuds calculé selon l'algorithme de Dijkstra
-     * en prenant en compte la vitesse. Contrat : Les noeuds fournis doivent être différents et présents sur le plan.
+     * en prenant en compte la vitesse.
      */
     public static Chemin dijkstra_c(Noeud n_depart, Noeud n_arrivee, Plan plan){
+        if (plan==null || n_depart==null || n_arrivee ==null)
+            throw new IllegalArgumentException();
+        if (n_depart.getM_id()==n_arrivee.getM_id())
+            return new Chemin();
         LinkedList<NoeudPondere> noeudsVisites = new LinkedList<NoeudPondere>();
         LinkedList<NoeudPondere> noeudsNonVisites = new LinkedList<NoeudPondere>();
         //On remplit la liste des noeuds non visités
         for (Noeud noeud : plan.getM_noeuds().values()) {
             noeudsNonVisites.addLast(new NoeudPondere(noeud));
         }
-
         //On initialise le noeud de départ
         NoeudPondere depart = new NoeudPondere(n_depart);
         depart.setM_poids(0.);
@@ -54,7 +57,6 @@ public class Dijkstra {
                     }
                 }
             }
-
             //On visite le noeud le plus proche
             NoeudPondere plusProche = noeudLePlusProche(noeudsNonVisites);
             noeudsNonVisites.remove(plusProche);
@@ -73,7 +75,8 @@ public class Dijkstra {
         /*System.out.println("Chemin entre "+n_depart.getM_id() +" et "+n_arrivee.getM_id());
         for (Troncon troncon : pcchemin.getListeTroncons()) {
             System.out.println("Départ : "+troncon.getDepart().getM_id() + ",arrivée : "+troncon.getArrivee().getM_id());
-        }*/
+        }
+        System.out.println("Poids du noeud : "+ dernierNoeudVisite.getM_poids());*/
         return pcchemin;
     }
 

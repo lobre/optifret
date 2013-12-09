@@ -1,5 +1,6 @@
 package model;
 
+import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -16,13 +17,55 @@ import static org.junit.Assert.assertTrue;
  * User: karimalaoui
  * Date: 09/12/2013
  * Time: 10:40
- * To change this template use File | Settings | File Templates.
  */
 public class DijkstraTest {
 
-    @org.junit.Test
-    public void testeDijkstra(){
+    @Test (expected = IllegalArgumentException.class)
+    public void testPlanInvalide(){
+        Plan plan = obtenirPlan();
+        Noeud noeudDepart = plan.getM_noeuds().get(0);
+        Noeud noeudArrivee = plan.getM_noeuds().get(1);
+        Chemin resultat = Dijkstra.dijkstra_c(noeudDepart,noeudArrivee,null);
+    }
 
+    @Test (expected = IllegalArgumentException.class)
+    public void testNoeudInvalide(){
+        Plan plan = obtenirPlan();
+        Noeud noeudDepart = plan.getM_noeuds().get(0);
+        Chemin resultat = Dijkstra.dijkstra_c(noeudDepart,null,plan);
+    }
+
+    @Test
+    public void testeDijkstraLongueur0(){
+        Plan plan = obtenirPlan();
+        Noeud noeudDepart = plan.getM_noeuds().get(0);
+        Chemin resultat = Dijkstra.dijkstra_c(noeudDepart,noeudDepart,plan);
+        assertTrue(resultat.getListeTroncons().size()==0);
+    }
+
+    @Test
+    public void testeDijkstraLongueur1(){
+        Plan plan = obtenirPlan();
+        Noeud noeudDepart = plan.getM_noeuds().get(0);
+        Noeud noeudArrivee = plan.getM_noeuds().get(1);
+        Chemin resultat = Dijkstra.dijkstra_c(noeudDepart,noeudArrivee,plan);
+        assertTrue(resultat.getListeTroncons().getFirst().getDepart().getM_id() == noeudDepart.getM_id());
+        assertTrue(resultat.getListeTroncons().getLast().getArrivee().getM_id() == noeudArrivee.getM_id());
+        assertTrue(resultat.getListeTroncons().size()==1);
+    }
+
+    @Test
+    public void testeDijkstraLongueurN(){
+        Plan plan = obtenirPlan();
+        Noeud noeudDepart = plan.getM_noeuds().get(0);
+        Noeud noeudArrivee = plan.getM_noeuds().get(53);
+        Chemin resultat = Dijkstra.dijkstra_c(noeudDepart,noeudArrivee,plan);
+        assertTrue(resultat.getListeTroncons().getFirst().getDepart().getM_id() == noeudDepart.getM_id());
+        assertTrue(resultat.getListeTroncons().getLast().getArrivee().getM_id() == noeudArrivee.getM_id());
+        assertTrue(resultat.getListeTroncons().size()==8);
+    }
+
+    public Plan obtenirPlan(){
         //Récupération du plan
         File xmlFile = new File("xml_data/plan10x10.xml");
 
@@ -46,17 +89,6 @@ public class DijkstraTest {
         }
         Plan plan = new Plan();
         plan.fromXML(doc.getDocumentElement());
-
-        //Application de Dijkstra
-
-        //Test sur un chemin de longueur 0
-        //Test sur un chemin de longueur 1
-        Noeud noeudDepart = plan.getM_noeuds().get(0);
-        Noeud noeudArrivee = plan.getM_noeuds().get(1);
-        Chemin resultat = Dijkstra.dijkstra_c(noeudDepart,noeudArrivee,plan);
-        assertTrue(resultat.getListeTroncons().getFirst().getDepart().getM_id() == noeudDepart.getM_id());
-        assertTrue(resultat.getListeTroncons().getLast().getArrivee().getM_id() == noeudArrivee.getM_id());
-        //Test sur un chemin de longueur > 1
+        return plan;
     }
-
 }
