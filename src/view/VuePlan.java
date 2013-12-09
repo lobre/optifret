@@ -117,9 +117,7 @@ public class VuePlan extends JPanel {
           //System.out.print("position Null");
       }
         else {
-          /////ATTENTION DANGEREUX
           setLocation((int)( this.getX()-(0.1*(deltaZoom/abs(deltaZoom))*(position.getX()))),(int)(this.getY()-(0.1*(deltaZoom/abs(deltaZoom)))*(position.getY())));
-         // setLocation((int)( this.getX()+(getParent().getWidth()/2-position.getX())),(int)(this.getY()+getParent().getHeight()/2-position.getY()));
       }
 
         repaint();
@@ -191,6 +189,29 @@ public class VuePlan extends JPanel {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
                 setM_zoom(getM_zoom() * (1 - (float) e.getWheelRotation() / 10), e.getPoint());
+            }
+        });
+        addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                // Redimensionnement du panel
+                setSize((int) ((m_x_max + 10) * m_zoom) , (int) ((m_y_max + 10) * m_zoom));
+                repaint();
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                //To change body of implemented methods use File | Settings | File Templates.
             }
         });
     };
