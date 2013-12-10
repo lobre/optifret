@@ -7,6 +7,9 @@ public class ZoneNotification extends JFormattedTextField {
 
     private Font m_font;
 
+    private static int HAUTEUR_DEFAUT = 35;
+    private static int LARGEUR_DEFAUT = 410;
+
     public ZoneNotification() {
 
         setEditable(false);
@@ -14,6 +17,8 @@ public class ZoneNotification extends JFormattedTextField {
         m_font = new Font("Arial", Font.BOLD, 14);
         setFont(m_font);
         setForeground(Color.white);
+
+        setPreferredSize(new Dimension(LARGEUR_DEFAUT, HAUTEUR_DEFAUT));
     }
 
     public void setSuccessMessage(String text) {

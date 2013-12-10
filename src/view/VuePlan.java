@@ -141,7 +141,7 @@ public class VuePlan extends JPanel {
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(getWidth(), getHeight());
+        return new Dimension((int) (m_x_max * m_zoom), (int) (m_y_max * m_zoom));
     }
 
     public VueNoeud getClickedNoeud(int x, int y) {
@@ -179,6 +179,8 @@ public class VuePlan extends JPanel {
                     return;
                 }
 
+                // TODO : Remove this and the two classes when we're sure we'll only use the sidebar
+                /**
                 if (e.getClickCount() == 2) {
                     if (clickedNoeud.getM_noeud().hasLivraison()) {
                         new FenetreInfosLivraison(clickedNoeud.getM_noeud().getM_livraison(), m_controleur);
@@ -187,7 +189,8 @@ public class VuePlan extends JPanel {
                         new FenetreAjoutLivraison(clickedNoeud.getM_noeud(), m_controleur.getM_demandeLivraison(), m_controleur);
                     }
                 }
-                else if (e.getClickCount() == 1 && clickedNoeud != m_selectedNoeud) {
+                **/
+                if (e.getClickCount() == 1 && clickedNoeud != m_selectedNoeud) {
                     setM_selectedNoeud(clickedNoeud);
                     repaint();
                 }
@@ -201,13 +204,11 @@ public class VuePlan extends JPanel {
                 super.mouseDragged(e);
 
                 Point p = MouseInfo.getPointerInfo().getLocation();
-                getM_lastPosition().getX();
-                p.getX();
-                getM_lastClick().getX();
 
-                int x = (int) (getM_lastPosition().getX() + p.getX() - getM_lastClick().getX());
-                int y = (int) (getM_lastPosition().getY() + p.getY() - getM_lastClick().getY());
+                int x = (int) (m_lastPosition.getX() + p.getX() - m_lastClick.getX());
+                int y = (int) (m_lastPosition.getY() + p.getY() - m_lastClick.getY());
                 setLocation(x, y);
+                getParent().repaint();
             }
 
             @Override
@@ -260,7 +261,12 @@ public class VuePlan extends JPanel {
         }
 
         for (VueTroncon vueTroncon : m_troncons.values()) {
-            vueTroncon.draw(g2);
+            int voies = 1;
+            if (m_troncons.containsKey(vueTroncon.getM_troncon().getOppositePair()))  {
+                voies = 2;
+            }
+
+            vueTroncon.draw(g2, voies);
         }
 
         for (VueNoeud vueNoeud : m_noeuds.values()) {
@@ -275,8 +281,17 @@ public class VuePlan extends JPanel {
         if (m_selectedNoeud != null) {
             m_selectedNoeud.setM_selected(false);
         }
-        if (selected != null) {
+        if (selected == null) {
+            m_controleur.hideSidebar();
+        }
+        else {
             selected.setM_selected(true);
+            if (selected.getM_noeud().hasLivraison()) {
+                m_controleur.showInfosLivraison(selected.getM_noeud().getM_livraison());
+            }
+            else {
+                m_controleur.showAjouterLivraison(selected.getM_noeud());
+            }
         }
 
         m_selectedNoeud = selected;
