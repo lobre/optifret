@@ -18,16 +18,17 @@ public class VueNoeud {
     private static int RAYON_DEFAUT = 5;
     private static int RAYON_LIVRAISON = 7;
     private static int RAYON_ENTREPOT = 14;
+
     private static int ZOOM_FACTOR = 2;
     private static int BORDER_WIDTH = 1;
+
+    private static int FONT_SIZE = 8;
+    private static Font ID_FONT = new Font("Arial", Font.BOLD, FONT_SIZE);
 
     public VueNoeud (Noeud noeud) {
         m_noeud = noeud;
         m_focused = false;
         m_selected = false;
-    }
-    
-    public VueNoeud(){
     }
 
     // Methods
@@ -52,6 +53,17 @@ public class VueNoeud {
         g2.setStroke(new BasicStroke(BORDER_WIDTH));
         g2.setColor(color.darker());
         g2.drawOval(x, y, 2 * r, 2 * r);
+
+        // Si un noeud est sélectionné, on affiche son ID
+        if (m_selected) {
+            g2.setFont(ID_FONT);
+            String idString = Integer.toString(m_noeud.getM_id());
+
+            int text_x = x + r - (int) (idString.length() * FONT_SIZE * 0.3);
+            int text_y = y + r + (int) (FONT_SIZE * 0.3);
+
+            g2.drawString(idString, text_x, text_y);
+        }
     }
 
 
@@ -82,15 +94,19 @@ public class VueNoeud {
     }
 
     public Color getM_couleur() {
+        Color color = COULEUR_DEFAUT;
         if (m_noeud.isEntrepot()) {
-            return COULEUR_ENTREPOT;
+            color = COULEUR_ENTREPOT;
         }
         else if (m_noeud.hasLivraison()) {
-            return COULEUR_LIVRAISON;
+            color = COULEUR_LIVRAISON;
         }
-        else {
-            return COULEUR_DEFAUT;
+
+        if (m_selected) {
+            color = color.brighter();
         }
+
+        return color;
     }
 
     public void setM_selected(boolean m_selected) {

@@ -1,6 +1,7 @@
 package view;
 
 import controller.Controleur;
+import javafx.util.Pair;
 import model.Noeud;
 import model.Plan;
 import model.Troncon;
@@ -16,11 +17,13 @@ import static com.sun.org.apache.xalan.internal.lib.ExsltMath.abs;
 public class VuePlan extends JPanel {
 
     static public Color COULEUR_BACKGROUND = new Color(50, 80, 180);
-    static private int STROKE_SIZE  = 5;
+    static private int MARGIN = 10;
 
     private Plan m_plan;
 
 	private HashMap<Integer, VueNoeud> m_noeuds;
+    private HashMap<Pair, VueTroncon> m_troncons;
+
 	private int m_largeur;
 	private int m_hauteur;
     private int m_x_max;
@@ -48,8 +51,8 @@ public class VuePlan extends JPanel {
         m_largeur = 1;
         m_hauteur = 1;
 
-        m_x_max = m_largeur;
-        m_y_max = m_hauteur;
+        m_x_max = m_largeur + MARGIN;
+        m_y_max = m_hauteur + MARGIN;
 
         m_zoom = 1;
         m_noeuds = new HashMap<Integer, VueNoeud>();
@@ -67,27 +70,25 @@ public class VuePlan extends JPanel {
     public void setM_plan(Plan plan) {
         m_plan = plan;
         m_noeuds = new HashMap<Integer, VueNoeud>();
+        m_troncons = new HashMap<Pair, VueTroncon>();
+
 
         m_x_max = -1;
         m_y_max = -1;
+
+        for (Troncon t : m_plan.getM_troncons()) {
+            m_troncons.put(t.getPair(), new VueTroncon(t));
+        }
 
         for (Noeud n : m_plan.getM_noeuds().values()) {
             VueNoeud vueNoeud = new VueNoeud(n);
             m_noeuds.put(n.getM_id(), vueNoeud);
         }
 
-        updateSize(m_zoom,(Point) null);
+        updateSize(m_zoom, null);
     }
     public Plan getM_plan() {
         return m_plan;
-    }
-
-    public int getM_y_max() {
-        return m_y_max;
-    }
-
-    public int getM_x_max() {
-        return m_x_max;
     }
 
     public void setM_zoom(float zoom,Point position) {
@@ -121,17 +122,19 @@ public class VuePlan extends JPanel {
             m_x_max = n.getM_x() + n.getM_rayon() > m_x_max ? n.getM_x() + n.getM_rayon() : m_x_max;
             m_y_max = n.getM_y() + n.getM_rayon() > m_y_max ? n.getM_y() + n.getM_rayon() : m_y_max;
         }
+        m_x_max +=  MARGIN;
+        m_y_max +=  MARGIN;
 
         // Redimensionnement du panel
-        setSize((int) ((m_x_max + 10) * m_zoom) , (int) ((m_y_max + 10) * m_zoom));
+        setSize((int) (m_x_max * m_zoom), (int) (m_y_max * m_zoom));
 
         // Centrage du panel
-      if (position==null){
-          setLocation((getParent().getWidth() - getWidth()) / 2, (getParent().getHeight() - getHeight()) / 2);
-      }
+        if (position == null){
+            setLocation((getParent().getWidth() - getWidth()) / 2, (getParent().getHeight() - getHeight()) / 2);
+        }
         else {
-          setLocation((int)( this.getX()-(0.1*(deltaZoom/abs(deltaZoom))*(position.getX()))),(int)(this.getY()-(0.1*(deltaZoom/abs(deltaZoom)))*(position.getY())));
-      }
+            setLocation((int)( this.getX()-(0.1*(deltaZoom/abs(deltaZoom))*(position.getX()))),(int)(this.getY()-(0.1*(deltaZoom/abs(deltaZoom)))*(position.getY())));
+        }
 
         repaint();
     }
@@ -154,7 +157,6 @@ public class VuePlan extends JPanel {
         }
 
         return null;
-
     }
 
     private void initListeners() {
@@ -224,27 +226,31 @@ public class VuePlan extends JPanel {
                 setM_zoom(getM_zoom() * (1 - (float) e.getWheelRotation() / 10), e.getPoint());
             }
         });
-        //to prevent the map to disappear when resizing the main windows
+
+        // Pour adapter la map au redimensionnement de la fenêtre
         addComponentListener(new ComponentAdapter(){
             @Override
             public void componentResized(ComponentEvent e) {
                 // Redimensionnement du panel
-                setSize((int) ((getM_x_max() + 10) * getM_zoom()) , (int) ((getM_y_max() + 10) * getM_zoom()));
+                setSize((int) (m_x_max * m_zoom) , (int) (m_y_max * m_zoom));
+
                 repaint();
             }
         });
 
-    };
+    }
 
 
     // Fonction de dessin du plan
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
+        // Antialiasing
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+        // Transformée pour appliquer le zoom
         AffineTransform tr2 = g2.getTransform();
-        tr2.scale(m_zoom,m_zoom);
+        tr2.scale(m_zoom, m_zoom);
         g2.setTransform(tr2);
 
         super.paintComponent(g2);
@@ -253,15 +259,8 @@ public class VuePlan extends JPanel {
             return;
         }
 
-        g2.setColor(VueTroncon.COULEUR_DEFAUT);
-        g2.setStroke(new BasicStroke(STROKE_SIZE));
-        for (Troncon troncon : m_plan.getM_troncons()) {
-            int x1 = (int) ( troncon.getArrivee().getM_x());
-            int y1 = (int) ( troncon.getArrivee().getM_y());
-            int x2 = (int) ( troncon.getDepart().getM_x());
-            int y2 = (int) ( troncon.getDepart().getM_y());
-
-            g2.drawLine(x1, y1, x2, y2);
+        for (VueTroncon vueTroncon : m_troncons.values()) {
+            vueTroncon.draw(g2);
         }
 
         for (VueNoeud vueNoeud : m_noeuds.values()) {
