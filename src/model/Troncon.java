@@ -36,11 +36,10 @@ public class Troncon {
     //
 
 
-
     //
     // Accessor methods
     //
-
+    // TODO : replace private statements where needed
     public float getM_longueur() {
         return m_longueur;
     }

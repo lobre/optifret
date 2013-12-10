@@ -1,9 +1,13 @@
 package model;
 
+import model.tsp.GraphImpl;
+import model.tsp.TSP;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class DemandeLivraison
@@ -14,22 +18,31 @@ public class DemandeLivraison {
     static public int PARSE_OK = 0;
 
     private Plan m_plan;
-    private Noeud entrepot;
+    private Noeud m_entrepot;
     private ArrayList<PlageHoraire> m_plagesHoraires;
+
+    private final Map<Integer, Map<Integer, Chemin>> m_chemins;
 
     //
     // Constructors
     //
     public DemandeLivraison(Plan plan) {
-        this.m_plagesHoraires = new ArrayList<PlageHoraire>();
+        m_chemins = new HashMap<>();
+        this.m_plagesHoraires = new ArrayList<>();
         m_plan = plan;
     }
 
     //
     // Accessor methods
     //
+
+
+    public Plan getPlan() {
+        return m_plan;
+    }
+
     public Noeud getEntrepot() {
-        return entrepot;
+        return m_entrepot;
     }
 
     public ArrayList<PlageHoraire> getM_plagesHoraires() {
@@ -37,7 +50,7 @@ public class DemandeLivraison {
     }
 
     public void setEntrepot(Noeud entrepot) {
-        this.entrepot = entrepot;
+        this.m_entrepot = entrepot;
     }
 
     private void ajouterPlageH(PlageHoraire plage) {
@@ -91,6 +104,25 @@ public class DemandeLivraison {
         return maxID + 1;
     }
 
+    /**
+     * Crée une FeuilleRoute à partir de l'objet this.
+     *
+     * @return la feuille de route créée.
+     */
+    public FeuilleRoute calculerFeuilleDeRoute() {
+        GraphImpl graph = new GraphImpl();
+        doSomeFirstCalc(m_plagesHoraires.get(0), m_entrepot, graph, m_plan);
+        for (int i = 1; i < m_plagesHoraires.size() - 1; i++) {
+            doSomeCalc(m_plagesHoraires.get(i), m_plagesHoraires.get(i + 1), graph, m_plan);
+        }
+        doSomeOtherCalc(m_plagesHoraires.get(m_plagesHoraires.size() - 1), m_entrepot, graph, m_plan);
+
+        TSP tsp = new TSP(graph);
+        // On tente de le résoudre en X\1000 secondes.
+        tsp.solve(1000, graph.getNbVertices() * graph.getMaxArcCost() + 1);
+        return new FeuilleRoute(tsp, m_chemins, this);
+    }
+
     public int fromXML(Element racineXML) {
 
         //récupération de l'entrepôt
@@ -100,11 +132,11 @@ public class DemandeLivraison {
         }
 
         String ad = ((Element) entre.item(0)).getAttribute("adresse");
-        entrepot = m_plan.getNoeudParID(Integer.parseInt(ad));
-        if (entrepot == null) {
+        m_entrepot = m_plan.getNoeudParID(Integer.parseInt(ad));
+        if (m_entrepot == null) {
             return DemandeLivraison.PARSE_ERROR;
         }
-        entrepot.setM_entrepot(true);
+        m_entrepot.setM_entrepot(true);
 
         //récupération des plages horaires
         NodeList n_plages = racineXML.getElementsByTagName("PlagesHoraires");
@@ -128,7 +160,7 @@ public class DemandeLivraison {
             if (hDepart.fromString(h1) == PARSE_ERROR || hFin.fromString(h2) == PARSE_ERROR || !hDepart.estAvant(hFin)) {
                 return DemandeLivraison.PARSE_ERROR;
             }
-            PlageHoraire plage = new PlageHoraire(hDepart,hFin);
+            PlageHoraire plage = new PlageHoraire(hDepart, hFin);
 
             //récupération des livraisons de la plage horaire
             NodeList livraisons = e_plage.getElementsByTagName("Livraisons");
@@ -155,5 +187,100 @@ public class DemandeLivraison {
 
         return DemandeLivraison.PARSE_OK;
 
+    }
+
+    /**
+     * Met à jour les poids optimaux entre les livraisons d'ordre i, en excluant les relations avec les livraisons d'ordre i+1.
+     * Calcule également le poids optimal du trajet entre les livraisons d'ordre i et la closure du graphe
+     *
+     * @param i      ordre de la livraison (Rang de la PlageHoraire dans la journée)
+     * @param depart depart du graphe
+     * @param graph  graphe à remplir
+     * @param plan
+     */
+    private void doSomeFirstCalc(PlageHoraire i, Noeud depart, GraphImpl graph, Plan plan) {
+        for (Livraison livraison : i.getM_livraisons()) {
+            for (Livraison autreLivraisonDeRangI : i.getM_livraisons()) {
+                Chemin chemin = Dijkstra.dijkstra_c(livraison.getM_adresse(), autreLivraisonDeRangI.getM_adresse(), plan);
+                int id1 = livraison.getM_adresse().getM_id();
+                int id2 = autreLivraisonDeRangI.getM_adresse().getM_id();
+                fillCost(id1, id2, chemin.getLongueur(), graph);
+                fillChemin(id1, id2, chemin);
+            }
+            Chemin chemin = Dijkstra.dijkstra_c(depart, livraison.getM_adresse(), plan);
+            int id1 = depart.getM_id();
+            int id2 = livraison.getM_adresse().getM_id();
+            fillCost(id1, id2, chemin.getLongueur(), graph);
+            fillChemin(id1, id2, chemin);
+        }
+    }
+
+    /**
+     * Met à jour les poids optimaux entre les livraisons d'ordre i, en incluant les relations avec les livraisons d'ordre i+1
+     *
+     * @param i       ordre de la livraison
+     * @param iPluzun ordre de la livraison de rang i+1
+     * @param graph   graphe à remplir
+     * @param plan
+     */
+    private void doSomeCalc(PlageHoraire i, PlageHoraire iPluzun, GraphImpl graph, Plan plan) {
+        for (Livraison livraison : i.getM_livraisons()) {
+            for (Livraison autreLivraisonDeRangI : i.getM_livraisons()) {
+                if (!livraison.equals(autreLivraisonDeRangI)) {
+                    Chemin chemin = Dijkstra.dijkstra_c(livraison.getM_adresse(), autreLivraisonDeRangI.getM_adresse(), plan);
+                    int id1 = livraison.getM_adresse().getM_id();
+                    int id2 = autreLivraisonDeRangI.getM_adresse().getM_id();
+                    fillCost(id1, id2, chemin.getLongueur(), graph);
+                    fillChemin(id1, id2, chemin);
+                }
+            }
+            for (Livraison autreLivraisonDeRangIPluzun : iPluzun.getM_livraisons()) {
+                Chemin chemin = Dijkstra.dijkstra_c(livraison.getM_adresse(), autreLivraisonDeRangIPluzun.getM_adresse(), plan);
+                int id1 = livraison.getM_adresse().getM_id();
+                int id2 = autreLivraisonDeRangIPluzun.getM_adresse().getM_id();
+                fillCost(id1, id2, chemin.getLongueur(), graph);
+                fillChemin(id1, id2, chemin);
+            }
+        }
+    }
+
+    /**
+     * Met à jour les poids optimaux entre les livraisons d'ordre i, en excluant les relations avec les livraisons d'ordre i+1.
+     * Calcule également le poids optimal du trajet entre les livraisons d'ordre i et la closure du graphe
+     *
+     * @param i       ordre de la livraison (Rang de la PlageHoraire dans la journée)
+     * @param closure closure du graphe
+     * @param graph   graphe à remplir
+     * @param plan
+     */
+    private void doSomeOtherCalc(PlageHoraire i, Noeud closure, GraphImpl graph, Plan plan) {
+        for (Livraison livraison : i.getM_livraisons()) {
+            for (Livraison autreLivraisonDeRangI : i.getM_livraisons()) {
+                Chemin chemin = Dijkstra.dijkstra_c(livraison.getM_adresse(), autreLivraisonDeRangI.getM_adresse(), plan);
+                int id1 = livraison.getM_adresse().getM_id();
+                int id2 = autreLivraisonDeRangI.getM_adresse().getM_id();
+                fillCost(id1, id2, chemin.getLongueur(), graph);
+                fillChemin(id1, id2, chemin);
+            }
+            Chemin chemin = Dijkstra.dijkstra_c(livraison.getM_adresse(), closure, plan);
+            int id1 = livraison.getM_adresse().getM_id();
+            int id2 = closure.getM_id();
+            fillCost(id1, id2, chemin.getLongueur(), graph);
+            fillChemin(id1, id2, chemin);
+        }
+    }
+
+    private void fillChemin(int from, int to, Chemin chemin) {
+        if (m_chemins.get(from) == null) {
+            m_chemins.put(from, new HashMap<Integer, Chemin>());
+        }
+        m_chemins.get(from).put(to, chemin);
+    }
+
+    private void fillCost(int from, int to, int cost, GraphImpl graph) {
+        if (graph.getCosts().get(from) == null) {
+            graph.getCosts().put(from, new HashMap<Integer, Integer>());
+        }
+        graph.getCosts().get(from).put(to, cost);
     }
 }
