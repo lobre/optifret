@@ -1,7 +1,6 @@
 package view;
 
 import controller.Controleur;
-import model.DemandeLivraison;
 import model.Noeud;
 import model.Plan;
 import model.Troncon;
@@ -9,6 +8,7 @@ import model.Troncon;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.AffineTransform;
 import java.util.HashMap;
 
 import static com.sun.org.apache.xalan.internal.lib.ExsltMath.abs;
@@ -16,9 +16,7 @@ import static com.sun.org.apache.xalan.internal.lib.ExsltMath.abs;
 public class VuePlan extends JPanel {
 
     static public Color COULEUR_BACKGROUND = new Color(50, 80, 180);
-    static public Color COULEUR_BACKGROUND_LIGHT = new Color(55, 86, 221);
     static private int STROKE_SIZE  = 5;
-    static private int ZOOM_ON_OVER = 2;
 
     private Plan m_plan;
 
@@ -38,8 +36,8 @@ public class VuePlan extends JPanel {
     private Controleur m_controleur;
 
     //gère la selection
-    private Noeud m_SelectedNoeud;
-    private Noeud m_FocusedNoeud;
+    private VueNoeud m_selectedNoeud;
+    private VueNoeud m_focusedNoeud;
 
     public VuePlan(Controleur controleur) {
 
@@ -60,9 +58,9 @@ public class VuePlan extends JPanel {
         m_lastClick = getLocation();
         m_lastPosition = getLocation();
 
-        //selection
-        m_SelectedNoeud=null;
-        m_FocusedNoeud=null;
+        // Selection / Focus
+        m_selectedNoeud = null;
+        m_focusedNoeud = null;
         initListeners();
     }
 
@@ -116,9 +114,9 @@ public class VuePlan extends JPanel {
 
     // Other methods
 
-    private void updateSize(float zoom,Point position) {
-         float deltaZoom=zoom-m_zoom;
-        m_zoom=zoom;
+    private void updateSize(float zoom, Point position) {
+        float deltaZoom = zoom - m_zoom;
+        m_zoom = zoom;
         for (VueNoeud n : m_noeuds.values()) {
             m_x_max = n.getM_x() + n.getM_rayon() > m_x_max ? n.getM_x() + n.getM_rayon() : m_x_max;
             m_y_max = n.getM_y() + n.getM_rayon() > m_y_max ? n.getM_y() + n.getM_rayon() : m_y_max;
@@ -143,7 +141,7 @@ public class VuePlan extends JPanel {
         return new Dimension(getWidth(), getHeight());
     }
 
-    public Noeud getClickedNoeud(int x, int y) {
+    public VueNoeud getClickedNoeud(int x, int y) {
 
         for (VueNoeud vueNoeud : m_noeuds.values()) {
             int n_x = (int) (m_zoom * vueNoeud.getM_x());
@@ -151,7 +149,7 @@ public class VuePlan extends JPanel {
             float r = vueNoeud.getM_rayon() * m_zoom;
 
             if (x >= n_x - r && x <= n_x + r && y >= n_y - r && y <= n_y + r) {
-                return vueNoeud.getM_noeud();
+                return vueNoeud;
             }
         }
 
@@ -173,21 +171,26 @@ public class VuePlan extends JPanel {
                 if (m_controleur.getM_demandeLivraison() == null) {
                     return;
                 }
-                Noeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
-                if (clickedNoeud != null) {
-                    if (e.getClickCount() == 2) {
-                        if (clickedNoeud.hasLivraison()) {
-                            new FenetreInfosLivraison(clickedNoeud.getM_livraison(), m_controleur);
+                VueNoeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
 
-                        } else if (!clickedNoeud.isM_entrepot()) {
-                            new FenetreAjoutLivraison(clickedNoeud, m_controleur.getM_demandeLivraison(), m_controleur);
-                        }
-                    }
-                    else if (e.getClickCount()==1){
-                        m_SelectedNoeud=clickedNoeud;
+                if (clickedNoeud == null) {
+                    return;
+                }
+
+                if (e.getClickCount() == 2) {
+                    if (clickedNoeud.getM_noeud().hasLivraison()) {
+                        new FenetreInfosLivraison(clickedNoeud.getM_noeud().getM_livraison(), m_controleur);
+
+                    } else if (!clickedNoeud.getM_noeud().isEntrepot()) {
+                        new FenetreAjoutLivraison(clickedNoeud.getM_noeud(), m_controleur.getM_demandeLivraison(), m_controleur);
                     }
                 }
+                else if (e.getClickCount() == 1 && clickedNoeud != m_selectedNoeud) {
+                    setM_selectedNoeud(clickedNoeud);
+                    repaint();
+                }
             }
+
         });
 
         addMouseMotionListener(new MouseMotionAdapter() {
@@ -207,16 +210,11 @@ public class VuePlan extends JPanel {
 
             @Override
             public void mouseMoved(MouseEvent e) {
-                Noeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
-                if (clickedNoeud != null) {
-                    m_FocusedNoeud=clickedNoeud;
+                VueNoeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
+                if (clickedNoeud != m_focusedNoeud) {
+                    setM_focusedNoeud(clickedNoeud);
                     repaint();
                 }
-                else if(m_FocusedNoeud!=null) {
-                    m_FocusedNoeud=null;
-                    repaint();
-                }
-
             }
         });
 
@@ -245,6 +243,10 @@ public class VuePlan extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+        AffineTransform tr2 = g2.getTransform();
+        tr2.scale(m_zoom,m_zoom);
+        g2.setTransform(tr2);
+
         super.paintComponent(g2);
 
         if (m_plan == null) {
@@ -252,34 +254,43 @@ public class VuePlan extends JPanel {
         }
 
         g2.setColor(VueTroncon.COULEUR_DEFAUT);
-        g2.setStroke(new BasicStroke(STROKE_SIZE * m_zoom));
+        g2.setStroke(new BasicStroke(STROKE_SIZE));
         for (Troncon troncon : m_plan.getM_troncons()) {
-            int x1 = (int) ( troncon.getArrivee().getM_x() * m_zoom);
-            int y1 = (int) ( troncon.getArrivee().getM_y() * m_zoom);
-            int x2 = (int) ( troncon.getDepart().getM_x() * m_zoom);
-            int y2 = (int) ( troncon.getDepart().getM_y() * m_zoom);
+            int x1 = (int) ( troncon.getArrivee().getM_x());
+            int y1 = (int) ( troncon.getArrivee().getM_y());
+            int x2 = (int) ( troncon.getDepart().getM_x());
+            int y2 = (int) ( troncon.getDepart().getM_y());
 
             g2.drawLine(x1, y1, x2, y2);
         }
 
-        int coefOnOver;
-
-        for (VueNoeud n : m_noeuds.values()) {
-            if((n.getM_noeud()==m_FocusedNoeud && !m_FocusedNoeud.isM_entrepot()) ||( n.getM_noeud()==m_SelectedNoeud && !m_SelectedNoeud.isM_entrepot())){
-                coefOnOver=ZOOM_ON_OVER;
-            }
-            else {
-                coefOnOver=1;
-            }
-                g2.setColor(n.getM_couleur());
-                int x = (int) ( m_zoom * (n.getM_x() - n.getM_rayon() * coefOnOver));
-                int y = (int) ( m_zoom * (n.getM_y() - n.getM_rayon() * coefOnOver));
-
-                g2.fillOval(x, y, (int) (2 * n.getM_rayon() * m_zoom * coefOnOver), (int) (2 * n.getM_rayon() * m_zoom * coefOnOver));
-
+        for (VueNoeud vueNoeud : m_noeuds.values()) {
+            vueNoeud.draw(g2);
         }
     }
 
+    // Getters/Setters
 
 
+    private void setM_selectedNoeud(VueNoeud selected) {
+        if (m_selectedNoeud != null) {
+            m_selectedNoeud.setM_selected(false);
+        }
+        if (selected != null) {
+            selected.setM_selected(true);
+        }
+
+        m_selectedNoeud = selected;
+    }
+
+    private void setM_focusedNoeud(VueNoeud focused) {
+        if (m_focusedNoeud != null) {
+            m_focusedNoeud.setM_focused(false);
+        }
+        if (focused != null) {
+            focused.setM_focused(true);
+        }
+
+        m_focusedNoeud = focused;
+    }
 }

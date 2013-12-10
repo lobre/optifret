@@ -54,32 +54,17 @@ public class Noeud {
     // Accessor methods
     //
 
-    public void setM_id(int newVar) {
-        m_id = newVar;
-    }
 
     public int getM_id() {
         return m_id;
     }
 
-    public void setM_x(int newVar) {
-        m_x = newVar;
-    }
 
     public int getM_x() {
         return m_x;
     }
-
-    public void setM_y(int newVar) {
-        m_y = newVar;
-    }
-
     public int getM_y() {
         return m_y;
-    }
-
-    public void setM_troncons(ArrayList<Troncon> newVar) {
-        m_troncons = newVar;
     }
 
     public ArrayList<Troncon> getM_troncons() {
@@ -96,7 +81,7 @@ public class Noeud {
     public void setM_entrepot(boolean m_entrepot) {
         this.m_entrepot = m_entrepot;
     }
-    public boolean isM_entrepot() {
+    public boolean isEntrepot() {
         return m_entrepot;
     }
 //
