@@ -120,8 +120,8 @@ public class DemandeLivraison {
 
         TSP tsp = new TSP(graph);
         // On tente de le résoudre en X\1000 secondes.
-        tsp.solve(1000, graph.getNbVertices() * graph.getMaxArcCost() + 1);
-        return new FeuilleRoute(tsp, m_chemins, this);
+        tsp.solve(10000, graph.getNbVertices() * graph.getMaxArcCost() + 1);
+        return new FeuilleRoute(tsp, m_chemins, graph.getMatches(), this);
     }
 
     public int fromXML(Element racineXML) {
@@ -204,7 +204,7 @@ public class DemandeLivraison {
 
     /**
      * Met à jour les poids optimaux entre les livraisons d'ordre i, en excluant les relations avec les livraisons d'ordre i+1.
-     * Calcule également le poids optimal du trajet entre les livraisons d'ordre i et la closure du graphe
+     * Calcule également le poids optimal du trajet entre le départ et les noeuds d'ordre i.
      *
      * @param i      ordre de la livraison (Rang de la PlageHoraire dans la journée)
      * @param depart depart du graphe
@@ -214,11 +214,13 @@ public class DemandeLivraison {
     private void doSomeFirstCalc(PlageHoraire i, Noeud depart, GraphImpl graph, Plan plan) {
         for (Livraison livraison : i.getM_livraisons()) {
             for (Livraison autreLivraisonDeRangI : i.getM_livraisons()) {
-                Chemin chemin = Dijkstra.dijkstra_c(livraison.getM_adresse(), autreLivraisonDeRangI.getM_adresse(), plan);
-                int id1 = livraison.getM_adresse().getM_id();
-                int id2 = autreLivraisonDeRangI.getM_adresse().getM_id();
-                fillCost(id1, id2, chemin.getLongueur(), graph);
-                fillChemin(id1, id2, chemin);
+                if (!livraison.equals(autreLivraisonDeRangI)) {
+                    Chemin chemin = Dijkstra.dijkstra_c(livraison.getM_adresse(), autreLivraisonDeRangI.getM_adresse(), plan);
+                    int id1 = livraison.getM_adresse().getM_id();
+                    int id2 = autreLivraisonDeRangI.getM_adresse().getM_id();
+                    fillCost(id1, id2, chemin.getLongueur(), graph);
+                    fillChemin(id1, id2, chemin);
+                }
             }
             Chemin chemin = Dijkstra.dijkstra_c(depart, livraison.getM_adresse(), plan);
             int id1 = depart.getM_id();
@@ -269,11 +271,13 @@ public class DemandeLivraison {
     private void doSomeOtherCalc(PlageHoraire i, Noeud closure, GraphImpl graph, Plan plan) {
         for (Livraison livraison : i.getM_livraisons()) {
             for (Livraison autreLivraisonDeRangI : i.getM_livraisons()) {
-                Chemin chemin = Dijkstra.dijkstra_c(livraison.getM_adresse(), autreLivraisonDeRangI.getM_adresse(), plan);
-                int id1 = livraison.getM_adresse().getM_id();
-                int id2 = autreLivraisonDeRangI.getM_adresse().getM_id();
-                fillCost(id1, id2, chemin.getLongueur(), graph);
-                fillChemin(id1, id2, chemin);
+                if (!livraison.equals(autreLivraisonDeRangI)) {
+                    Chemin chemin = Dijkstra.dijkstra_c(livraison.getM_adresse(), autreLivraisonDeRangI.getM_adresse(), plan);
+                    int id1 = livraison.getM_adresse().getM_id();
+                    int id2 = autreLivraisonDeRangI.getM_adresse().getM_id();
+                    fillCost(id1, id2, chemin.getLongueur(), graph);
+                    fillChemin(id1, id2, chemin);
+                }
             }
             Chemin chemin = Dijkstra.dijkstra_c(livraison.getM_adresse(), closure, plan);
             int id1 = livraison.getM_adresse().getM_id();
