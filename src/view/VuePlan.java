@@ -201,24 +201,6 @@ public class VuePlan extends JPanel {
                     return;
                 }
                 VueNoeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
-
-               // TODO : Not sure it's good, cause clicking out of a node does not make the side bar disepear.
-               /*
-                if (clickedNoeud == null) {
-                    return;
-                }  */
-
-                // TODO : Remove this and the two classes when we're sure we'll only use the sidebar
-                /**
-                if (e.getClickCount() == 2) {
-                    if (clickedNoeud.getM_noeud().hasLivraison()) {
-                        new FenetreInfosLivraison(clickedNoeud.getM_noeud().getM_livraison(), m_controleur);
-
-                    } else if (!clickedNoeud.getM_noeud().isEntrepot()) {
-                        new FenetreAjoutLivraison(clickedNoeud.getM_noeud(), m_controleur.getM_demandeLivraison(), m_controleur);
-                    }
-                }
-                **/
                 if (e.getClickCount() == 1 && clickedNoeud != m_selectedNoeud) {
                     setM_selectedNoeud(clickedNoeud);
                     repaint();
@@ -297,10 +279,17 @@ public class VuePlan extends JPanel {
             return;
         }
 
+        // Dessin des tronçons
         for (VueTroncon vueTroncon : m_troncons.values()) {
-            vueTroncon.draw(g2);
+            vueTroncon.drawBase(g2);
         }
 
+        // Dessin des chemins sur les tronçons
+        for (VueTroncon vueTroncon : m_troncons.values()) {
+            vueTroncon.drawChemins(g2);
+        }
+
+        // Dessin des noeuds
         for (VueNoeud vueNoeud : m_noeuds.values()) {
             vueNoeud.draw(g2);
         }
@@ -313,9 +302,12 @@ public class VuePlan extends JPanel {
         if (m_selectedNoeud != null) {
             m_selectedNoeud.setM_selected(false);
         }
+
         if (selected == null) {
+            m_selectedNoeud = null;
             m_controleur.hideSidebar();
-        } else if (!selected.getM_noeud().isEntrepot()) {
+        }
+        else if (!selected.getM_noeud().isEntrepot()) {
             selected.setM_selected(true);
             if (selected.getM_noeud().hasLivraison()) {
                 m_controleur.showInfosLivraison(selected.getM_noeud().getM_livraison());
@@ -323,7 +315,9 @@ public class VuePlan extends JPanel {
                 m_controleur.showAjouterLivraison(selected.getM_noeud());
             }
         }
+
         //TODO : A supprimer plus tard
+        /*
         if (selected != null && m_selectedNoeud != null) {
             resetTroncons();
             Chemin chemin = Dijkstra.dijkstra_c(selected.getM_noeud(), m_selectedNoeud.getM_noeud(), m_plan);
@@ -332,7 +326,8 @@ public class VuePlan extends JPanel {
                 vueT.ajouterChemin(chemin);
             }
         }
-        //TODO : Fin à supprimer
+        */
+
         m_selectedNoeud = selected;
     }
 

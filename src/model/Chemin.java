@@ -47,6 +47,14 @@ public class Chemin {
         return listeTroncons;
     }
 
+    public Noeud getDepart() {
+        return listeTroncons.getFirst().getDepart();
+    }
+
+    public Noeud getArrivee() {
+        return listeTroncons.getLast().getArrivee();
+    }
+
 
     //
     // Other methods
