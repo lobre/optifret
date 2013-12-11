@@ -20,9 +20,11 @@ import static org.junit.Assert.assertTrue;
  */
 public class DijkstraTest {
 
+    static final String cheminXml = "xml_tests/planTestDijkstra.xml";
+
     @Test (expected = IllegalArgumentException.class)
     public void testPlanInvalide(){
-        Plan plan = obtenirPlan();
+        Plan plan = obtenirPlan(cheminXml);
         Noeud noeudDepart = plan.getM_noeuds().get(0);
         Noeud noeudArrivee = plan.getM_noeuds().get(1);
         Chemin resultat = Dijkstra.dijkstra_c(noeudDepart,noeudArrivee,null);
@@ -30,14 +32,14 @@ public class DijkstraTest {
 
     @Test (expected = IllegalArgumentException.class)
     public void testNoeudInvalide(){
-        Plan plan = obtenirPlan();
+        Plan plan = obtenirPlan(cheminXml);
         Noeud noeudDepart = plan.getM_noeuds().get(0);
         Chemin resultat = Dijkstra.dijkstra_c(noeudDepart,null,plan);
     }
 
     @Test
     public void testeDijkstraLongueur0(){
-        Plan plan = obtenirPlan();
+        Plan plan = obtenirPlan(cheminXml);
         Noeud noeudDepart = plan.getM_noeuds().get(0);
         Chemin resultat = Dijkstra.dijkstra_c(noeudDepart,noeudDepart,plan);
         assertTrue(resultat.getListeTroncons().size()==0);
@@ -45,7 +47,7 @@ public class DijkstraTest {
 
     @Test
     public void testeDijkstraLongueur1(){
-        Plan plan = obtenirPlan();
+        Plan plan = obtenirPlan(cheminXml);
         Noeud noeudDepart = plan.getM_noeuds().get(0);
         Noeud noeudArrivee = plan.getM_noeuds().get(1);
         Chemin resultat = Dijkstra.dijkstra_c(noeudDepart,noeudArrivee,plan);
@@ -56,18 +58,20 @@ public class DijkstraTest {
 
     @Test
     public void testeDijkstraLongueurN(){
-        Plan plan = obtenirPlan();
+        Plan plan = obtenirPlan(cheminXml);
         Noeud noeudDepart = plan.getM_noeuds().get(0);
-        Noeud noeudArrivee = plan.getM_noeuds().get(53);
+        Noeud noeudArrivee = plan.getM_noeuds().get(4);
+        System.out.println(noeudArrivee.getM_id());
         Chemin resultat = Dijkstra.dijkstra_c(noeudDepart,noeudArrivee,plan);
         assertTrue(resultat.getListeTroncons().getFirst().getDepart().getM_id() == noeudDepart.getM_id());
         assertTrue(resultat.getListeTroncons().getLast().getArrivee().getM_id() == noeudArrivee.getM_id());
-        assertTrue(resultat.getListeTroncons().size()==8);
+        assertTrue(resultat.getListeTroncons().size()==3);
+        assertTrue(resultat.getListeTroncons().get(1).getArrivee().getM_id()==2);
     }
 
-    public Plan obtenirPlan(){
+    public Plan obtenirPlan(String chemin){
         //Récupération du plan
-        File xmlFile = new File("xml_data/plan10x10.xml");
+        File xmlFile = new File(chemin);
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = null;
