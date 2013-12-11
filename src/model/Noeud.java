@@ -63,6 +63,7 @@ public class Noeud {
     public int getM_x() {
         return m_x;
     }
+
     public int getM_y() {
         return m_y;
     }
@@ -74,6 +75,7 @@ public class Noeud {
     public void setM_livraison(Livraison m_livraison) {
         this.m_livraison = m_livraison;
     }
+
     public Livraison getM_livraison() {
         return m_livraison;
     }
@@ -81,6 +83,7 @@ public class Noeud {
     public void setM_entrepot(boolean m_entrepot) {
         this.m_entrepot = m_entrepot;
     }
+
     public boolean isEntrepot() {
         return m_entrepot;
     }

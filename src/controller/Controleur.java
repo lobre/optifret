@@ -145,7 +145,6 @@ public class Controleur {
     }
 
 
-
     public void ajouterLivraison(Livraison livraison) {
         m_commandes.executer(new CommandeAjout(m_demandeLivraison, livraison));
         m_window.getM_vuePlan().repaint();
@@ -160,6 +159,7 @@ public class Controleur {
         m_commandes.reexecuter();
         m_window.getM_vuePlan().repaint();
     }
+
     public void annuler() {
         m_commandes.annuler();
         m_window.getM_vuePlan().repaint();

@@ -25,7 +25,7 @@ public class VueNoeud {
     private static int FONT_SIZE = 8;
     private static Font ID_FONT = new Font("Arial", Font.BOLD, FONT_SIZE);
 
-    public VueNoeud (Noeud noeud) {
+    public VueNoeud(Noeud noeud) {
         m_noeud = noeud;
         m_focused = false;
         m_selected = false;
@@ -36,7 +36,7 @@ public class VueNoeud {
     public void draw(Graphics2D g2) {
 
         int r = getM_rayon();
-        if(!m_noeud.isEntrepot() && (m_selected || m_focused)){
+        if (!m_noeud.isEntrepot() && (m_selected || m_focused)) {
             r *= ZOOM_FACTOR;
         }
 
@@ -84,11 +84,9 @@ public class VueNoeud {
     public int getM_rayon() {
         if (m_noeud.isEntrepot()) {
             return RAYON_ENTREPOT;
-        }
-        else if (m_noeud.hasLivraison()) {
+        } else if (m_noeud.hasLivraison()) {
             return RAYON_LIVRAISON;
-        }
-        else {
+        } else {
             return RAYON_DEFAUT;
         }
     }
@@ -97,8 +95,7 @@ public class VueNoeud {
         Color color = COULEUR_DEFAUT;
         if (m_noeud.isEntrepot()) {
             color = COULEUR_ENTREPOT;
-        }
-        else if (m_noeud.hasLivraison()) {
+        } else if (m_noeud.hasLivraison()) {
             color = COULEUR_LIVRAISON;
         }
 

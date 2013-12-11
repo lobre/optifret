@@ -128,6 +128,7 @@ public class VuePlan extends JPanel {
     public void setM_lastPosition(Point lastPosition) {
         this.m_lastPosition = lastPosition;
     }
+    public Point getM_lastPosition() {
 
     public Point getM_lastPosition() {
         return m_lastPosition;
@@ -149,8 +150,8 @@ public class VuePlan extends JPanel {
             m_x_max = n.getM_x() + n.getM_rayon() > m_x_max ? n.getM_x() + n.getM_rayon() : m_x_max;
             m_y_max = n.getM_y() + n.getM_rayon() > m_y_max ? n.getM_y() + n.getM_rayon() : m_y_max;
         }
-        m_x_max += MARGIN;
-        m_y_max += MARGIN;
+        m_x_max +=  MARGIN;
+        m_y_max +=  MARGIN;
         // Redimensionnement du panel
         setSize((int) (m_x_max * m_zoom), (int) (m_y_max * m_zoom));
 
@@ -203,7 +204,7 @@ public class VuePlan extends JPanel {
                 }
                 VueNoeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
 
-                // TODO : Not sure it's good, cause clicking out of a node does not make the side bar disepear.
+               // TODO : Not sure it's good, cause clicking out of a node does not make the side bar disepear.
                /*
                 if (clickedNoeud == null) {
                     return;
@@ -211,15 +212,15 @@ public class VuePlan extends JPanel {
 
                 // TODO : Remove this and the two classes when we're sure we'll only use the sidebar
                 /**
-                 if (e.getClickCount() == 2) {
-                 if (clickedNoeud.getM_noeud().hasLivraison()) {
-                 new FenetreInfosLivraison(clickedNoeud.getM_noeud().getM_livraison(), m_controleur);
+                if (e.getClickCount() == 2) {
+                    if (clickedNoeud.getM_noeud().hasLivraison()) {
+                        new FenetreInfosLivraison(clickedNoeud.getM_noeud().getM_livraison(), m_controleur);
 
-                 } else if (!clickedNoeud.getM_noeud().isEntrepot()) {
-                 new FenetreAjoutLivraison(clickedNoeud.getM_noeud(), m_controleur.getM_demandeLivraison(), m_controleur);
-                 }
-                 }
-                 **/
+                    } else if (!clickedNoeud.getM_noeud().isEntrepot()) {
+                        new FenetreAjoutLivraison(clickedNoeud.getM_noeud(), m_controleur.getM_demandeLivraison(), m_controleur);
+                    }
+                }
+                **/
                 if (e.getClickCount() == 1 && clickedNoeud != m_selectedNoeud) {
                     setM_selectedNoeud(clickedNoeud);
                     repaint();
@@ -347,8 +348,7 @@ public class VuePlan extends JPanel {
 
         m_focusedNoeud = focused;
     }
-
-
+    
     private VueTroncon getVueTroncon(Troncon t) {
         if (m_troncons.containsKey(t.getPair())) {
             return m_troncons.get(t.getPair());

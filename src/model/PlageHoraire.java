@@ -45,10 +45,12 @@ public class PlageHoraire implements Comparable<PlageHoraire> {
         livraison.getM_adresse().setM_livraison(livraison);
         m_livraisons.add(livraison);
     }
+
     public void removeLivraison(Livraison livraison) {
         livraison.getM_adresse().setM_livraison(null);
         m_livraisons.remove(livraison);
     }
+
     public ArrayList<Livraison> getM_livraisons() {
         return m_livraisons;
     }
@@ -57,6 +59,7 @@ public class PlageHoraire implements Comparable<PlageHoraire> {
     public void setHeureDebut(Heure newVar) {
         m_heureDebut = newVar;
     }
+
     public Heure getHeureDebut() {
         return m_heureDebut;
     }
@@ -65,6 +68,7 @@ public class PlageHoraire implements Comparable<PlageHoraire> {
     public void setHeureFin(Heure newVar) {
         m_heureFin = newVar;
     }
+
     public Heure getHeureFin() {
         return m_heureFin;
     }
@@ -72,6 +76,7 @@ public class PlageHoraire implements Comparable<PlageHoraire> {
     public void setM_indice(int m_indice) {
         this.m_indice = m_indice;
     }
+
     public int getM_indice() {
         return m_indice;
     }
@@ -81,6 +86,6 @@ public class PlageHoraire implements Comparable<PlageHoraire> {
     //
     @Override
     public String toString() {
-        return  m_heureDebut.toString() + " - " + m_heureFin.toString();
+        return m_heureDebut.toString() + " - " + m_heureFin.toString();
     }
 }

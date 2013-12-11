@@ -20,7 +20,7 @@ public class FeuilleRouteTest {
     public void devraitCreerUneFeuilleDeRouteCorrectement() {
         // Given : une DemandeLivraison correcte et éprouvée (courtoisie de vzantedeschi)
         File xmlPlan = new File("xml_data/plan20x20.xml");
-        File xmlDemande = new File("xml_data/livraison20x20-1.xml");
+        File xmlDemande = new File("xml_data/livraison10x10-1.xml");
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = null;
@@ -43,8 +43,7 @@ public class FeuilleRouteTest {
         plan.fromXML(docPlan.getDocumentElement());
 
         DemandeLivraison demande = new DemandeLivraison(plan);
-        int status = demande.fromXML(docDemande.getDocumentElement());
-
+        demande.fromXML(docDemande.getDocumentElement());
 
         // When : on crée la FeuilleRoute correspondante
         FeuilleRoute feuilleRoute = null;

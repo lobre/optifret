@@ -15,7 +15,7 @@ public class NoeudPondere {
     private Troncon m_rejointDepuis;
 
     //Constructor
-    NoeudPondere(Noeud noeud){
+    NoeudPondere(Noeud noeud) {
         this.m_noeud = noeud;
         //this.m_precedent = null;
         this.m_poids = Double.POSITIVE_INFINITY;  //infini comme valeur par défaut, pour Dikjstra
@@ -31,7 +31,7 @@ public class NoeudPondere {
     //    this.m_precedent = m_precedent;
     //}
 
-    public int get_id(){
+    public int get_id() {
         return this.m_noeud.getM_id();
     }
 
