@@ -2,9 +2,7 @@ package view;
 
 import controller.Controleur;
 import javafx.util.Pair;
-import model.Noeud;
-import model.Plan;
-import model.Troncon;
+import model.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -77,6 +75,11 @@ public class VuePlan extends JPanel {
         m_y_max = -1;
 
         for (Troncon t : m_plan.getM_troncons()) {
+            if (m_troncons.containsKey(t.getOppositePair())){
+                //TODO : Finir cette partie
+                //if (m_troncons.get())
+
+            }
             m_troncons.put(t.getPair(), new VueTroncon(t));
         }
 
@@ -87,6 +90,14 @@ public class VuePlan extends JPanel {
 
         updateSize(m_zoom, null);
     }
+
+    public void resetTroncons(){
+        //Supprime les chemins des vues de tronçons
+        for (VueTroncon vueTroncon : m_troncons.values()) {
+            vueTroncon.supprimerChemins();
+        }
+    }
+
     public Plan getM_plan() {
         return m_plan;
     }
@@ -312,7 +323,16 @@ public class VuePlan extends JPanel {
                 m_controleur.showAjouterLivraison(selected.getM_noeud());
             }
         }
-
+        //TODO : A supprimer plus tard
+        if (selected != null && m_selectedNoeud !=null){
+            resetTroncons();
+            Chemin chemin = Dijkstra.dijkstra_c(selected.getM_noeud(),m_selectedNoeud.getM_noeud(),m_plan);
+            for (Troncon troncon : chemin.getListeTroncons()) {
+                VueTroncon vueT = m_troncons.get(troncon.getPair());
+                vueT.ajouterChemin(chemin);
+            }
+        }
+        //TODO : Fin à supprimer
         m_selectedNoeud = selected;
     }
 

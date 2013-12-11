@@ -62,12 +62,6 @@ public class Troncon {
         return m_depart;
     }
 
-    public Pair<Noeud, Noeud> getPair() {
-        return new Pair<Noeud, Noeud>(m_depart, m_arrivee);
-    }
-    public Pair<Noeud, Noeud> getOppositePair() {
-        return new Pair<Noeud, Noeud>(m_arrivee, m_depart);
-    }
 
     //
     // Other methods
@@ -93,6 +87,18 @@ public class Troncon {
 
         return Troncon.PARSE_OK;
 
+    }
+
+
+    public Pair<Noeud, Noeud> getPair() {
+        return new Pair<Noeud, Noeud>(m_depart, m_arrivee);
+    }
+    public Pair<Noeud, Noeud> getOppositePair() {
+        return new Pair<Noeud, Noeud>(m_arrivee, m_depart);
+    }
+
+    public Boolean estDeSensPositif(){
+        return m_depart.getM_id() < m_arrivee.getM_id();
     }
 
 }

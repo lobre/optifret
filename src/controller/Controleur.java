@@ -139,7 +139,7 @@ public class Controleur {
 
         // Active le menu "Édition"
         m_window.getM_menuEdition().setEnabled(true);
-
+        m_window.getM_vuePlan().resetTroncons();
         m_window.getM_vuePlan().repaint();
 
     }
