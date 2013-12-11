@@ -6,6 +6,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -185,8 +186,20 @@ public class DemandeLivraison {
             this.ajouterPlageH(plage);
         }
 
-        return DemandeLivraison.PARSE_OK;
+        // Validation des plages horaires
+        Collections.sort(m_plagesHoraires);
+        for (int i = 0; i < m_plagesHoraires.size() - 1; i++) {
+            PlageHoraire ph1 = m_plagesHoraires.get(i);
+            PlageHoraire ph2 = m_plagesHoraires.get(i + 1);
+            if (ph2.getHeureDebut().estAvant(ph1.getHeureFin())) {
+                // Chevauchement de deux plages horaires
+                return DemandeLivraison.PARSE_ERROR;
+            }
+            ph1.setM_indice(i);
+            ph2.setM_indice(i + 1);
+        }
 
+        return DemandeLivraison.PARSE_OK;
     }
 
     /**

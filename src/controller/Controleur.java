@@ -111,7 +111,7 @@ public class Controleur {
 
     public void chargerDemandeLivraison() {
 
-        if (m_window.getM_vuePlan().getM_plan() == null) {
+        if (m_plan == null) {
             m_window.getM_zoneNotification().setErrorMessage("Veuillez d'abord charger un plan avant de charger une demande de livraison.");
             return;
         }
@@ -131,6 +131,7 @@ public class Controleur {
 
         if (status != DemandeLivraison.PARSE_OK) {
             m_window.getM_zoneNotification().setErrorMessage("Erreur: impossible de charger la demande de livraison demandée.");
+            m_plan.resetNoeuds();
             return;
         }
 

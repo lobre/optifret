@@ -23,52 +23,19 @@ public class Heure {
     public Heure() {
     }
 
-
-
     //
     // Methods
     //
-
-
-    //
-    // Accessor methods
-    //
-
-    public void setM_heures(int newVar) {
-        m_heures = newVar;
-    }
-    public int getM_heures() {
-        return m_heures;
+    public int getTotalSeconds() {
+        return m_heures * 3600 + m_minutes * 60 + m_secondes;
     }
 
-    public void setM_minutes(int newVar) {
-        m_minutes = newVar;
-    }
-    public int getM_minutes() {
-        return m_minutes;
-    }
-
-    public void setM_secondes(int newVar) {
-        m_secondes = newVar;
-    }
-    public int getM_secondes() {
-        return m_secondes;
-    }
     //
     // Other methods
     //
 
     public boolean estAvant(Heure h){
-        if (this.getM_heures() < h.getM_heures()) {
-            return true;
-        }
-        if (this.getM_heures() == h.getM_heures()) {
-
-            if (this.getM_minutes() < h.getM_minutes()) {
-                return  true;
-            }
-        }
-        return false;
+        return getTotalSeconds() < h.getTotalSeconds();
     }
 
     //format hh:mm:ss
@@ -100,7 +67,8 @@ public class Heure {
         return Heure.PARSE_OK;
     }
 
-    @Override     //format hh:mm:ss
+    //format hh:mm:ss
+    @Override
     public String toString() {
         return  String.format("%02d",m_heures) + ":" + String.format("%02d",m_minutes) + ":" + String.format("%02d",m_secondes) ;
     }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 /**
  * Class PlageHoraire
  */
-public class PlageHoraire {
+public class PlageHoraire implements Comparable<PlageHoraire> {
 
     //
     // Fields
@@ -16,25 +16,27 @@ public class PlageHoraire {
     private Heure m_heureDebut;
     private Heure m_heureFin;
 
+    private int m_indice;
+
     //
     // Constructors
     //
-    public PlageHoraire() {
-        m_livraisons = new ArrayList<Livraison>();
-        m_heureDebut = new Heure();
-        m_heureFin = new Heure();
-    }
 
     public PlageHoraire(Heure hDebut, Heure hFin) {
         m_livraisons = new ArrayList<Livraison>();
-        this.m_heureDebut = hDebut;
-        this.m_heureFin = hFin;
+        m_heureDebut = hDebut;
+        m_heureFin = hFin;
+        m_indice = 0;
     }
 
     //
     // Methods
     //
 
+    @Override
+    public int compareTo(PlageHoraire ph) {
+        return m_heureDebut.getTotalSeconds() - ph.getHeureDebut().getTotalSeconds();
+    }
 
     //
     // Accessor methods
@@ -65,6 +67,13 @@ public class PlageHoraire {
     }
     public Heure getHeureFin() {
         return m_heureFin;
+    }
+
+    public void setM_indice(int m_indice) {
+        this.m_indice = m_indice;
+    }
+    public int getM_indice() {
+        return m_indice;
     }
 
     //

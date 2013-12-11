@@ -10,8 +10,11 @@ public class ZoneNotification extends JFormattedTextField {
     private static int HAUTEUR_DEFAUT = 35;
     private static int LARGEUR_DEFAUT = 410;
 
-    public ZoneNotification() {
+    private static Color COULEUR_INFO = new Color(60, 140, 235);
+    private static Color COULEUR_SUCCES = new Color(42, 210, 48);
+    private static Color COULEUR_ERREUR = new Color(230, 68, 25);
 
+    public ZoneNotification() {
         setEditable(false);
 
         m_font = new Font("Arial", Font.BOLD, 14);
@@ -22,17 +25,17 @@ public class ZoneNotification extends JFormattedTextField {
     }
 
     public void setSuccessMessage(String text) {
-        setBackground(new Color(42, 210, 48));
+        setBackground(COULEUR_SUCCES);
         setValue("  " + text);
     }
 
     public void setErrorMessage(String text) {
-        setBackground(new Color(230, 68, 25));
+        setBackground(COULEUR_ERREUR);
         setValue("  " + text);
     }
 
     public void setInfoMessage(String text) {
-        setBackground(new Color(60, 140, 235));
+        setBackground(COULEUR_INFO);
         setValue("  " + text);
     }
 
