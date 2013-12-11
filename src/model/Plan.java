@@ -43,6 +43,7 @@ public class Plan {
     public Noeud getM_racine() {
         return m_racine;
     }
+
     public void setM_racine(Noeud m_racine) {
         this.m_racine = m_racine;
     }
@@ -50,9 +51,11 @@ public class Plan {
     public Noeud getNoeudParID(int id) {
         return m_noeuds.containsKey(id) ? m_noeuds.get(id) : null;
     }
+
     public HashMap<Integer, Noeud> getM_noeuds() {
         return m_noeuds;
     }
+
     public void setM_noeuds(HashMap<Integer, Noeud> m_noeuds) {
         this.m_noeuds = m_noeuds;
     }
@@ -60,6 +63,7 @@ public class Plan {
     public void setM_troncons(ArrayList<Troncon> m_troncons) {
         this.m_troncons = m_troncons;
     }
+
     public ArrayList<Troncon> getM_troncons() {
         return m_troncons;
     }

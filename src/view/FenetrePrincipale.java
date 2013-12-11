@@ -94,14 +94,11 @@ public class FenetrePrincipale {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_P) {
                     m_controleur.chargerPlan();
-                }
-                else if (e.getKeyCode() == KeyEvent.VK_D) {
+                } else if (e.getKeyCode() == KeyEvent.VK_D) {
                     m_controleur.chargerDemandeLivraison();
-                }
-                else if (e.getKeyCode() == KeyEvent.VK_Z) {
+                } else if (e.getKeyCode() == KeyEvent.VK_Z) {
                     m_controleur.annuler();
-                }
-                else if (e.getKeyCode() == KeyEvent.VK_Y) {
+                } else if (e.getKeyCode() == KeyEvent.VK_Y) {
                     m_controleur.reexecuter();
                 }
             }
@@ -109,13 +106,13 @@ public class FenetrePrincipale {
         });
         // Pour adapter la map au redimensionnement de la fenêtre
 
-        m_frame.addComponentListener(new ComponentAdapter(){
+        m_frame.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 // Redimensionnement du panel
                 //System.out.println("resize");
-                m_vuePlan.setSize((int) (m_vuePlan.getM_x_max() * m_vuePlan.getM_zoom()) , (int) (m_vuePlan.getM_y_max() * m_vuePlan.getM_zoom()));
-               // m_vuePlan.setLocation(m_vuePlan.getM_lastPosition());
+                m_vuePlan.setSize((int) (m_vuePlan.getM_x_max() * m_vuePlan.getM_zoom()), (int) (m_vuePlan.getM_y_max() * m_vuePlan.getM_zoom()));
+                // m_vuePlan.setLocation(m_vuePlan.getM_lastPosition());
                 m_vuePlan.repaint();
             }
         });
@@ -143,12 +140,15 @@ public class FenetrePrincipale {
     public ZoneNotification getM_zoneNotification() {
         return m_zoneNotification;
     }
+
     public VuePlan getM_vuePlan() {
         return m_vuePlan;
     }
+
     public JMenu getM_menuFichier() {
         return m_menuFichier;
     }
+
     public JMenu getM_menuEdition() {
         return m_menuEdition;
     }
@@ -241,8 +241,7 @@ public class FenetrePrincipale {
         m_selectedNoeud = noeud;
 
 
-        for (PlageHoraire ph : m_controleur.getM_demandeLivraison().getM_plagesHoraires())
-        {
+        for (PlageHoraire ph : m_controleur.getM_demandeLivraison().getM_plagesHoraires()) {
             m_plagesHoraires.addItem(ph.toString());
         }
 

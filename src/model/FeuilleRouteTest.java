@@ -20,7 +20,7 @@ public class FeuilleRouteTest {
     public void devraitCreerUneFeuilleDeRouteCorrectement() {
         // Given : une DemandeLivraison correcte et éprouvée (courtoisie de vzantedeschi)
         File xmlPlan = new File("xml_data/plan20x20.xml");
-        File xmlDemande = new File("xml_data/livraison10x10-42.xml");
+        File xmlDemande = new File("xml_data/livraison10x10-1.xml");
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = null;
@@ -46,26 +46,25 @@ public class FeuilleRouteTest {
         demande.fromXML(docDemande.getDocumentElement());
 
         // When : on crée la FeuilleRoute correspondante
-        FeuilleRoute feuilleRoute = null;
-        //try {
-        feuilleRoute = demande.calculerFeuilleDeRoute();
-        /*} catch (Exception e) {
-            System.out.println(e);
+        FeuilleRoute feuilleRoute;
+        try {
+            feuilleRoute = demande.calculerFeuilleDeRoute();
+        } catch (Exception e) {
+            System.out.println(format("Shit happened : {0}", e));
             return;
-        *///}
+        }
 
         // Then : on affiche le trajet obtenu dans la console
         int i = 0, j = 0;
         for (Chemin chemin : feuilleRoute.getChemins()) {
             j = 0;
             for (Troncon troncon : chemin.getListeTroncons()) {
-                System.out.println(format("Chemin {0,number,0}, tronçon {0,number,0} : de {0,number,0} à {0,number,0}.", i, j, troncon.getDepart().getM_id(), troncon.getArrivee().getM_id()));
+                System.out.println(format("Chemin {0,number,0}, tronçon {1,number,0} : de {2,number,0} à {3,number,0}.",
+                        i, j, troncon.getDepart().getM_id(), troncon.getArrivee().getM_id()));
                 j++;
             }
             ++i;
         }
         assertTrue("Failed to generate FeuilleRoute", j > 0 && i > 0);
-
     }
-
 }

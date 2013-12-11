@@ -33,9 +33,8 @@ public class FenetreAjoutLivraison {
         m_demandeLivraison = demandeLivraison;
         m_controleur = controleur;
 
-        for (PlageHoraire p :m_demandeLivraison.getM_plagesHoraires())
-        {
-             m_plageHoraireComboBox.addItem(p.toString());
+        for (PlageHoraire p : m_demandeLivraison.getM_plagesHoraires()) {
+            m_plageHoraireComboBox.addItem(p.toString());
         }
 
         m_adresseDeLivraisonTextField.setText(Integer.toString(m_noeud.getM_id()));
@@ -87,19 +86,18 @@ public class FenetreAjoutLivraison {
 
         // Bouton "Supprimer"
         m_ajouterLivraisonButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            try {
-                PlageHoraire ph = m_demandeLivraison.getM_plagesHoraires().get(m_plageHoraireComboBox.getSelectedIndex());
-                int client = Integer.parseInt(m_numéroClientTextField.getText());
-                Livraison livraison = new Livraison(m_demandeLivraison.getUniqueID(), client, m_noeud, ph);
-                m_controleur.ajouterLivraison(livraison);
-                m_dialog.dispose();
-            }
-            catch (NumberFormatException exception) {
-                m_inputNotification.setVisible(true);
-                m_inputNotification.setErrorMessage("N° client invalide !");
-            }
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    PlageHoraire ph = m_demandeLivraison.getM_plagesHoraires().get(m_plageHoraireComboBox.getSelectedIndex());
+                    int client = Integer.parseInt(m_numéroClientTextField.getText());
+                    Livraison livraison = new Livraison(m_demandeLivraison.getUniqueID(), client, m_noeud, ph);
+                    m_controleur.ajouterLivraison(livraison);
+                    m_dialog.dispose();
+                } catch (NumberFormatException exception) {
+                    m_inputNotification.setVisible(true);
+                    m_inputNotification.setErrorMessage("N° client invalide !");
+                }
 
             }
         });

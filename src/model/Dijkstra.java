@@ -15,17 +15,16 @@ import java.util.LinkedList;
 public class Dijkstra {
 
     /**
-     *
-     * @param n_depart le noeud de départ
+     * @param n_depart  le noeud de départ
      * @param n_arrivee le noeud d'arrivée
-     * @param plan le plan sur lequel le chemin est calculé
+     * @param plan      le plan sur lequel le chemin est calculé
      * @return le plus court chemin entre les deux noeuds calculé selon l'algorithme de Dijkstra
-     * en prenant en compte la vitesse.
+     *         en prenant en compte la vitesse.
      */
-    public static Chemin dijkstra_c(Noeud n_depart, Noeud n_arrivee, Plan plan){
-        if (plan==null || n_depart==null || n_arrivee ==null)
+    public static Chemin dijkstra_c(Noeud n_depart, Noeud n_arrivee, Plan plan) {
+        if (plan == null || n_depart == null || n_arrivee == null)
             throw new IllegalArgumentException();
-        if (n_depart.getM_id()==n_arrivee.getM_id())
+        if (n_depart.getM_id() == n_arrivee.getM_id())
             return new Chemin();
         LinkedList<NoeudPondere> noeudsVisites = new LinkedList<NoeudPondere>();
         LinkedList<NoeudPondere> noeudsNonVisites = new LinkedList<NoeudPondere>();
@@ -40,18 +39,18 @@ public class Dijkstra {
         noeudsVisites.add(depart);
 
         //On visite les noeuds non visités jusqu'à visiter le noeud cible
-        while (dernierNoeudVisite.get_id() != n_arrivee.getM_id()){
-            if (dernierNoeudVisite.getM_poids()== Double.POSITIVE_INFINITY){
+        while (dernierNoeudVisite.get_id() != n_arrivee.getM_id()) {
+            if (dernierNoeudVisite.getM_poids() == Double.POSITIVE_INFINITY) {
                 throw new SecurityException("Echec de Dijkstra : noeud d'arrivee inaccessible.");
             }
             //On met à jour la distance des noeuds accessibles depuis le dernier noeud accédé
             for (Troncon troncon : dernierNoeudVisite.getM_noeud().getM_troncons()) {
                 for (NoeudPondere noeudNonVisite : noeudsNonVisites) {
-                    if (noeudNonVisite.get_id() == troncon.getArrivee().getM_id()){
+                    if (noeudNonVisite.get_id() == troncon.getArrivee().getM_id()) {
                         //On met à jour le poids du noeud s'il est meilleur que l'ancien
-                        float poidsTroncon = troncon.getM_longueur()/troncon.getM_vitesse();
-                        if (dernierNoeudVisite.getM_poids()+poidsTroncon < noeudNonVisite.getM_poids()){
-                            noeudNonVisite.setM_poids(dernierNoeudVisite.getM_poids()+poidsTroncon);
+                        float poidsTroncon = troncon.getM_longueur() / troncon.getM_vitesse();
+                        if (dernierNoeudVisite.getM_poids() + poidsTroncon < noeudNonVisite.getM_poids()) {
+                            noeudNonVisite.setM_poids(dernierNoeudVisite.getM_poids() + poidsTroncon);
                             noeudNonVisite.setM_rejointDepuis(troncon);
                         }
                     }
@@ -67,10 +66,10 @@ public class Dijkstra {
         //On reconstruit le chemin
         Chemin pcchemin = new Chemin();
         NoeudPondere noeudParcouru = dernierNoeudVisite;
-        while (noeudParcouru.get_id() != depart.get_id()){
+        while (noeudParcouru.get_id() != depart.get_id()) {
             pcchemin.ajouterTronconDebut(noeudParcouru.getM_rejointDepuis());
             int idOrigine = noeudParcouru.getM_rejointDepuis().getDepart().getM_id();
-            noeudParcouru = noeudOrigine(noeudsVisites,idOrigine);
+            noeudParcouru = noeudOrigine(noeudsVisites, idOrigine);
         }
         /*System.out.println("Chemin entre "+n_depart.getM_id() +" et "+n_arrivee.getM_id());
         for (Troncon troncon : pcchemin.getListeTroncons()) {
@@ -80,22 +79,22 @@ public class Dijkstra {
         return pcchemin;
     }
 
-    private static NoeudPondere noeudLePlusProche(LinkedList<NoeudPondere> noeudsNonVisites){
+    private static NoeudPondere noeudLePlusProche(LinkedList<NoeudPondere> noeudsNonVisites) {
         NoeudPondere plusProche = noeudsNonVisites.getFirst();
         for (NoeudPondere noeudsNonVisite : noeudsNonVisites) {
-            if (noeudsNonVisite.getM_poids() < plusProche.getM_poids()){
+            if (noeudsNonVisite.getM_poids() < plusProche.getM_poids()) {
                 plusProche = noeudsNonVisite;
             }
         }
         return plusProche;
     }
 
-    private static NoeudPondere noeudOrigine(LinkedList<NoeudPondere> noeudsVisites, int idOrigine){
+    private static NoeudPondere noeudOrigine(LinkedList<NoeudPondere> noeudsVisites, int idOrigine) {
         Iterator<NoeudPondere> it = noeudsVisites.iterator();
         NoeudPondere retour = null;
         while (it.hasNext()) {
             NoeudPondere x = it.next();
-            if (x.get_id() == idOrigine){
+            if (x.get_id() == idOrigine) {
                 retour = x;
                 break;
             }

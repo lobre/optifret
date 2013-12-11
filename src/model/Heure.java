@@ -34,7 +34,7 @@ public class Heure {
     // Other methods
     //
 
-    public boolean estAvant(Heure h){
+    public boolean estAvant(Heure h) {
         return getTotalSeconds() < h.getTotalSeconds();
     }
 
@@ -70,6 +70,6 @@ public class Heure {
     //format hh:mm:ss
     @Override
     public String toString() {
-        return  String.format("%02d",m_heures) + ":" + String.format("%02d",m_minutes) + ":" + String.format("%02d",m_secondes) ;
+        return String.format("%02d", m_heures) + ":" + String.format("%02d", m_minutes) + ":" + String.format("%02d", m_secondes);
     }
 }
