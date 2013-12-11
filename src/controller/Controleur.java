@@ -3,6 +3,7 @@ package controller;
 import libs.ExampleFileFilter;
 import model.DemandeLivraison;
 import model.Livraison;
+import model.Noeud;
 import model.Plan;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -102,13 +103,15 @@ public class Controleur {
         m_window.getM_zoneNotification().setSuccessMessage("Le plan '" + fichierXML.getName() + "' a été chargé avec succès !");
 
 
-        // Active le menu "Charger une demande de livraison"
-        m_window.getM_menu().getItem(1).setEnabled(true);
+        // Active l'action "Charger une demande de livraison"
+        m_window.getM_menuFichier().getItem(1).setEnabled(true);
+        // Désactive le menu "Édition"
+        m_window.getM_menuEdition().setEnabled(false);
     }
 
     public void chargerDemandeLivraison() {
 
-        if (m_window.getM_vuePlan().getM_plan() == null) {
+        if (m_plan == null) {
             m_window.getM_zoneNotification().setErrorMessage("Veuillez d'abord charger un plan avant de charger une demande de livraison.");
             return;
         }
@@ -128,13 +131,19 @@ public class Controleur {
 
         if (status != DemandeLivraison.PARSE_OK) {
             m_window.getM_zoneNotification().setErrorMessage("Erreur: impossible de charger la demande de livraison demandée.");
+            m_plan.resetNoeuds();
             return;
         }
 
         m_window.getM_zoneNotification().setSuccessMessage("La demande de livraison  '" + fichierXML.getName() + "' a été chargée avec succès !");
+
+        // Active le menu "Édition"
+        m_window.getM_menuEdition().setEnabled(true);
+
         m_window.getM_vuePlan().repaint();
 
     }
+
 
 
     public void ajouterLivraison(Livraison livraison) {
@@ -154,5 +163,17 @@ public class Controleur {
     public void annuler() {
         m_commandes.annuler();
         m_window.getM_vuePlan().repaint();
+    }
+
+    public void showInfosLivraison(Livraison livraison) {
+        m_window.showInfosLivraison(livraison);
+    }
+
+    public void showAjouterLivraison(Noeud noeud) {
+        m_window.showAjouterLivraison(noeud);
+    }
+
+    public void hideSidebar() {
+        m_window.hideSidebar();
     }
 }

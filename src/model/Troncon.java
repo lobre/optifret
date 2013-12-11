@@ -35,11 +35,17 @@ public class Troncon {
     // Methods
     //
 
-
+    
     //
     // Accessor methods
     //
     // TODO : replace private statements where needed
+
+
+    public String getM_nom() {
+        return m_nom;
+    }
+
     public float getM_longueur() {
         return m_longueur;
     }
@@ -59,7 +65,9 @@ public class Troncon {
     public Pair<Noeud, Noeud> getPair() {
         return new Pair<Noeud, Noeud>(m_depart, m_arrivee);
     }
-
+    public Pair<Noeud, Noeud> getOppositePair() {
+        return new Pair<Noeud, Noeud>(m_arrivee, m_depart);
+    }
 
     //
     // Other methods
