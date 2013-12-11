@@ -75,10 +75,18 @@ public class VuePlan extends JPanel {
         m_y_max = -1;
 
         for (Troncon t : m_plan.getM_troncons()) {
+            VueTroncon vueTroncon = new VueTroncon(t);
             if (m_troncons.containsKey(t.getOppositePair())){
-                //TODO : Finir cette partie
-                //if (m_troncons.get())
+                VueTroncon tInverse = m_troncons.get(t.getOppositePair());
 
+                if (t.estDeSensPositif()) {
+                    m_troncons.remove(t.getOppositePair());
+                    vueTroncon.setM_doubleVoie(true);
+                }
+                else {
+                    tInverse.setM_doubleVoie(true);
+                    continue;
+                }
             }
             m_troncons.put(t.getPair(), new VueTroncon(t));
         }
@@ -120,7 +128,6 @@ public class VuePlan extends JPanel {
         this.m_lastPosition = lastPosition;
     }
     public Point getM_lastPosition() {
-
         return m_lastPosition;
     }
 
@@ -291,12 +298,7 @@ public class VuePlan extends JPanel {
         }
 
         for (VueTroncon vueTroncon : m_troncons.values()) {
-            int voies = 1;
-            if (m_troncons.containsKey(vueTroncon.getM_troncon().getOppositePair()))  {
-                voies = 2;
-            }
-
-            vueTroncon.draw(g2, voies);
+            vueTroncon.draw(g2);
         }
 
         for (VueNoeud vueNoeud : m_noeuds.values()) {
@@ -314,7 +316,7 @@ public class VuePlan extends JPanel {
         if (selected == null) {
             m_controleur.hideSidebar();
         }
-        else {
+        else if (!selected.getM_noeud().isEntrepot()) {
             selected.setM_selected(true);
             if (selected.getM_noeud().hasLivraison()) {
                 m_controleur.showInfosLivraison(selected.getM_noeud().getM_livraison());
@@ -328,7 +330,7 @@ public class VuePlan extends JPanel {
             resetTroncons();
             Chemin chemin = Dijkstra.dijkstra_c(selected.getM_noeud(),m_selectedNoeud.getM_noeud(),m_plan);
             for (Troncon troncon : chemin.getListeTroncons()) {
-                VueTroncon vueT = m_troncons.get(troncon.getPair());
+                VueTroncon vueT = getVueTroncon(troncon);
                 vueT.ajouterChemin(chemin);
             }
         }
@@ -345,5 +347,18 @@ public class VuePlan extends JPanel {
         }
 
         m_focusedNoeud = focused;
+    }
+
+
+    private VueTroncon getVueTroncon(Troncon t) {
+        if (m_troncons.containsKey(t.getPair())) {
+            return m_troncons.get(t.getPair());
+        }
+        else if (m_troncons.containsKey(t.getOppositePair())) {
+            return m_troncons.get(t.getOppositePair());
+        }
+        else {
+            return null;
+        }
     }
 }

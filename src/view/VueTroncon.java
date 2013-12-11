@@ -13,7 +13,12 @@ public class VueTroncon {
     private Boolean m_doubleVoie;
 
     private static Color COULEUR_DEFAUT = new Color(89, 147, 221);
-    private static int STROKE_SIZE  = 2;
+    private static int LARGEUR_TRONCON = 4;
+
+    private static Stroke STROKE_TRONCON_SIMPLE = new BasicStroke(LARGEUR_TRONCON);
+    private static Stroke STROKE_TRONCON_DOUBLE = new BasicStroke(LARGEUR_TRONCON * 2);
+    private static Stroke STROKE_CHEMIN = new BasicStroke(1);
+
     private static Color tableauCouleurs[] = new Color[] {Color.BLUE,Color.RED,Color.YELLOW,Color.GREEN,Color.CYAN,Color.MAGENTA,Color.ORANGE,Color.WHITE,Color.PINK,Color.BLACK};
 
     private static int RUE_FONTSIZE = 6;
@@ -30,11 +35,11 @@ public class VueTroncon {
 
     // Methods
     private float getOffset(int position){
-        if (m_chemins.size()==1){
-            return STROKE_SIZE;
+        if (m_chemins.size() == 1){
+            return LARGEUR_TRONCON;
         }
-        else{
-            return 2*STROKE_SIZE/(m_chemins.size()-1);
+        else {
+            return - LARGEUR_TRONCON + position * (2 * LARGEUR_TRONCON / (m_chemins.size() - 1));
         }
     }
 
@@ -46,44 +51,51 @@ public class VueTroncon {
         return Math.atan2(y2 - y1, x2 - x1);
     }
 
-    public void draw(Graphics2D g2, int voies) {
+    public void draw(Graphics2D g2) {
 
-        g2.setStroke(new BasicStroke(STROKE_SIZE * voies));
+        g2.setColor(COULEUR_DEFAUT);
+        if (m_doubleVoie) {
+            g2.setStroke(STROKE_TRONCON_DOUBLE);
+        }
+        else {
+            g2.setStroke(STROKE_TRONCON_SIMPLE);
+        }
+
         int x1 = m_troncon.getArrivee().getM_x();
         int y1 = m_troncon.getArrivee().getM_y();
         int x2 = m_troncon.getDepart().getM_x();
         int y2 = m_troncon.getDepart().getM_y();
-        g2.setColor(COULEUR_DEFAUT);
+
         g2.drawLine(x1, y1, x2, y2);
 
-        //TODO : Gérer l'offset
-        if (m_chemins.size() != 0){
-            g2.setStroke(new BasicStroke(1));
-            for (int i=0;i<m_chemins.size();i++){
+        // Dessin des chemins
+        double angle = getAngle();
+        if (m_chemins.size() != 0) {
+            g2.setStroke(STROKE_CHEMIN);
+            for (int i = 0 ;i < m_chemins.size(); i++) {
                 g2.setColor(obtenirCouleur(m_chemins.get(i)));
                 float offset = getOffset(i);
-                double angle = getAngle();
-                int xoffset = (int) (offset*Math.cos(angle));
-                int yoffset = (int) (offset*Math.sin(angle));
-                g2.drawLine(x1+xoffset, y1+yoffset, x2+xoffset, y2+yoffset);
+
+                int xoffset = (int) (offset * Math.sin(angle));
+                int yoffset = (int) (offset * Math.cos(angle));
+                g2.drawLine(x1 + xoffset, y1 + yoffset, x2 + xoffset, y2 + yoffset);
             }
         }
 
 
         // Affichage du nom de la rue
-        // TODO : Corriger ça pour que ce soit plus clair, ou l'enlever sinon
-        /**
+        // TODO : Corriger ça pour que ce soit plus clair, ou... l'enlever
+        /*
         g2.setColor(COULEUR_DEFAUT.brighter());
         g2.setFont(RUE_FONT);
 
         int t_x = (x1 + x2) / 2;
         int t_y = (y1 + y2) / 2;
-        double angle = Math.atan2(Math.abs(y2 - y1), Math.abs(x2 - x1));
         if ( Math.abs(angle - Math.PI / 2) < ANGLE_TOLERANCE) {
             t_y += RUE_Y_OFFSET;
         }
         g2.drawString(m_troncon.getM_nom(), t_x, t_y);
-        **/
+        */
     }
 
     public void supprimerChemins(){
@@ -97,7 +109,10 @@ public class VueTroncon {
     }
 
     public void ajouterChemin(Chemin chemin){
-        m_chemins.add(chemin);
+        // TODO : "for" à supprimer plus tard (ajout multiple pour tester les collisions)
+        for (int i = 0; i < 3; i++) {
+            m_chemins.add(chemin);
+        }
     }
 
     // Getters/Setters
