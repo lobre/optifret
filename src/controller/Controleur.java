@@ -5,6 +5,7 @@ import model.*;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import view.FenetrePrincipale;
+import view.VueFeuilleRoutePapier;
 
 import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
@@ -106,6 +107,9 @@ public class Controleur {
         // Désactive le menu "Édition"
         m_window.getM_menuEdition().setEnabled(false);
         // Désactive le bouton "Calculer feuille de route"
+        m_window.getM_calculerButton().setEnabled(false);
+        // Désactive l'action "Éditer version papier"
+        m_window.getM_menuFichier().getItem(2).setEnabled(false);
     }
 
     public void chargerDemandeLivraison() {
@@ -138,10 +142,15 @@ public class Controleur {
 
         // Active le menu "Édition"
         m_window.getM_menuEdition().setEnabled(true);
-        m_window.getM_vuePlan().resetTroncons();
+
+        // Active l'action "Éditer version papier"
+        m_window.getM_menuFichier().getItem(2).setEnabled(true);
 
         // Activer le bouton "Calculer feuille de route"
         m_window.getM_calculerButton().setEnabled(true);
+
+        // Réinitialise les vues troncons
+        m_window.getM_vuePlan().resetTroncons();
 
         m_window.getM_vuePlan().repaint();
 
@@ -155,7 +164,18 @@ public class Controleur {
         m_feuilleRoute = m_demandeLivraison.calculerFeuilleDeRoute();
         m_window.getM_vuePlan().setM_feuilleRoute(m_feuilleRoute);
 
+        m_window.getM_zoneNotification().setSuccessMessage("Feuille de route calculée avec succès !");
+
         System.out.println("Chemins calculés : " + m_feuilleRoute.getChemins());
+    }
+
+    public void editerFeuilleRoutePapier() {
+        if (m_feuilleRoute == null) {
+            throw new IllegalStateException("Aucune feuille de route n'est chargée.");
+        }
+
+        VueFeuilleRoutePapier feuilleRoutePapier = new VueFeuilleRoutePapier(m_feuilleRoute);
+        System.out.println(feuilleRoutePapier.getVersionPapier());
     }
 
 

@@ -289,6 +289,9 @@ public class VuePlan extends JPanel {
         // Dessin des chemins sur les tronçons
         for (VueTroncon vueTroncon : m_troncons.values()) {
             vueTroncon.drawChemins(g2);
+            // TODO : remove this later
+            // vueTroncon.drawNomRue(g2);
+
         }
 
         // Dessin des noeuds

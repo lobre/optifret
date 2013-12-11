@@ -101,4 +101,12 @@ public class Troncon {
         return m_depart.getM_id() < m_arrivee.getM_id();
     }
 
+    public double getAngle() {
+        return Math.atan2(m_arrivee.getM_y() - m_depart.getM_y(), m_arrivee.getM_x() - m_depart.getM_x());
+    }
+
+    public double angleAvec(Troncon t2) {
+        return getAngle() - t2.getAngle();
+    }
+
 }

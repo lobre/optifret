@@ -186,8 +186,19 @@ public class FenetrePrincipale {
             }
         };
         ajoutItem("Charger une demande de livraison (CTRL + D)", m_menuFichier, actionChargerDemandeLivraison);
-        // Désactive le menu "Charger une demande de livraison" par défaut
+
+        // Action "Éditer feuille de route papier"
+        ActionListener actionVersionPapier = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                m_controleur.editerFeuilleRoutePapier();
+            }
+        };
+        ajoutItem("Éditer feuille de route 'papier'", m_menuFichier, actionVersionPapier);
+
+        // Désactive les menu "Charger une demande de livraison" et "Éditer feuille de route papier" par défaut
         m_menuFichier.getItem(1).setEnabled(false);
+        m_menuFichier.getItem(2).setEnabled(false);
+
 
         // Action "Fermer"
         ActionListener actionFermerProgramme = new ActionListener() {
@@ -253,7 +264,7 @@ public class FenetrePrincipale {
 
         m_selectedNoeud = noeud;
 
-
+        m_plagesHoraires.removeAllItems();
         for (PlageHoraire ph : m_controleur.getM_demandeLivraison().getM_plagesHoraires()) {
             m_plagesHoraires.addItem(ph.toString());
         }
@@ -261,7 +272,7 @@ public class FenetrePrincipale {
         m_adresseNouvelleLivraison.setText(Integer.toString(noeud.getM_id()));
 
         // Zone de notification
-        m_notificationAjout.setInfoMessage("Veuillez entrer les informations relatives à la livraison");
+        m_notificationAjout.setInfoMessage("Ajout d'une livraison");
 
         // Bouton "Ajouter"
         m_ajouterButton.addActionListener(new ActionListener() {

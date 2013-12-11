@@ -3,6 +3,7 @@ package model;
 import model.tsp.SolutionState;
 import model.tsp.TSP;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -81,6 +82,14 @@ public class FeuilleRoute {
                 return i;
         }
         return -1;
+    }
+
+    public ArrayList<Troncon> getTroncons() {
+        ArrayList<Troncon> troncons = new ArrayList<Troncon>();
+        for (Chemin chemin : m_chemins) {
+            troncons.addAll(chemin.getListeTroncons());
+        }
+        return troncons;
     }
 
 }
