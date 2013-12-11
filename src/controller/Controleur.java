@@ -98,7 +98,6 @@ public class Controleur {
         }
 
         m_window.getM_vuePlan().setM_plan(m_plan);
-
         m_window.getM_zoneNotification().setSuccessMessage("Le plan '" + fichierXML.getName() + "' a été chargé avec succès !");
 
 
@@ -106,6 +105,7 @@ public class Controleur {
         m_window.getM_menuFichier().getItem(1).setEnabled(true);
         // Désactive le menu "Édition"
         m_window.getM_menuEdition().setEnabled(false);
+        // Désactive le bouton "Calculer feuille de route"
     }
 
     public void chargerDemandeLivraison() {

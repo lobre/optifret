@@ -93,9 +93,9 @@ public class VueTroncon {
 
             g2.drawLine(x1 + xoffset, y1 + yoffset, x2 + xoffset, y2 + yoffset);
 
-            System.out.println("Chemin " + i + ": " + getAngle() + "; xoffset = " + xoffset + " ;  yoffset = " + yoffset);
+            //System.out.println("Chemin " + i + ": " + getAngle() + "; xoffset = " + xoffset + " ;  yoffset = " + yoffset);
         }
-        System.out.println("---------");
+        //System.out.println("---------");
     }
 
 
@@ -129,7 +129,7 @@ public class VueTroncon {
         //Retourne la couleur associee au chemin
         Noeud depart = chemin.getDepart();
         Noeud arrivee = chemin.getArrivee();
-        if (depart.getM_livraison().getM_plage() != depart.getM_livraison().getM_plage()) {
+        if ((!depart.hasLivraison() || !arrivee.hasLivraison()) || (depart.getM_livraison().getM_plage() != depart.getM_livraison().getM_plage())) {
             return COULEUR_CHEMIN_NEUTRE;
         }
         else {
@@ -139,10 +139,7 @@ public class VueTroncon {
     }
 
     public void ajouterChemin(Chemin chemin){
-        // TODO : "for" à supprimer plus tard (ajout multiple pour tester les collisions)
-        for (int i = 0; i < 3; i++) {
-            m_chemins.add(chemin);
-        }
+        m_chemins.add(chemin);
     }
 
     // Getters/Setters
