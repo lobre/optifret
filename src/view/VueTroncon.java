@@ -74,12 +74,16 @@ public class VueTroncon {
             g2.setStroke(STROKE_CHEMIN);
             for (int i = 0 ;i < m_chemins.size(); i++) {
                 g2.setColor(obtenirCouleur(m_chemins.get(i)));
-                float offset = getOffset(i);
 
+                float offset = getOffset(i);
                 int xoffset = (int) (offset * Math.sin(angle));
                 int yoffset = (int) (offset * Math.cos(angle));
+
                 g2.drawLine(x1 + xoffset, y1 + yoffset, x2 + xoffset, y2 + yoffset);
+
+                System.out.println("Chemin " + i + ": " + getAngle() + "; xoffset = " + xoffset + " ;  yoffset = " + yoffset);
             }
+            System.out.println("---------");
         }
 
 

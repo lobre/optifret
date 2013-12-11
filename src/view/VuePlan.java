@@ -19,11 +19,11 @@ public class VuePlan extends JPanel {
 
     private Plan m_plan;
 
-	private HashMap<Integer, VueNoeud> m_noeuds;
+    private HashMap<Integer, VueNoeud> m_noeuds;
     private HashMap<Pair, VueTroncon> m_troncons;
 
-	private int m_largeur;
-	private int m_hauteur;
+    private int m_largeur;
+    private int m_hauteur;
     private int m_x_max;
     private int m_y_max;
 
@@ -45,7 +45,7 @@ public class VuePlan extends JPanel {
         setBackground(COULEUR_BACKGROUND);
 
         m_plan = null;
-        m_controleur= controleur;
+        m_controleur = controleur;
         m_largeur = 1;
         m_hauteur = 1;
 
@@ -76,14 +76,13 @@ public class VuePlan extends JPanel {
 
         for (Troncon t : m_plan.getM_troncons()) {
             VueTroncon vueTroncon = new VueTroncon(t);
-            if (m_troncons.containsKey(t.getOppositePair())){
+            if (m_troncons.containsKey(t.getOppositePair())) {
                 VueTroncon tInverse = m_troncons.get(t.getOppositePair());
 
                 if (t.estDeSensPositif()) {
                     m_troncons.remove(t.getOppositePair());
                     vueTroncon.setM_doubleVoie(true);
-                }
-                else {
+                } else {
                     tInverse.setM_doubleVoie(true);
                     continue;
                 }
@@ -99,7 +98,7 @@ public class VuePlan extends JPanel {
         updateSize(m_zoom, null);
     }
 
-    public void resetTroncons(){
+    public void resetTroncons() {
         //Supprime les chemins des vues de tronçons
         for (VueTroncon vueTroncon : m_troncons.values()) {
             vueTroncon.supprimerChemins();
@@ -110,9 +109,10 @@ public class VuePlan extends JPanel {
         return m_plan;
     }
 
-    public void setM_zoom(float zoom,Point position) {
-        updateSize(zoom,position);
+    public void setM_zoom(float zoom, Point position) {
+        updateSize(zoom, position);
     }
+
     public float getM_zoom() {
         return m_zoom;
     }
@@ -120,6 +120,7 @@ public class VuePlan extends JPanel {
     public void setM_lastClick(Point lastClick) {
         this.m_lastClick = lastClick;
     }
+
     public Point getM_lastClick() {
         return m_lastClick;
     }
@@ -127,6 +128,7 @@ public class VuePlan extends JPanel {
     public void setM_lastPosition(Point lastPosition) {
         this.m_lastPosition = lastPosition;
     }
+
     public Point getM_lastPosition() {
         return m_lastPosition;
     }
@@ -147,19 +149,18 @@ public class VuePlan extends JPanel {
             m_x_max = n.getM_x() + n.getM_rayon() > m_x_max ? n.getM_x() + n.getM_rayon() : m_x_max;
             m_y_max = n.getM_y() + n.getM_rayon() > m_y_max ? n.getM_y() + n.getM_rayon() : m_y_max;
         }
-        m_x_max +=  MARGIN;
-        m_y_max +=  MARGIN;
+        m_x_max += MARGIN;
+        m_y_max += MARGIN;
         // Redimensionnement du panel
         setSize((int) (m_x_max * m_zoom), (int) (m_y_max * m_zoom));
 
         // Centrage du panel
-        if (position == null){
+        if (position == null) {
             setLocation((getParent().getWidth() - getWidth()) / 2, (getParent().getHeight() - getHeight()) / 2);
-        }
-        else {
+        } else {
             //setLocation(new Point((int)( this.getX()-(0.1*(deltaZoom/abs(deltaZoom))*(position.getX()))),(int)(this.getY()-(0.1*(deltaZoom/abs(deltaZoom)))*(position.getY()))));
 
-            setM_lastPosition(new Point((int)( this.getX()-(0.1*(deltaZoom/abs(deltaZoom))*(position.getX()))),(int)(this.getY()-(0.1*(deltaZoom/abs(deltaZoom)))*(position.getY()))));
+            setM_lastPosition(new Point((int) (this.getX() - (0.1 * (deltaZoom / abs(deltaZoom)) * (position.getX()))), (int) (this.getY() - (0.1 * (deltaZoom / abs(deltaZoom))) * (position.getY()))));
             setLocation(m_lastPosition);
         }
 
@@ -202,7 +203,7 @@ public class VuePlan extends JPanel {
                 }
                 VueNoeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
 
-               // TODO : Not sure it's good, cause clicking out of a node does not make the side bar disepear.
+                // TODO : Not sure it's good, cause clicking out of a node does not make the side bar disepear.
                /*
                 if (clickedNoeud == null) {
                     return;
@@ -210,15 +211,15 @@ public class VuePlan extends JPanel {
 
                 // TODO : Remove this and the two classes when we're sure we'll only use the sidebar
                 /**
-                if (e.getClickCount() == 2) {
-                    if (clickedNoeud.getM_noeud().hasLivraison()) {
-                        new FenetreInfosLivraison(clickedNoeud.getM_noeud().getM_livraison(), m_controleur);
+                 if (e.getClickCount() == 2) {
+                 if (clickedNoeud.getM_noeud().hasLivraison()) {
+                 new FenetreInfosLivraison(clickedNoeud.getM_noeud().getM_livraison(), m_controleur);
 
-                    } else if (!clickedNoeud.getM_noeud().isEntrepot()) {
-                        new FenetreAjoutLivraison(clickedNoeud.getM_noeud(), m_controleur.getM_demandeLivraison(), m_controleur);
-                    }
-                }
-                **/
+                 } else if (!clickedNoeud.getM_noeud().isEntrepot()) {
+                 new FenetreAjoutLivraison(clickedNoeud.getM_noeud(), m_controleur.getM_demandeLivraison(), m_controleur);
+                 }
+                 }
+                 **/
                 if (e.getClickCount() == 1 && clickedNoeud != m_selectedNoeud) {
                     setM_selectedNoeud(clickedNoeud);
                     repaint();
@@ -258,17 +259,17 @@ public class VuePlan extends JPanel {
         });
 
         // Pour adapter la map au redimensionnement de la fenêtre
-        addComponentListener(new ComponentAdapter(){
+        addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 // Redimensionnement du panel
                 //System.out.println("resize");
-                setSize((int) (m_x_max * m_zoom) , (int) (m_y_max * m_zoom));
+                setSize((int) (m_x_max * m_zoom), (int) (m_y_max * m_zoom));
                /* if (m_selectedNoeud!=null){
                     setLocation(m_selectedNoeud.getM_x()+getX(),m_selectedNoeud.getM_y()+getHeight()/2);
                 } */
-               // else{
-                    setLocation(m_lastPosition);
+                // else{
+                setLocation(m_lastPosition);
                 //}
                 repaint();
             }
@@ -315,20 +316,18 @@ public class VuePlan extends JPanel {
         }
         if (selected == null) {
             m_controleur.hideSidebar();
-        }
-        else if (!selected.getM_noeud().isEntrepot()) {
+        } else if (!selected.getM_noeud().isEntrepot()) {
             selected.setM_selected(true);
             if (selected.getM_noeud().hasLivraison()) {
                 m_controleur.showInfosLivraison(selected.getM_noeud().getM_livraison());
-            }
-            else {
+            } else {
                 m_controleur.showAjouterLivraison(selected.getM_noeud());
             }
         }
         //TODO : A supprimer plus tard
-        if (selected != null && m_selectedNoeud !=null){
+        if (selected != null && m_selectedNoeud != null) {
             resetTroncons();
-            Chemin chemin = Dijkstra.dijkstra_c(selected.getM_noeud(),m_selectedNoeud.getM_noeud(),m_plan);
+            Chemin chemin = Dijkstra.dijkstra_c(selected.getM_noeud(), m_selectedNoeud.getM_noeud(), m_plan);
             for (Troncon troncon : chemin.getListeTroncons()) {
                 VueTroncon vueT = getVueTroncon(troncon);
                 vueT.ajouterChemin(chemin);
@@ -353,11 +352,9 @@ public class VuePlan extends JPanel {
     private VueTroncon getVueTroncon(Troncon t) {
         if (m_troncons.containsKey(t.getPair())) {
             return m_troncons.get(t.getPair());
-        }
-        else if (m_troncons.containsKey(t.getOppositePair())) {
+        } else if (m_troncons.containsKey(t.getOppositePair())) {
             return m_troncons.get(t.getOppositePair());
-        }
-        else {
+        } else {
             return null;
         }
     }

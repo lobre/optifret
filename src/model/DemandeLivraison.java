@@ -112,6 +112,7 @@ public class DemandeLivraison {
      */
     public FeuilleRoute calculerFeuilleDeRoute() {
         GraphImpl graph = new GraphImpl();
+        System.out.println(m_plagesHoraires);
         doSomeFirstCalc(m_plagesHoraires.get(0), m_entrepot, graph, m_plan);
         for (int i = 1; i < m_plagesHoraires.size() - 1; i++) {
             doSomeCalc(m_plagesHoraires.get(i), m_plagesHoraires.get(i + 1), graph, m_plan);
@@ -146,6 +147,9 @@ public class DemandeLivraison {
         }
 
         NodeList liste_plages = racineXML.getElementsByTagName("Plage");
+        if (liste_plages.getLength() < 1) {
+            return DemandeLivraison.PARSE_ERROR;
+        }
 
         for (int i = 0; i < liste_plages.getLength(); i++) {
 
