@@ -105,6 +105,19 @@ public class FenetrePrincipale {
                     m_controleur.reexecuter();
                 }
             }
+
+        });
+        // Pour adapter la map au redimensionnement de la fenêtre
+
+        m_frame.addComponentListener(new ComponentAdapter(){
+            @Override
+            public void componentResized(ComponentEvent e) {
+                // Redimensionnement du panel
+                //System.out.println("resize");
+                m_vuePlan.setSize((int) (m_vuePlan.getM_x_max() * m_vuePlan.getM_zoom()) , (int) (m_vuePlan.getM_y_max() * m_vuePlan.getM_zoom()));
+               // m_vuePlan.setLocation(m_vuePlan.getM_lastPosition());
+                m_vuePlan.repaint();
+            }
         });
 
         // Bouton "Supprimer"

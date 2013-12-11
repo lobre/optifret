@@ -42,7 +42,7 @@ public class FenetreAjoutLivraison {
 
         // Zone de notification
         m_inputNotification.setVisible(true);
-        m_inputNotification.setPreferredSize(new Dimension(500, 35));
+        //m_inputNotification.setPreferredSize(new Dimension(500, 35));
         m_inputNotification.setInfoMessage("Veuillez entrer les informations relatives à la livraison");
 
         // Initialisation de la fenêtre

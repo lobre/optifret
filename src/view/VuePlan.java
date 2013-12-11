@@ -113,7 +113,14 @@ public class VuePlan extends JPanel {
         return m_lastPosition;
     }
 
-    // Other methods
+    public int getM_x_max() {
+        return m_x_max;
+    }
+
+    public int getM_y_max() {
+        return m_y_max;
+    }
+// Other methods
 
     private void updateSize(float zoom, Point position) {
         float deltaZoom = zoom - m_zoom;
@@ -124,7 +131,6 @@ public class VuePlan extends JPanel {
         }
         m_x_max +=  MARGIN;
         m_y_max +=  MARGIN;
-
         // Redimensionnement du panel
         setSize((int) (m_x_max * m_zoom), (int) (m_y_max * m_zoom));
 
@@ -133,7 +139,10 @@ public class VuePlan extends JPanel {
             setLocation((getParent().getWidth() - getWidth()) / 2, (getParent().getHeight() - getHeight()) / 2);
         }
         else {
-            setLocation((int)( this.getX()-(0.1*(deltaZoom/abs(deltaZoom))*(position.getX()))),(int)(this.getY()-(0.1*(deltaZoom/abs(deltaZoom)))*(position.getY())));
+            //setLocation(new Point((int)( this.getX()-(0.1*(deltaZoom/abs(deltaZoom))*(position.getX()))),(int)(this.getY()-(0.1*(deltaZoom/abs(deltaZoom)))*(position.getY()))));
+
+            setM_lastPosition(new Point((int)( this.getX()-(0.1*(deltaZoom/abs(deltaZoom))*(position.getX()))),(int)(this.getY()-(0.1*(deltaZoom/abs(deltaZoom)))*(position.getY()))));
+            setLocation(m_lastPosition);
         }
 
         repaint();
@@ -175,9 +184,11 @@ public class VuePlan extends JPanel {
                 }
                 VueNoeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
 
+               // TODO : Not sure it's good, cause clicking out of a node does not make the side bar disepear.
+               /*
                 if (clickedNoeud == null) {
                     return;
-                }
+                }  */
 
                 // TODO : Remove this and the two classes when we're sure we'll only use the sidebar
                 /**
@@ -233,8 +244,14 @@ public class VuePlan extends JPanel {
             @Override
             public void componentResized(ComponentEvent e) {
                 // Redimensionnement du panel
+                //System.out.println("resize");
                 setSize((int) (m_x_max * m_zoom) , (int) (m_y_max * m_zoom));
-
+               /* if (m_selectedNoeud!=null){
+                    setLocation(m_selectedNoeud.getM_x()+getX(),m_selectedNoeud.getM_y()+getHeight()/2);
+                } */
+               // else{
+                    setLocation(m_lastPosition);
+                //}
                 repaint();
             }
         });
@@ -246,7 +263,9 @@ public class VuePlan extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
+
         // Antialiasing
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Transformée pour appliquer le zoom
