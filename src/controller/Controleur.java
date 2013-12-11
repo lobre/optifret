@@ -1,10 +1,7 @@
 package controller;
 
 import libs.ExampleFileFilter;
-import model.DemandeLivraison;
-import model.Livraison;
-import model.Noeud;
-import model.Plan;
+import model.*;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import view.FenetrePrincipale;
@@ -22,6 +19,7 @@ public class Controleur {
 
     private Plan m_plan;
     private DemandeLivraison m_demandeLivraison;
+    private FeuilleRoute m_feuilleRoute;
     private HistoriqueCommandes m_commandes;
 
 
@@ -34,6 +32,7 @@ public class Controleur {
     public Controleur() {
         m_plan = null;
         m_demandeLivraison = null;
+        m_feuilleRoute = null;
         m_commandes = new HistoriqueCommandes();
 
         m_window = new FenetrePrincipale(this);
@@ -140,18 +139,43 @@ public class Controleur {
         // Active le menu "Édition"
         m_window.getM_menuEdition().setEnabled(true);
         m_window.getM_vuePlan().resetTroncons();
+
+        // Activer le bouton "Calculer feuille de route"
+        m_window.getM_calculerButton().setEnabled(true);
+
         m_window.getM_vuePlan().repaint();
 
+    }
+
+    public void calculerFeuilleRoute() {
+        if (m_demandeLivraison == null) {
+            return;
+        }
+        // TODO : gérer les erreurs au calcul d'une feuille de route
+        m_feuilleRoute = m_demandeLivraison.calculerFeuilleDeRoute();
+        m_window.getM_vuePlan().setM_feuilleRoute(m_feuilleRoute);
+
+        System.out.println("Chemins calculés : " + m_feuilleRoute.getChemins());
     }
 
 
     public void ajouterLivraison(Livraison livraison) {
         m_commandes.executer(new CommandeAjout(m_demandeLivraison, livraison));
+
+        // Annulation de la feuille de route (s'il y en avait une)
+        m_feuilleRoute = null;
+        m_window.getM_vuePlan().setM_feuilleRoute(null);
+
         m_window.getM_vuePlan().repaint();
     }
 
     public void supprimerLivraison(Livraison livraison) {
         m_commandes.executer(new CommandeSuppression(m_demandeLivraison, livraison));
+
+        // Annulation de la feuille de route (s'il y en avait une)
+        m_feuilleRoute = null;
+        m_window.getM_vuePlan().setM_feuilleRoute(null);
+
         m_window.getM_vuePlan().repaint();
     }
 

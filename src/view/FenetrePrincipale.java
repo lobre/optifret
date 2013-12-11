@@ -127,10 +127,19 @@ public class FenetrePrincipale {
             }
         });
 
+        // Bouton qui cache la sidebar
         m_hideSidebarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 hideSidebar();
+                m_frame.repaint();
+            }
+        });
+
+        m_calculerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                m_controleur.calculerFeuilleRoute();
                 m_frame.repaint();
             }
         });
@@ -151,6 +160,10 @@ public class FenetrePrincipale {
 
     public JMenu getM_menuEdition() {
         return m_menuEdition;
+    }
+
+    public JButton getM_calculerButton() {
+        return m_calculerButton;
     }
 
     // Other methods

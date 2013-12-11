@@ -18,6 +18,7 @@ public class VuePlan extends JPanel {
     static private int MARGIN = 10;
 
     private Plan m_plan;
+    private FeuilleRoute m_feuilleRoute;
 
     private HashMap<Integer, VueNoeud> m_noeuds;
     private HashMap<Pair, VueTroncon> m_troncons;
@@ -45,6 +46,7 @@ public class VuePlan extends JPanel {
         setBackground(COULEUR_BACKGROUND);
 
         m_plan = null;
+        m_feuilleRoute = null;
         m_controleur = controleur;
         m_largeur = 1;
         m_hauteur = 1;
@@ -341,6 +343,24 @@ public class VuePlan extends JPanel {
 
         m_focusedNoeud = focused;
     }
+
+
+    public void setM_feuilleRoute(FeuilleRoute feuilleRoute) {
+        m_feuilleRoute = feuilleRoute;
+        resetTroncons();
+        if (feuilleRoute == null) {
+            return;
+        }
+
+        for (Chemin chemin : m_feuilleRoute.getChemins()) {
+            for (Troncon troncon : chemin.getListeTroncons()) {
+                VueTroncon vueT = getVueTroncon(troncon);
+                vueT.ajouterChemin(chemin);
+            }
+        }
+
+        repaint();
+    }
     
     private VueTroncon getVueTroncon(Troncon t) {
         if (m_troncons.containsKey(t.getPair())) {
@@ -351,4 +371,5 @@ public class VuePlan extends JPanel {
             return null;
         }
     }
+
 }
