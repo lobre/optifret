@@ -129,8 +129,6 @@ public class VuePlan extends JPanel {
         this.m_lastPosition = lastPosition;
     }
     public Point getM_lastPosition() {
-
-    public Point getM_lastPosition() {
         return m_lastPosition;
     }
 
