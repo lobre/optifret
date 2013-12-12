@@ -34,6 +34,7 @@ public class VuePlan extends JPanel {
     // Attributs utilisés pour "dragger" la VuePlan
     private Point m_lastClick;
     private Point m_lastPosition;
+    private Point m_lastPositionDrag;
 
     private Controleur m_controleur;
 
@@ -59,6 +60,7 @@ public class VuePlan extends JPanel {
 
         // Drag attributes
         m_lastClick = getLocation();
+        m_lastPositionDrag = getLocation();
         m_lastPosition = getLocation();
 
         // Selection / Focus
@@ -97,7 +99,8 @@ public class VuePlan extends JPanel {
             m_noeuds.put(n.getM_id(), vueNoeud);
         }
 
-        updateSize(m_zoom, null);
+        updateSize();
+        centerOnCenter();
     }
 
     public void resetTroncons() {
@@ -107,12 +110,17 @@ public class VuePlan extends JPanel {
         }
     }
 
+    public VueNoeud getM_selectedNoeud() {
+        return m_selectedNoeud;
+    }
+
     public Plan getM_plan() {
         return m_plan;
     }
 
-    public void setM_zoom(float zoom, Point position) {
-        updateSize(zoom, position);
+    public void setM_zoom(float zoom) {
+        m_zoom=zoom;
+        updateSize();
     }
 
     public float getM_zoom() {
@@ -133,6 +141,12 @@ public class VuePlan extends JPanel {
     public Point getM_lastPosition() {
         return m_lastPosition;
     }
+    public void setM_lastPositionDrag(Point lastPosition) {
+        this.m_lastPositionDrag = lastPosition;
+    }
+    public Point getM_lastPositionDrag() {
+        return m_lastPositionDrag;
+    }
 
     public int getM_x_max() {
         return m_x_max;
@@ -143,31 +157,28 @@ public class VuePlan extends JPanel {
     }
 // Other methods
 
-    private void updateSize(float zoom, Point position) {
-        float deltaZoom = zoom - m_zoom;
-        m_zoom = zoom;
+    private void updateSize() {
         for (VueNoeud n : m_noeuds.values()) {
             m_x_max = n.getM_x() + n.getM_rayon() > m_x_max ? n.getM_x() + n.getM_rayon() : m_x_max;
             m_y_max = n.getM_y() + n.getM_rayon() > m_y_max ? n.getM_y() + n.getM_rayon() : m_y_max;
         }
-        m_x_max +=  MARGIN;
-        m_y_max +=  MARGIN;
+        m_x_max += MARGIN;
+        m_y_max += MARGIN;
         // Redimensionnement du panel
         setSize((int) (m_x_max * m_zoom), (int) (m_y_max * m_zoom));
 
-        // Centrage du panel
-        if (position == null) {
-            setLocation((getParent().getWidth() - getWidth()) / 2, (getParent().getHeight() - getHeight()) / 2);
-        } else {
-            //setLocation(new Point((int)( this.getX()-(0.1*(deltaZoom/abs(deltaZoom))*(position.getX()))),(int)(this.getY()-(0.1*(deltaZoom/abs(deltaZoom)))*(position.getY()))));
 
-            setM_lastPosition(new Point((int) (this.getX() - (0.1 * (deltaZoom / abs(deltaZoom)) * (position.getX()))), (int) (this.getY() - (0.1 * (deltaZoom / abs(deltaZoom))) * (position.getY()))));
-            setLocation(m_lastPosition);
-        }
 
-        repaint();
     }
-
+     private void centerOnCenter(){
+         int x;
+         int y;
+         x=(getParent().getWidth() - getWidth()) / 2     ;
+         y=(getParent().getHeight() - getHeight()) / 2  ;
+         setM_lastPosition(new Point(x,y));
+         setLocation(x,y);
+         repaint();
+     }
     @Override
     public Dimension getPreferredSize() {
         return new Dimension((int) (m_x_max * m_zoom), (int) (m_y_max * m_zoom));
@@ -197,7 +208,7 @@ public class VuePlan extends JPanel {
 
                 // Mise à jour de valeurs utiles pour le déplacement par "drag" de la vue
                 setM_lastClick(MouseInfo.getPointerInfo().getLocation());
-                setM_lastPosition(getLocation());
+                setM_lastPositionDrag(getLocation());
 
                 if (m_controleur.getM_demandeLivraison() == null) {
                     return;
@@ -205,7 +216,6 @@ public class VuePlan extends JPanel {
                 VueNoeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
                 if (e.getClickCount() == 1 && clickedNoeud != m_selectedNoeud) {
                     setM_selectedNoeud(clickedNoeud);
-                    repaint();
                 }
             }
 
@@ -218,9 +228,10 @@ public class VuePlan extends JPanel {
 
                 Point p = MouseInfo.getPointerInfo().getLocation();
 
-                int x = (int) (m_lastPosition.getX() + p.getX() - m_lastClick.getX());
-                int y = (int) (m_lastPosition.getY() + p.getY() - m_lastClick.getY());
+                int x = (int) (m_lastPositionDrag.getX() + p.getX() - m_lastClick.getX());
+                int y = (int) (m_lastPositionDrag.getY() + p.getY() - m_lastClick.getY());
                 setLocation(x, y);
+               // setM_lastPosition(new Point(x,y));
                 getParent().repaint();
             }
 
@@ -231,33 +242,55 @@ public class VuePlan extends JPanel {
                     setM_focusedNoeud(clickedNoeud);
                     repaint();
                 }
+
             }
         });
 
         addMouseWheelListener(new MouseWheelListener() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
-                setM_zoom(getM_zoom() * (1 - (float) e.getWheelRotation() / 10), e.getPoint());
-            }
-        });
+                float zoom= getM_zoom() * (1 - (float) e.getWheelRotation() / 10);
+                float deltaZoom = zoom-m_zoom;
+                int x;
+                int y;
+                setM_zoom(zoom );
 
-        // Pour adapter la map au redimensionnement de la fenêtre
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                // Redimensionnement du panel
-                //System.out.println("resize");
-                setSize((int) (m_x_max * m_zoom), (int) (m_y_max * m_zoom));
-               /* if (m_selectedNoeud!=null){
-                    setLocation(m_selectedNoeud.getM_x()+getX(),m_selectedNoeud.getM_y()+getHeight()/2);
-                } */
-                // else{
-                setLocation(m_lastPosition);
-                //}
+                x=(int)( getX()-(0.1*(deltaZoom/abs(deltaZoom))*(e.getPoint().getX())));
+                y=(int)(getY()-(0.1*(deltaZoom/abs(deltaZoom)))*(e.getPoint().getY())) ;
+                setM_lastPosition(new Point(x,y));
+                setLocation(x,y);
                 repaint();
             }
         });
 
+       /* addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                //To change body of implemented methods use File | Settings | File Templates.
+                centerMapOnSelected(0);
+                getParent().repaint();
+            }
+        });   */
+    }
+
+    //Fonction de recentrage du plan sur le noeud selectionné
+    public void centerMapOnSelected(){
+        int x;
+        int y;
+        // Redimensionnement du panel
+        setSize((int) (getM_x_max() * getM_zoom()) , (int) (getM_y_max() * getM_zoom()));
+        if (m_selectedNoeud!=null){
+            x=(int)(-m_selectedNoeud.getM_x()*m_zoom-getX()+(getParent().getWidth()/2)) ;
+            y=(int)(-m_selectedNoeud.getM_y()*m_zoom-getY()+(getParent().getHeight()/2))  ;
+            setLocation(x,y);
+            repaint();
+            setM_lastPosition(new Point(x,y));
+        }
+        else{
+            System.out.println(getM_lastPosition());
+            setLocation(getM_lastPosition());
+            repaint();
+        }
     }
 
 
@@ -319,8 +352,8 @@ public class VuePlan extends JPanel {
             } else {
                 m_controleur.showAjouterLivraison(selected.getM_noeud());
             }
-        }
 
+        }
         //TODO : A supprimer plus tard
         /*
         if (selected != null && m_selectedNoeud != null) {

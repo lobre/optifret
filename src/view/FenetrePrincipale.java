@@ -106,16 +106,6 @@ public class FenetrePrincipale {
         });
         // Pour adapter la map au redimensionnement de la fenêtre
 
-        m_frame.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                // Redimensionnement du panel
-                //System.out.println("resize");
-                m_vuePlan.setSize((int) (m_vuePlan.getM_x_max() * m_vuePlan.getM_zoom()), (int) (m_vuePlan.getM_y_max() * m_vuePlan.getM_zoom()));
-                // m_vuePlan.setLocation(m_vuePlan.getM_lastPosition());
-                m_vuePlan.repaint();
-            }
-        });
 
         // Bouton "Supprimer"
         m_supprimerButton.addActionListener(new ActionListener() {
@@ -141,6 +131,16 @@ public class FenetrePrincipale {
             public void actionPerformed(ActionEvent e) {
                 m_controleur.calculerFeuilleRoute();
                 m_frame.repaint();
+            }
+        });
+        m_sidebar.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+               m_vuePlan.centerMapOnSelected();
+            }
+            @Override
+            public void componentHidden(ComponentEvent e) {
+               m_vuePlan.centerMapOnSelected();
             }
         });
     }
@@ -263,7 +263,6 @@ public class FenetrePrincipale {
         panelAjouterLivraison.setVisible(true);
 
         m_selectedNoeud = noeud;
-
         m_plagesHoraires.removeAllItems();
         for (PlageHoraire ph : m_controleur.getM_demandeLivraison().getM_plagesHoraires()) {
             m_plagesHoraires.addItem(ph.toString());
@@ -287,11 +286,12 @@ public class FenetrePrincipale {
                 } catch (NumberFormatException exception) {
                     m_notificationAjout.setErrorMessage("N° client invalide !");
                 }
-
             }
         });
 
         m_sidebar.setVisible(true);
+
+
     }
 
     public void hideSidebar() {
