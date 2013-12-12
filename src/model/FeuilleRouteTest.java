@@ -20,7 +20,7 @@ public class FeuilleRouteTest {
     public void devraitCreerUneFeuilleDeRouteCorrectement() {
         // Given : une DemandeLivraison correcte et éprouvée (courtoisie de vzantedeschi)
         File xmlPlan = new File("xml_data/plan20x20.xml");
-        File xmlDemande = new File("xml_data/livraison10x10-1.xml");
+        File xmlDemande = new File("xml_data/livraison20x20-1.xml");
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = null;
@@ -59,7 +59,7 @@ public class FeuilleRouteTest {
         for (Chemin chemin : feuilleRoute.getChemins()) {
             j = 0;
             for (Troncon troncon : chemin.getListeTroncons()) {
-                System.out.println(format("Chemin {0,number,0}, tronçon {0,number,0} : de {0,number,0} à {0,number,0}.", i, j, troncon.getDepart().getM_id(), troncon.getArrivee().getM_id()));
+                System.out.println(format("Chemin {0,number,0}, tronçon {1,number,0} : de {2,number,0} à {3,number,0}.", i, j, troncon.getDepart().getM_id(), troncon.getArrivee().getM_id()));
                 j++;
             }
             ++i;

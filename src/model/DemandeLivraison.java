@@ -113,7 +113,7 @@ public class DemandeLivraison {
     public FeuilleRoute calculerFeuilleDeRoute() {
         GraphImpl graph = new GraphImpl();
         doSomeFirstCalc(m_plagesHoraires.get(0), m_entrepot, graph, m_plan);
-        for (int i = 1; i < m_plagesHoraires.size() - 1; i++) {
+        for (int i = 0; i < m_plagesHoraires.size() - 1; i++) {
             doSomeCalc(m_plagesHoraires.get(i), m_plagesHoraires.get(i + 1), graph, m_plan);
         }
         doSomeOtherCalc(m_plagesHoraires.get(m_plagesHoraires.size() - 1), m_entrepot, graph, m_plan);
