@@ -206,18 +206,17 @@ public class DemandeLivraison {
     }
 
     /**
-     * Met à jour les poids optimaux entre les livraisons d'ordre i, en excluant les relations avec les livraisons d'ordre i+1.
-     * Calcule également le poids optimal du trajet entre le départ et les noeuds d'ordre i.
+     * Calcule le poids optimal du trajet entre un noeud particulier du graphe et les noeuds d'ordre i.
      *
-     * @param i      ordre de la livraison (Rang de la PlageHoraire dans la journée)
-     * @param depart depart du graphe
-     * @param graph  graphe à remplir
-     * @param plan
+     * @param i     PlageHoraire d'ordre i (i étant le rang de la PlageHoraire dans la journée)
+     * @param noeud noeud particulier du graphe
+     * @param graph graphe à remplir
+     * @param plan  l'environnement de calcul
      */
-    private void doSomeFirstCalc(PlageHoraire i, Noeud depart, GraphImpl graph, Plan plan) {
+    private void doSomeFirstCalc(PlageHoraire i, Noeud noeud, GraphImpl graph, Plan plan) {
         for (Livraison livraison : i.getM_livraisons()) {
-            Chemin chemin = Dijkstra.dijkstra_c(depart, livraison.getM_adresse(), plan);
-            int id1 = depart.getM_id();
+            Chemin chemin = Dijkstra.dijkstra_c(noeud, livraison.getM_adresse(), plan);
+            int id1 = noeud.getM_id();
             int id2 = livraison.getM_adresse().getM_id();
             fillCost(id1, id2, chemin.getLongueur(), graph);
             fillChemin(id1, id2, chemin);
@@ -225,12 +224,13 @@ public class DemandeLivraison {
     }
 
     /**
-     * Met à jour les poids optimaux entre les livraisons d'ordre i, en incluant les relations avec les livraisons d'ordre i+1
+     * Met à jour les poids optimaux entre les livraisons d'ordre i.
+     * Résout également les relations avec les livraisons d'ordre i+1
      *
-     * @param i       ordre de la livraison
-     * @param iPluzun ordre de la livraison de rang i+1
+     * @param i       PlageHoraire d'ordre i
+     * @param iPluzun PlageHoraire d'ordre i+1
      * @param graph   graphe à remplir
-     * @param plan
+     * @param plan    l'environnement de calcul
      */
     private void doSomeCalc(PlageHoraire i, PlageHoraire iPluzun, GraphImpl graph, Plan plan) {
         for (Livraison livraison : i.getM_livraisons()) {
@@ -255,14 +255,14 @@ public class DemandeLivraison {
 
     /**
      * Met à jour les poids optimaux entre les livraisons d'ordre i, en excluant les relations avec les livraisons d'ordre i+1.
-     * Calcule également le poids optimal du trajet entre les livraisons d'ordre i et la closure du graphe
+     * Calcule également le poids optimal du trajet entre les livraisons d'ordre i et un noeud particulier du graphe
      *
-     * @param i       ordre de la livraison (Rang de la PlageHoraire dans la journée)
-     * @param closure closure du graphe
-     * @param graph   graphe à remplir
-     * @param plan
+     * @param i     PlageHoraire d'ordre i (i étant le rang de la PlageHoraire dans la journée)
+     * @param noeud noeud particulier du graphe
+     * @param graph graphe à remplir
+     * @param plan  l'environnement de calcul
      */
-    private void doSomeOtherCalc(PlageHoraire i, Noeud closure, GraphImpl graph, Plan plan) {
+    private void doSomeOtherCalc(PlageHoraire i, Noeud noeud, GraphImpl graph, Plan plan) {
         for (Livraison livraison : i.getM_livraisons()) {
             for (Livraison autreLivraisonDeRangI : i.getM_livraisons()) {
                 if (!livraison.equals(autreLivraisonDeRangI)) {
@@ -273,9 +273,9 @@ public class DemandeLivraison {
                     fillChemin(id1, id2, chemin);
                 }
             }
-            Chemin chemin = Dijkstra.dijkstra_c(livraison.getM_adresse(), closure, plan);
+            Chemin chemin = Dijkstra.dijkstra_c(livraison.getM_adresse(), noeud, plan);
             int id1 = livraison.getM_adresse().getM_id();
-            int id2 = closure.getM_id();
+            int id2 = noeud.getM_id();
             fillCost(id1, id2, chemin.getLongueur(), graph);
             fillChemin(id1, id2, chemin);
         }
