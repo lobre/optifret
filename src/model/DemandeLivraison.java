@@ -216,15 +216,6 @@ public class DemandeLivraison {
      */
     private void doSomeFirstCalc(PlageHoraire i, Noeud depart, GraphImpl graph, Plan plan) {
         for (Livraison livraison : i.getM_livraisons()) {
-            for (Livraison autreLivraisonDeRangI : i.getM_livraisons()) {
-                if (!livraison.equals(autreLivraisonDeRangI)) {
-                    Chemin chemin = Dijkstra.dijkstra_c(livraison.getM_adresse(), autreLivraisonDeRangI.getM_adresse(), plan);
-                    int id1 = livraison.getM_adresse().getM_id();
-                    int id2 = autreLivraisonDeRangI.getM_adresse().getM_id();
-                    fillCost(id1, id2, chemin.getLongueur(), graph);
-                    fillChemin(id1, id2, chemin);
-                }
-            }
             Chemin chemin = Dijkstra.dijkstra_c(depart, livraison.getM_adresse(), plan);
             int id1 = depart.getM_id();
             int id2 = livraison.getM_adresse().getM_id();

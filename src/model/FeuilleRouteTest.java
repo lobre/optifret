@@ -20,7 +20,7 @@ public class FeuilleRouteTest {
     public void devraitCreerUneFeuilleDeRouteCorrectement() {
         // Given : une DemandeLivraison correcte et éprouvée (courtoisie de vzantedeschi)
         File xmlPlan = new File("xml_data/plan20x20.xml");
-        File xmlDemande = new File("xml_data/livraison20x20-1.xml");
+        File xmlDemande = new File("xml_data/livraison20x20-2.xml");
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = null;
@@ -47,12 +47,12 @@ public class FeuilleRouteTest {
 
         // When : on crée la FeuilleRoute correspondante
         FeuilleRoute feuilleRoute = null;
-        //try {
-        feuilleRoute = demande.calculerFeuilleDeRoute();
-        /*} catch (Exception e) {
+        try {
+            feuilleRoute = demande.calculerFeuilleDeRoute();
+        } catch (Exception e) {
             System.out.println(e);
             return;
-        *///}
+        }
 
         // Then : on affiche le trajet obtenu dans la console
         int i = 0, j = 0;
