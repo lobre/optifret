@@ -113,6 +113,7 @@ public class FenetrePrincipale {
             public void actionPerformed(ActionEvent e) {
                 m_controleur.supprimerLivraison(m_selectedLivraison);
                 hideSidebar();
+                m_vuePlan.centerMapOnSelected();
                 m_frame.repaint();
             }
         });
@@ -122,6 +123,7 @@ public class FenetrePrincipale {
             @Override
             public void actionPerformed(ActionEvent e) {
                 hideSidebar();
+                m_vuePlan.centerMapOnSelected();
                 m_frame.repaint();
             }
         });
@@ -140,6 +142,12 @@ public class FenetrePrincipale {
             }
             @Override
             public void componentHidden(ComponentEvent e) {
+               m_vuePlan.centerMapOnSelected();
+            }
+        });
+        m_frame.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
                m_vuePlan.centerMapOnSelected();
             }
         });
