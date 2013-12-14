@@ -305,4 +305,8 @@ public class FenetrePrincipale {
         m_sidebar.setVisible(false);
     }
 
+    // Getters/Setters
+    public JFrame getM_frame() {
+        return m_frame;
+    }
 }

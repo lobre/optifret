@@ -1,6 +1,6 @@
 package controller;
 
-import libs.ExampleFileFilter;
+import libs.CustomFilenameFilter;
 import model.*;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -11,7 +11,9 @@ import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import java.awt.*;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 
 public class Controleur {
@@ -26,6 +28,14 @@ public class Controleur {
 
     // Point d'entrée de l'application:
     public static void main(String[] args) {
+        // Paramètre Swing pour utiliser une apparence native
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            System.err.println("Interface native non gérée, fallback sur l'interface Swing par défaut.");
+        }
+
         new Controleur();
     }
 
@@ -39,25 +49,29 @@ public class Controleur {
         m_window = new FenetrePrincipale(this);
     }
 
-    public FenetrePrincipale getM_window() {
-        return m_window;
-    }
-
     public DemandeLivraison getM_demandeLivraison() {
         return m_demandeLivraison;
     }
 
     private File ouvrirFichier() {
-        JFileChooser jFileChooserXML = new JFileChooser("./xml_data");
-        ExampleFileFilter filter = new ExampleFileFilter();
-        filter.addExtension("xml");
-        filter.setDescription("Fichier XML");
-        jFileChooserXML.setFileFilter(filter);
-        jFileChooserXML.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        FileDialog fileDialog = new FileDialog(m_window.getM_frame());
+        fileDialog.setModal(true);
 
-        if (jFileChooserXML.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-            return new File(jFileChooserXML.getSelectedFile().getAbsolutePath());
-        return null;
+        FilenameFilter filter = new CustomFilenameFilter(".xml");
+        fileDialog.setFilenameFilter(filter);
+
+        fileDialog.setDirectory("xml_data");
+        fileDialog.setAlwaysOnTop(true);
+
+        fileDialog.setVisible(true);
+
+        String filename = fileDialog.getFile();
+        if (filename != null) {
+            return new File(fileDialog.getDirectory(), fileDialog.getFile());
+        }
+        else {
+            return null;
+        }
     }
 
     private Document lireDepuisXML(File fichierXML) {
