@@ -140,11 +140,13 @@ public class Controleur {
 
         m_window.getM_zoneNotification().setSuccessMessage("La demande de livraison  '" + fichierXML.getName() + "' a été chargée avec succès !");
 
+        // Désactive l'action "Éditer version papier" et annule la feuille de route
+        m_feuilleRoute = null;
+        m_window.getM_vuePlan().setM_feuilleRoute(null);
+        m_window.getM_menuFichier().getItem(2).setEnabled(false);
+
         // Active le menu "Édition"
         m_window.getM_menuEdition().setEnabled(true);
-
-        // Active l'action "Éditer version papier"
-        m_window.getM_menuFichier().getItem(2).setEnabled(true);
 
         // Activer le bouton "Calculer feuille de route"
         m_window.getM_calculerButton().setEnabled(true);
@@ -166,6 +168,9 @@ public class Controleur {
 
         m_window.getM_zoneNotification().setSuccessMessage("Feuille de route calculée avec succès !");
 
+        // Active l'action "Éditer version papier"
+        m_window.getM_menuFichier().getItem(2).setEnabled(true);
+
         System.out.println("Chemins calculés : " + m_feuilleRoute.getChemins());
     }
 
@@ -173,7 +178,7 @@ public class Controleur {
         if (m_feuilleRoute == null) {
             throw new IllegalStateException("Aucune feuille de route n'est chargée.");
         }
-
+        // TODO => Ajouter des choses ici (afficher une fenêtre, etc.)
         VueFeuilleRoutePapier feuilleRoutePapier = new VueFeuilleRoutePapier(m_feuilleRoute);
         System.out.println(feuilleRoutePapier.getVersionPapier());
     }
@@ -185,8 +190,6 @@ public class Controleur {
         // Annulation de la feuille de route (s'il y en avait une)
         m_feuilleRoute = null;
         m_window.getM_vuePlan().setM_feuilleRoute(null);
-
-        m_window.getM_vuePlan().repaint();
     }
 
     public void supprimerLivraison(Livraison livraison) {
@@ -195,8 +198,6 @@ public class Controleur {
         // Annulation de la feuille de route (s'il y en avait une)
         m_feuilleRoute = null;
         m_window.getM_vuePlan().setM_feuilleRoute(null);
-
-        m_window.getM_vuePlan().repaint();
     }
 
     public void reexecuter() {

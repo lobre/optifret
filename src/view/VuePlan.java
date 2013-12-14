@@ -110,53 +110,29 @@ public class VuePlan extends JPanel {
         }
     }
 
-    public VueNoeud getM_selectedNoeud() {
-        return m_selectedNoeud;
-    }
 
     public Plan getM_plan() {
         return m_plan;
     }
 
     public void setM_zoom(float zoom) {
-        m_zoom=zoom;
+        m_zoom = zoom;
         updateSize();
-    }
-
-    public float getM_zoom() {
-        return m_zoom;
     }
 
     public void setM_lastClick(Point lastClick) {
         this.m_lastClick = lastClick;
     }
 
-    public Point getM_lastClick() {
-        return m_lastClick;
-    }
-
     public void setM_lastPosition(Point lastPosition) {
         this.m_lastPosition = lastPosition;
     }
-    public Point getM_lastPosition() {
-        return m_lastPosition;
-    }
+
     public void setM_lastPositionDrag(Point lastPosition) {
         this.m_lastPositionDrag = lastPosition;
     }
-    public Point getM_lastPositionDrag() {
-        return m_lastPositionDrag;
-    }
 
-    public int getM_x_max() {
-        return m_x_max;
-    }
-
-    public int getM_y_max() {
-        return m_y_max;
-    }
-// Other methods
-
+    // Other methods
     private void updateSize() {
         for (VueNoeud n : m_noeuds.values()) {
             m_x_max = n.getM_x() + n.getM_rayon() > m_x_max ? n.getM_x() + n.getM_rayon() : m_x_max;
@@ -164,21 +140,19 @@ public class VuePlan extends JPanel {
         }
         m_x_max += MARGIN;
         m_y_max += MARGIN;
+
         // Redimensionnement du panel
         setSize((int) (m_x_max * m_zoom), (int) (m_y_max * m_zoom));
-
-
-
     }
-     private void centerOnCenter(){
-         int x;
-         int y;
-         x=(getParent().getWidth() - getWidth()) / 2     ;
-         y=(getParent().getHeight() - getHeight()) / 2  ;
-         setM_lastPosition(new Point(x,y));
-         setLocation(x,y);
-         repaint();
-     }
+
+    private void centerOnCenter() {
+        int x = (getParent().getWidth() - getWidth()) / 2;
+        int y = (getParent().getHeight() - getHeight()) / 2;
+        setM_lastPosition(new Point(x, y));
+        setLocation(x, y);
+        repaint();
+    }
+
     @Override
     public Dimension getPreferredSize() {
         return new Dimension((int) (m_x_max * m_zoom), (int) (m_y_max * m_zoom));
@@ -214,7 +188,7 @@ public class VuePlan extends JPanel {
                     return;
                 }
                 VueNoeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
-                if (e.getClickCount() == 1 && clickedNoeud != m_selectedNoeud) {
+                if (clickedNoeud != m_selectedNoeud) {
                     setM_selectedNoeud(clickedNoeud);
                 }
             }
@@ -231,12 +205,13 @@ public class VuePlan extends JPanel {
                 int x = (int) (m_lastPositionDrag.getX() + p.getX() - m_lastClick.getX());
                 int y = (int) (m_lastPositionDrag.getY() + p.getY() - m_lastClick.getY());
                 setLocation(x, y);
-                setM_lastPosition(new Point(x,y));
+                setM_lastPosition(new Point(x, y));
 
                 //pour empecher une partie du graph non visible de disparaitre quand on le drag
-                setSize((int) (getM_x_max() * getM_zoom()) , (int) (getM_y_max() * getM_zoom()));
+                setSize((int) (m_x_max * m_zoom), (int) (m_y_max * m_zoom));
                 getParent().repaint();
             }
+
             //Permet d'augmenter la taille dun noeud survolé par la souris
             @Override
             public void mouseMoved(MouseEvent e) {
@@ -252,15 +227,16 @@ public class VuePlan extends JPanel {
         addMouseWheelListener(new MouseWheelListener() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
-                float zoom= getM_zoom() * (1 - (float) e.getWheelRotation() / 10);
-                float deltaZoom = zoom-m_zoom;
+                float zoom = m_zoom * (1 - (float) e.getWheelRotation() / 10);
+                float deltaZoom = zoom - m_zoom;
                 int x;
                 int y;
-                setM_zoom(zoom );
-                //On fait en sorte que le plan zoom là où la souris est. 0.1 est une valeur arbitraire qui fonctionne
-                x=(int)( getX()-(0.1*(deltaZoom/abs(deltaZoom))*(e.getPoint().getX())));
-                y=(int)(getY()-(0.1*(deltaZoom/abs(deltaZoom)))*(e.getPoint().getY())) ;
-                setM_lastPosition(new Point(x,y));
+                setM_zoom(zoom);
+
+                // On fait en sorte que le plan zoom là où la souris est. 0.1 est le ratio de ce déplacement
+                x = (int) (getX() - (0.1 * (deltaZoom / abs(deltaZoom)) * (e.getPoint().getX())));
+                y = (int) (getY() - (0.1 * (deltaZoom / abs(deltaZoom))) * (e.getPoint().getY()));
+                setM_lastPosition(new Point(x, y));
                 setLocation(x, y);
                 repaint();
             }
@@ -268,20 +244,18 @@ public class VuePlan extends JPanel {
     }
 
     //Fonction de recentrage du plan sur le noeud selectionné. Si aucun noeud selectionné, même position qu'avant.
-    public void centerMapOnSelected(){
-        int x;
-        int y;
+    public void centerMapOnSelected() {
         // Redimensionnement du panel
-        setSize((int) (getM_x_max() * getM_zoom()) , (int) (getM_y_max() * getM_zoom()));
-        if (m_selectedNoeud!=null){
-            x=(int)(-m_selectedNoeud.getM_x()*m_zoom-getX()+(getParent().getWidth()/2)) ;
-            y=(int)(-m_selectedNoeud.getM_y()*m_zoom-getY()+(getParent().getHeight()/2))  ;
-            setLocation(x,y);
+        setSize((int) (m_x_max * m_zoom), (int) (m_y_max * m_zoom));
+
+        if (m_selectedNoeud != null) {
+            int x = (int) (-m_selectedNoeud.getM_x() * m_zoom - getX() + (getParent().getWidth() / 2));
+            int y = (int) (-m_selectedNoeud.getM_y() * m_zoom - getY() + (getParent().getHeight() / 2));
+            setLocation(x, y);
             repaint();
-            setM_lastPosition(new Point(x,y));
-        }
-        else{
-            setLocation(getM_lastPosition());
+            setM_lastPosition(new Point(x, y));
+        } else {
+            setLocation(m_lastPosition);
             repaint();
         }
     }
@@ -293,7 +267,6 @@ public class VuePlan extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
 
         // Antialiasing
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Transformée pour appliquer le zoom
@@ -337,27 +310,21 @@ public class VuePlan extends JPanel {
         if (selected == null) {
             m_selectedNoeud = null;
             m_controleur.hideSidebar();
+            repaint();
+            return;
         }
-        else if (!selected.getM_noeud().isEntrepot()) {
-            selected.setM_selected(true);
-            if (selected.getM_noeud().hasLivraison()) {
-                m_controleur.showInfosLivraison(selected.getM_noeud().getM_livraison());
-            } else {
-                m_controleur.showAjouterLivraison(selected.getM_noeud());
-            }
 
+        if (selected.getM_noeud().isEntrepot()) {
+            return;
         }
-        //TODO : A supprimer plus tard
-        /*
-        if (selected != null && m_selectedNoeud != null) {
-            resetTroncons();
-            Chemin chemin = Dijkstra.dijkstra_c(selected.getM_noeud(), m_selectedNoeud.getM_noeud(), m_plan);
-            for (Troncon troncon : chemin.getListeTroncons()) {
-                VueTroncon vueT = getVueTroncon(troncon);
-                vueT.ajouterChemin(chemin);
-            }
+
+
+        selected.setM_selected(true);
+        if (selected.getM_noeud().hasLivraison()) {
+            m_controleur.showInfosLivraison(selected.getM_noeud().getM_livraison());
+        } else {
+            m_controleur.showAjouterLivraison(selected.getM_noeud());
         }
-        */
 
         m_selectedNoeud = selected;
     }
@@ -390,7 +357,7 @@ public class VuePlan extends JPanel {
 
         repaint();
     }
-    
+
     private VueTroncon getVueTroncon(Troncon t) {
         if (m_troncons.containsKey(t.getPair())) {
             return m_troncons.get(t.getPair());

@@ -8,7 +8,7 @@ public class ZoneNotification extends JFormattedTextField {
     private Font m_font;
 
     private static int HAUTEUR_DEFAUT = 35;
-    private static int LARGEUR_DEFAUT = 410;
+    private static int LARGEUR_DEFAUT = 350;
 
     private static Color COULEUR_INFO = new Color(60, 140, 235);
     private static Color COULEUR_SUCCES = new Color(42, 210, 48);

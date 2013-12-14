@@ -9,9 +9,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * Created by vzantedeschi on 05/12/13.
- */
 public class DemandeLivraisonTest {
 
     public static void main(String[] args) {

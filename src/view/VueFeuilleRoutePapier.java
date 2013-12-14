@@ -1,6 +1,5 @@
 package view;
 
-import model.Chemin;
 import model.FeuilleRoute;
 import model.Troncon;
 

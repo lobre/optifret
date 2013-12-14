@@ -17,8 +17,10 @@ public class Chemin {
     //
     // Constructors
     //
+    public Chemin() {
 
-    ;
+    }
+
 
     //
     // Methods

@@ -92,13 +92,13 @@ public class FenetrePrincipale {
         m_frame.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_P) {
+                if (e.getKeyCode() == KeyEvent.VK_P && e.isControlDown()) {
                     m_controleur.chargerPlan();
-                } else if (e.getKeyCode() == KeyEvent.VK_D) {
+                } else if (e.getKeyCode() == KeyEvent.VK_D && e.isControlDown()) {
                     m_controleur.chargerDemandeLivraison();
-                } else if (e.getKeyCode() == KeyEvent.VK_Z) {
+                } else if (e.getKeyCode() == KeyEvent.VK_Z && e.isControlDown()) {
                     m_controleur.annuler();
-                } else if (e.getKeyCode() == KeyEvent.VK_Y) {
+                } else if (e.getKeyCode() == KeyEvent.VK_Y && e.isControlDown()) {
                     m_controleur.reexecuter();
                 }
             }
@@ -115,6 +115,22 @@ public class FenetrePrincipale {
                 hideSidebar();
                 m_vuePlan.centerMapOnSelected();
                 m_frame.repaint();
+            }
+        });
+
+        // Bouton "Ajouter"
+        m_ajouterButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    PlageHoraire ph = m_controleur.getM_demandeLivraison().getM_plagesHoraires().get(m_plagesHoraires.getSelectedIndex());
+                    int client = Integer.parseInt(m_clientTextField.getText());
+                    Livraison livraison = new Livraison(m_controleur.getM_demandeLivraison().getUniqueID(), client, m_selectedNoeud, ph);
+                    m_controleur.ajouterLivraison(livraison);
+                    hideSidebar();
+                } catch (NumberFormatException exception) {
+                    m_notificationAjout.setErrorMessage("N° client invalide !");
+                }
             }
         });
 
@@ -197,7 +213,7 @@ public class FenetrePrincipale {
         };
         ajoutItem("Charger une demande de livraison (CTRL + D)", m_menuFichier, actionChargerDemandeLivraison);
 
-        // Action "Éditer feuille de route papier"
+        // Action "Éditer feuille de route"
         ActionListener actionVersionPapier = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 m_controleur.editerFeuilleRoutePapier();
@@ -208,7 +224,6 @@ public class FenetrePrincipale {
         // Désactive les menu "Charger une demande de livraison" et "Éditer feuille de route papier" par défaut
         m_menuFichier.getItem(1).setEnabled(false);
         m_menuFichier.getItem(2).setEnabled(false);
-
 
         // Action "Fermer"
         ActionListener actionFermerProgramme = new ActionListener() {
@@ -283,35 +298,11 @@ public class FenetrePrincipale {
         // Zone de notification
         m_notificationAjout.setInfoMessage("Ajout d'une livraison");
 
-        // Bouton "Ajouter"
-        m_ajouterButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    PlageHoraire ph = m_controleur.getM_demandeLivraison().getM_plagesHoraires().get(m_plagesHoraires.getSelectedIndex());
-                    int client = Integer.parseInt(m_clientTextField.getText());
-                    Livraison livraison = new Livraison(m_controleur.getM_demandeLivraison().getUniqueID(), client, m_selectedNoeud, ph);
-                    m_controleur.ajouterLivraison(livraison);
-                    hideSidebar();
-                } catch (NumberFormatException exception) {
-                    m_notificationAjout.setErrorMessage("N° client invalide !");
-                }
-            }
-        });
-
         m_sidebar.setVisible(true);
-
-
     }
 
     public void hideSidebar() {
         m_sidebar.setVisible(false);
     }
-
-    // Getters/Setters
-    public JFrame getM_frame() {
-        return m_frame;
-    }
-
 
 }

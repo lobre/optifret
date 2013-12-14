@@ -15,8 +15,8 @@ public class VueNoeud {
     private static Color COULEUR_ENTREPOT = new Color(211, 5, 188);
     private static Color COULEUR_LIVRAISON = new Color(143, 210, 53);
 
-    private static int RAYON_DEFAUT = 5;
-    private static int RAYON_LIVRAISON = 7;
+    private static int RAYON_DEFAUT = 6;
+    private static int RAYON_LIVRAISON = 8;
     private static int RAYON_ENTREPOT = 14;
 
     private static int ZOOM_FACTOR = 2;

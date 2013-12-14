@@ -6,6 +6,9 @@ package model;
  */
 public class Heure {
 
+
+    // TODO : ajouter des méthodes d'aide pour décaler une heure (ajouter des secondes, des minutes, ...)
+
     //
     // Fields
     //
