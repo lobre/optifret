@@ -135,6 +135,7 @@ public class FenetrePrincipale {
                 m_frame.repaint();
             }
         });
+        //gère le centrage du graph sur le noeud selectionné lors de la selection d'un noeud, faisant apparaitre m_slide
         m_sidebar.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
@@ -145,6 +146,7 @@ public class FenetrePrincipale {
                m_vuePlan.centerMapOnSelected();
             }
         });
+        //gère le centrage du graph sur le noeud selectionné lors d'un redimensionnement de fenetre
         m_frame.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {

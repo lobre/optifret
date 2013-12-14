@@ -72,6 +72,10 @@ public class DemandeLivraison {
 
     // TODO : Il faudra remettre à zéro la feuille de route de la DemandeLivraison à l'ajout/suppression d'une livraison
 
+    /**
+     * Ajoute la livraison à la plage horaire correspondante dans la liste des plages horaires.
+     * @param livraison  livraison que l'on veut ajouter dans sa plage horaire.
+     */
     public void ajouterLivraison(Livraison livraison) {
         for (PlageHoraire ph : m_plagesHoraires) {
             if (ph == livraison.getM_plage()) {
@@ -81,6 +85,10 @@ public class DemandeLivraison {
         }
     }
 
+    /**
+     * Supprime la livraison de sa plage horaire correspondante dans la liste des plages horaires.
+     * @param livraison livraison que l'on veut supprimer de sa plage horaire.
+     */
     public void supprimerLivraison(Livraison livraison) {
         for (PlageHoraire ph : m_plagesHoraires) {
             if (ph == livraison.getM_plage()) {
@@ -94,6 +102,11 @@ public class DemandeLivraison {
     // Other methods
     //
 
+    /**
+     * Obtient un ID numérique servant à identifier les livraisons. Cet ID est garanti unique, non utilisé pour une
+     * autre livraison parmi l'ensemble des livraisons présentes dans toutes les plage horaire.
+     * @return un ID encore non utilisé pour identifier de façon unique une livraison.
+     */
     public int getUniqueID() {
         int maxID = 0;
         for (PlageHoraire ph : m_plagesHoraires) {
@@ -124,6 +137,19 @@ public class DemandeLivraison {
         return new FeuilleRoute(tsp, m_chemins, graph.getMatches(), this);
     }
 
+    /**
+     * Parse un élément XML correspondant à une demande de livraison, afin d'en extraire tous les éléments. Met à jour
+     * la liste de plage horaire en la remplissant avec les différentes livraisons correspondantes.
+     * @param racineXML  (Element) correspondant au document XML à parser.
+     * @return  PARSE_ERROR :
+     *                  si les plages horaires se chevauchent
+     *                  si il y a plusieurs ou aucun entrepôts,
+ *                      si il y a plusieurs listes de plages horaires
+     *                  si les horaires sont mal formattés
+     *                  si il y a plus d'une liste de livraisons par plage horaire,
+     *                  si une livraison doit avoir lieu sur un noeud du graph (une adresse) non existant
+     *          PARSE_OK sinon.
+     */
     public int fromXML(Element racineXML) {
 
         //récupération de l'entrepôt
@@ -281,6 +307,12 @@ public class DemandeLivraison {
         }
     }
 
+    /**
+     * Ajoute le chemin <chemin>, partant de <from> et arrivant <to> dans l'attribut m_chemin de notre classe.
+     * @param from ID de la livraison de départ
+     * @param to  ID de la livraison d'arrivé du chemin
+     * @param chemin chemin entre deux livraisons.
+     */
     private void fillChemin(int from, int to, Chemin chemin) {
         if (m_chemins.get(from) == null) {
             m_chemins.put(from, new HashMap<Integer, Chemin>());
@@ -288,6 +320,14 @@ public class DemandeLivraison {
         m_chemins.get(from).put(to, chemin);
     }
 
+    /**
+     * Donne le cout (poids) <cost> au chemin partant de la livraison d'ID <from> à la livraison d'ID <to>
+     * dans le graphique <graph>
+     * @param from ID de la livraison d'où commence le chemin auquel on veut donner un cout (poids)
+     * @param to ID de la livraison d'où fini le chemin auquel on veut donner un cout (poids)
+     * @param cost coût (poids) à donner au chemin
+     * @param graph graphique sur lequel on veut donner un cout (poids) à un chemin.
+     */
     private void fillCost(int from, int to, int cost, GraphImpl graph) {
         if (graph.getCosts().get(from) == null) {
             graph.getCosts().put(from, new HashMap<Integer, Integer>());

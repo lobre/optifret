@@ -232,10 +232,12 @@ public class VuePlan extends JPanel {
                 int y = (int) (m_lastPositionDrag.getY() + p.getY() - m_lastClick.getY());
                 setLocation(x, y);
                 setM_lastPosition(new Point(x,y));
+
+                //pour empecher une partie du graph non visible de disparaitre quand on le drag
                 setSize((int) (getM_x_max() * getM_zoom()) , (int) (getM_y_max() * getM_zoom()));
                 getParent().repaint();
             }
-
+            //Permet d'augmenter la taille dun noeud survolé par la souris
             @Override
             public void mouseMoved(MouseEvent e) {
                 VueNoeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
@@ -255,26 +257,17 @@ public class VuePlan extends JPanel {
                 int x;
                 int y;
                 setM_zoom(zoom );
-
+                //On fait en sorte que le plan zoom là où la souris est. 0.1 est une valeur arbitraire qui fonctionne
                 x=(int)( getX()-(0.1*(deltaZoom/abs(deltaZoom))*(e.getPoint().getX())));
                 y=(int)(getY()-(0.1*(deltaZoom/abs(deltaZoom)))*(e.getPoint().getY())) ;
                 setM_lastPosition(new Point(x,y));
-                setLocation(x,y);
+                setLocation(x, y);
                 repaint();
             }
         });
-
-       /* addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                //To change body of implemented methods use File | Settings | File Templates.
-                centerMapOnSelected(0);
-                getParent().repaint();
-            }
-        });   */
     }
 
-    //Fonction de recentrage du plan sur le noeud selectionné
+    //Fonction de recentrage du plan sur le noeud selectionné. Si aucun noeud selectionné, même position qu'avant.
     public void centerMapOnSelected(){
         int x;
         int y;
