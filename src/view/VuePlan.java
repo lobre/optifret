@@ -231,7 +231,7 @@ public class VuePlan extends JPanel {
                 int x = (int) (m_lastPositionDrag.getX() + p.getX() - m_lastClick.getX());
                 int y = (int) (m_lastPositionDrag.getY() + p.getY() - m_lastClick.getY());
                 setLocation(x, y);
-               // setM_lastPosition(new Point(x,y));
+                setM_lastPosition(new Point(x,y));
                 getParent().repaint();
             }
 
@@ -287,7 +287,6 @@ public class VuePlan extends JPanel {
             setM_lastPosition(new Point(x,y));
         }
         else{
-            System.out.println(getM_lastPosition());
             setLocation(getM_lastPosition());
             repaint();
         }
@@ -307,7 +306,6 @@ public class VuePlan extends JPanel {
         AffineTransform tr2 = g2.getTransform();
         tr2.scale(m_zoom, m_zoom);
         g2.setTransform(tr2);
-
         super.paintComponent(g2);
 
         if (m_plan == null) {
@@ -331,6 +329,7 @@ public class VuePlan extends JPanel {
         for (VueNoeud vueNoeud : m_noeuds.values()) {
             vueNoeud.draw(g2);
         }
+
     }
 
     // Getters/Setters
