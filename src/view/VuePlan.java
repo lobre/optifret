@@ -232,6 +232,7 @@ public class VuePlan extends JPanel {
                 int y = (int) (m_lastPositionDrag.getY() + p.getY() - m_lastClick.getY());
                 setLocation(x, y);
                 setM_lastPosition(new Point(x,y));
+                setSize((int) (getM_x_max() * getM_zoom()) , (int) (getM_y_max() * getM_zoom()));
                 getParent().repaint();
             }
 
