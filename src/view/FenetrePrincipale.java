@@ -76,10 +76,8 @@ public class FenetrePrincipale {
         initListeners();
 
         // Style du bouton "Cacher"
-        m_hideSidebarButton.setBackground(Color.white);
-        m_hideSidebarButton.setContentAreaFilled(false);
+        m_hideSidebarButton.setContentAreaFilled(true);
         m_hideSidebarButton.setBackground(VuePlan.COULEUR_BACKGROUND);
-        //m_hideSidebarButton.setBorder(BorderFactory.createRaisedBevelBorder());
 
         // Sidebar cachée par défaut
         hideSidebar();
