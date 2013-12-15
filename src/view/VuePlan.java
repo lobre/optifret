@@ -104,7 +104,7 @@ public class VuePlan extends JPanel {
         m_x_max = m_largeur + MARGIN;
         m_y_max = m_hauteur + MARGIN;
 
-        m_zoom = 1;
+        setZoom(1);
         m_noeuds = new HashMap<Integer, VueNoeud>();
 
         // Drag attributes
@@ -127,7 +127,7 @@ public class VuePlan extends JPanel {
      * @param plan le plan &agrave; repr&eacute;senter
      * @see model.Plan
      */
-    public void setM_plan(Plan plan) {
+    public void setPlan(Plan plan) {
         m_plan = plan;
         m_noeuds = new HashMap<Integer, VueNoeud>();
         m_troncons = new HashMap<Pair, VueTroncon>();
@@ -158,7 +158,7 @@ public class VuePlan extends JPanel {
      * @param feuilleRoute la feuille de route &agrave; afficher
      * @see model.FeuilleRoute
      */
-    public void setM_feuilleRoute(FeuilleRoute feuilleRoute) {
+    public void setFeuilleRoute(FeuilleRoute feuilleRoute) {
         m_feuilleRoute = feuilleRoute;
         resetTroncons();
         if (feuilleRoute == null) {
@@ -175,11 +175,16 @@ public class VuePlan extends JPanel {
         repaint();
     }
 
-    public Plan getM_plan() {
+    public void setZoom(float zoom) {
+        m_zoom = zoom;
+        updateSize();
+    }
+
+    public Plan getPlan() {
         return m_plan;
     }
 
-    private void setM_lastPosition(Point lastPosition) {
+    private void setLastPosition(Point lastPosition) {
         this.m_lastPosition = lastPosition;
     }
 
@@ -189,7 +194,7 @@ public class VuePlan extends JPanel {
      * nul (null), cache la barre lat&eacute;rale.
      * @param selected le noeud actuellement s&eacute;lectionn&eacute;
      */
-    private void setM_selectedNoeud(VueNoeud selected) {
+    private void setSelectedNoeud(VueNoeud selected) {
         if (m_selectedNoeud != null) {
             m_selectedNoeud.setM_selected(false);
         }
@@ -220,7 +225,7 @@ public class VuePlan extends JPanel {
      * Change le noeud actuellement survolé. (Le rayon de ce noeud est amplifié dans la vue)
      * @param focused le noeud actuellement survolé
      */
-    private void setM_focusedNoeud(VueNoeud focused) {
+    private void setFocusedNoeud(VueNoeud focused) {
         if (m_focusedNoeud != null) {
             m_focusedNoeud.setM_focused(false);
         }
@@ -269,7 +274,7 @@ public class VuePlan extends JPanel {
     private void centerOnCenter() {
         int x = (getParent().getWidth() - getWidth()) / 2;
         int y = (getParent().getHeight() - getHeight()) / 2;
-        setM_lastPosition(new Point(x, y));
+        setLastPosition(new Point(x, y));
         setLocation(x, y);
         repaint();
     }
@@ -287,7 +292,7 @@ public class VuePlan extends JPanel {
             int y = (int) (-m_selectedNoeud.getM_y() * m_zoom - getY() + (getParent().getHeight() / 2));
             setLocation(x, y);
             repaint();
-            setM_lastPosition(new Point(x, y));
+            setLastPosition(new Point(x, y));
         } else {
             setLocation(m_lastPosition);
             repaint();
@@ -343,7 +348,7 @@ public class VuePlan extends JPanel {
                 }
                 VueNoeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
                 if (clickedNoeud != m_selectedNoeud) {
-                    setM_selectedNoeud(clickedNoeud);
+                    setSelectedNoeud(clickedNoeud);
                     repaint();
                 }
             }
@@ -372,7 +377,7 @@ public class VuePlan extends JPanel {
             public void mouseMoved(MouseEvent e) {
                 VueNoeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
                 if (clickedNoeud != m_focusedNoeud) {
-                    setM_focusedNoeud(clickedNoeud);
+                    setFocusedNoeud(clickedNoeud);
                     repaint();
                 }
 
@@ -390,12 +395,12 @@ public class VuePlan extends JPanel {
 
                 float zoom = m_zoom * (1 - (float) e.getWheelRotation() / 10);
                 float deltaZoom = zoom - m_zoom;
-                m_zoom = zoom;
+                setZoom(zoom);
 
                 // On fait en sorte que le plan zoom là où la souris est. 0.1 est le ratio de ce déplacement
                 int x = (int) (getX() - (0.1 * (deltaZoom / abs(deltaZoom)) * (e.getPoint().getX())));
                 int y = (int) (getY() - (0.1 * (deltaZoom / abs(deltaZoom))) * (e.getPoint().getY()));
-                setM_lastPosition(new Point(x, y));
+                setLastPosition(new Point(x, y));
                 setLocation(x, y);
                 repaint();
             }
@@ -406,7 +411,7 @@ public class VuePlan extends JPanel {
      * Dessine le plan représenté ainsi que les points de livraison et l'entrepot si une demande de livraison a été
      * chargée, et les chemins si une feuille de route a été calculée.
      * Les opérations de dessin sont déléguées aux vues de chaque entité (VueNoeud, VueTroncon)
-     * @param g, l'objet Graphics où se fait le rendu
+     * @param g l'objet Graphics où se fait le rendu
      */
     @Override
     public void paintComponent(Graphics g) {
