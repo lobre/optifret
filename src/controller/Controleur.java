@@ -17,13 +17,34 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 
+/**
+ * Classe Controleur
+ */
 public class Controleur {
 
+    /**
+     * Interface de l'application
+     */
     private FenetrePrincipale m_window;
 
+    /**
+     * Plan de la zone géographique courante
+     */
     private Plan m_plan;
+
+    /**
+     * Demande de livraison courante
+     */
     private DemandeLivraison m_demandeLivraison;
+
+    /**
+     * Dernière feuille de route calculée
+     */
     private FeuilleRoute m_feuilleRoute;
+
+    /**
+     * Ensemble des commandes exécutées qui peuvent être annulées ou réexécutées
+     */
     private HistoriqueCommandes m_commandes;
 
 
@@ -41,7 +62,7 @@ public class Controleur {
     }
 
     /**
-     * Class constructor
+     * Constructeur de la classe
      */
     public Controleur() {
         m_plan = null;
@@ -81,8 +102,8 @@ public class Controleur {
     }
 
     /**
-     * instancie un parseur xml et récupère la balise racine du fichier passé en paramètre
-     * @param fichierXML fichier d'extension 'xml'
+     * Instancie un parseur xml et récupère la balise racine d'en fichier
+     * @param fichierXML fichier d'extension 'xml' dont le contenu est récupéré
      * @return racine du fichier xml
      */
     private Document lireDepuisXML(File fichierXML) {
@@ -107,8 +128,8 @@ public class Controleur {
     /**
      * à partir du fichier choisi par l'utilisateur, instancie un nouveau plan de la zone géographique,
      * c'est-à-dire les noeuds et les tronçons la composant, et rend possible, dans la suite, le chargement
-     * d'une demande de livraisons. Pourque l'analyse soit faite, le fichier xml doit avoir la même structure
-     * que le fichier 'xml_data/plan10x10.xml'
+     * d'une demande de livraisons. Si le fichier choisi est invalide (erreurs de syntaxes, éléments manquants,
+     * ect) un message d'erreur est affiché
      */
     public void chargerPlan() {
         try {
@@ -145,12 +166,12 @@ public class Controleur {
     }
 
     /**
-     * à partir du fichier choisi par l'utilisateur, instancie une nouvelle demande de livraisons, ainsi que
+     * A partir du fichier choisi par l'utilisateur, instancie une nouvelle demande de livraisons, ainsi que
      * les plages horaires et livraisons la composant, associe les livraisons aux noeuds correspondants et
      * repère l'adresse de l'entrepôt. Rend aussi possible, dans la suite, le calcul d'une feuille de route.
      * Pourque l'analyse soit faite, un plan de la zone où seront effectuées les livraisons doit être
-     * précedemment chargé et le fichier xml doit avoir la même structure que le fichier
-     * 'xml_data/livraison10x10-1.xml'
+     * précedemment chargé. Si le fichier choisi est invalide (erreurs de syntaxes, éléments manquants,
+     * ect) un message d'erreur est affiché
      */
     public void chargerDemandeLivraison() {
         try {
@@ -198,7 +219,7 @@ public class Controleur {
     }
 
     /**
-     * calcule la tournée la plus efficace pour l'ensemble de livraisons du jour et la zone courants et
+     * Calcule la tournée la plus efficace pour l'ensemble de livraisons du jour et la zone courants et
      * rend possible, dans la suite, l'édition en format papier de la feuille de route.
      * Pourque l'analyse soit faite, un plan et une demande de livraisons doivent être chargés.
      */
@@ -219,7 +240,7 @@ public class Controleur {
     }
 
     /**
-     * affiche sur la console la dernière tournée calculée
+     * Affiche en console la dernière tournée calculée
      */
     public void editerFeuilleRoutePapier() {
         if (m_feuilleRoute == null) {
@@ -231,7 +252,7 @@ public class Controleur {
     }
 
     /**
-     * ajoute une livraison à la demande de livraison courante et, le cas écheant, élimine la
+     * Ajoute une livraison à la demande de livraison courante et, le cas écheant, élimine la
      * feuille de route calculée
      * @param livraison à rajouter
      */
@@ -244,7 +265,7 @@ public class Controleur {
     }
 
     /**
-     * supprime une livraison à la demande de livraison courante et, le cas écheant, élimine la
+     * Supprime une livraison à la demande de livraison courante et, le cas écheant, élimine la
      * feuille de route calculée
      * @param livraison
      */
@@ -257,7 +278,7 @@ public class Controleur {
     }
 
     /**
-     * permet d'exécuter la dernière commande annulée et met à jour le panel du plan
+     * Permet d'exécuter la dernière commande annulée et met à jour le panel du plan
      */
     public void reexecuter() {
         m_commandes.reexecuter();
@@ -265,7 +286,7 @@ public class Controleur {
     }
 
     /**
-     * permet de annuler la dernière commande exécutée et met à jour le panel du plan
+     * Permet de annuler la dernière commande exécutée et met à jour le panel du plan
      */
     public void annuler() {
         m_commandes.annuler();
@@ -273,7 +294,7 @@ public class Controleur {
     }
 
     /**
-     * affiche un panel contenant les informations d'une livraison
+     * Affiche le panel contenant les informations d'une livraison
      * @param livraison dont les informations vont être affichées
      */
     public void showInfosLivraison(Livraison livraison) {
@@ -281,7 +302,7 @@ public class Controleur {
     }
 
     /**
-     * affiche le panel d'ajout d'une nouvelle livraison
+     * Affiche le panel d'ajout d'une nouvelle livraison
      * @param noeud auquel la nouvelle livraison va être associée
      */
     public void showAjouterLivraison(Noeud noeud) {
@@ -289,7 +310,7 @@ public class Controleur {
     }
 
     /**
-     * ferme la barre latérale droite contenant les informations de la livraison ou du noeud
+     * Ferme la barre latérale droite contenant les informations de la livraison ou du noeud
      * sélectionnés
      */
     public void hideSidebar() {
