@@ -150,12 +150,6 @@ public class Controleur {
         status = m_demandeLivraison.fromXML(doc.getDocumentElement());
 
 
-        if (status != DemandeLivraison.PARSE_OK) {
-            m_window.getM_zoneNotification().setErrorMessage("Erreur: impossible de charger la demande de livraison demandée.");
-            m_plan.resetNoeuds();
-            return;
-        }
-
         m_window.getM_zoneNotification().setSuccessMessage("La demande de livraison  '" + fichierXML.getName() + "' a été chargée avec succès !");
 
         // Désactive l'action "Éditer version papier" et annule la feuille de route
@@ -175,7 +169,10 @@ public class Controleur {
         m_window.getM_vuePlan().repaint();
         }
         catch(ParseXmlException e){
-            System.out.println(e.getMessage());
+                m_window.getM_zoneNotification().setErrorMessage("Erreur: impossible de charger la demande de livraison" +
+                        " demandée. Cause : "+e.getMessage());
+                m_plan.resetNoeuds();
+                return;
         }
     }
 
