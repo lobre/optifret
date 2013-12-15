@@ -6,7 +6,9 @@ import model.Troncon;
 
 import java.awt.*;
 import java.util.ArrayList;
-
+/**
+ Vue d'un objet Troncon et (éventuellement) des chemins le traversant
+ */
 public class VueTroncon {
 
     private Troncon m_troncon;

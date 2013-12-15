@@ -189,7 +189,7 @@ public class VuePlan extends JPanel {
                 super.mouseClicked(e);
 
                 // Mise à jour de valeurs utiles pour le déplacement par "drag" de la vue
-                setM_lastClick(MouseInfo.getPointerInfo().getLocation());
+                m_lastClick = MouseInfo.getPointerInfo().getLocation();
                 m_lastPositionDrag = getLocation();
 
                 if (m_controleur.getM_demandeLivraison() == null) {
@@ -238,6 +238,10 @@ public class VuePlan extends JPanel {
         addMouseWheelListener(new MouseWheelListener() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
+                // Mise à jour de valeurs utiles pour le déplacement par "drag" de la vue
+                m_lastClick = MouseInfo.getPointerInfo().getLocation();
+                m_lastPositionDrag = getLocation();
+
                 float zoom = m_zoom * (1 - (float) e.getWheelRotation() / 10);
                 float deltaZoom = zoom - m_zoom;
                 int x;

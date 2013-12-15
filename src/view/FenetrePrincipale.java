@@ -85,7 +85,6 @@ public class FenetrePrincipale {
     }
 
     private void initListeners() {
-
         m_frame.setFocusable(true);
 
         m_frame.addKeyListener(new KeyAdapter() {
@@ -103,8 +102,6 @@ public class FenetrePrincipale {
             }
 
         });
-        // Pour adapter la map au redimensionnement de la fenêtre
-
 
         // Bouton "Supprimer"
         m_supprimerButton.addActionListener(new ActionListener() {
@@ -150,7 +147,8 @@ public class FenetrePrincipale {
                 m_frame.repaint();
             }
         });
-        //gère le centrage du graph sur le noeud selectionné lors de la selection d'un noeud, faisant apparaitre m_slide
+
+        // Gère le centrage du graph sur le noeud selectionné lors de la selection d'un noeud, faisant apparaitre m_slide
         m_sidebar.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
@@ -165,7 +163,7 @@ public class FenetrePrincipale {
         m_frame.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-               m_vuePlan.centerMapOnSelected();
+                m_vuePlan.centerMapOnSelected();
             }
         });
     }
@@ -280,7 +278,6 @@ public class FenetrePrincipale {
         panelInfosLivraison.setVisible(true);
         panelAjouterLivraison.setVisible(false);
         m_sidebar.setVisible(true);
-
     }
 
     public void showAjouterLivraison(Noeud noeud) {
