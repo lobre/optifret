@@ -7,7 +7,6 @@ import org.xml.sax.SAXException;
 import view.FenetrePrincipale;
 import view.VueFeuilleRoutePapier;
 
-import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -25,21 +24,6 @@ public class Controleur {
     private FeuilleRoute m_feuilleRoute;
     private HistoriqueCommandes m_commandes;
 
-
-    // Point d'entrée de l'application:
-    public static void main(String[] args) {
-        // Paramètre Swing pour utiliser une apparence native
-
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-            System.err.println("Interface native non gérée, fallback sur l'interface Swing par défaut.");
-        }
-
-        new Controleur();
-    }
-
-
     public Controleur() {
         m_plan = null;
         m_demandeLivraison = null;
@@ -55,12 +39,13 @@ public class Controleur {
 
     private File ouvrirFichier() {
         FileDialog fileDialog = new FileDialog(m_window.getM_frame());
-        fileDialog.setModal(true);
+        fileDialog.setDirectory("xml_data");
 
         FilenameFilter filter = new CustomFilenameFilter(".xml");
         fileDialog.setFilenameFilter(filter);
 
-        fileDialog.setDirectory("xml_data");
+        fileDialog.setModal(true);
+        fileDialog.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
         fileDialog.setAlwaysOnTop(true);
 
         fileDialog.setVisible(true);
@@ -184,8 +169,6 @@ public class Controleur {
 
         // Active l'action "Éditer version papier"
         m_window.getM_menuFichier().getItem(2).setEnabled(true);
-
-        System.out.println("Chemins calculés : " + m_feuilleRoute.getChemins());
     }
 
     public void editerFeuilleRoutePapier() {

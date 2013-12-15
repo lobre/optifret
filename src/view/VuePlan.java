@@ -74,24 +74,15 @@ public class VuePlan extends JPanel {
         m_noeuds = new HashMap<Integer, VueNoeud>();
         m_troncons = new HashMap<Pair, VueTroncon>();
 
-
-        m_x_max = -1;
-        m_y_max = -1;
-
         for (Troncon t : m_plan.getM_troncons()) {
             VueTroncon vueTroncon = new VueTroncon(t);
             if (m_troncons.containsKey(t.getOppositePair())) {
-                VueTroncon tInverse = m_troncons.get(t.getOppositePair());
-
-                if (t.estDeSensPositif()) {
-                    m_troncons.remove(t.getOppositePair());
-                    vueTroncon.setM_doubleVoie(true);
-                } else {
-                    tInverse.setM_doubleVoie(true);
-                    continue;
-                }
+                VueTroncon tOpposite = m_troncons.get(t.getOppositePair());
+                tOpposite.setM_doubleVoie(true);
+                vueTroncon.setM_doubleVoie(true);
             }
-            m_troncons.put(t.getPair(), new VueTroncon(t));
+
+            m_troncons.put(t.getPair(), vueTroncon);
         }
 
         for (Noeud n : m_plan.getM_noeuds().values()) {
@@ -102,6 +93,25 @@ public class VuePlan extends JPanel {
         updateSize();
         centerOnCenter();
     }
+
+
+    public void setM_feuilleRoute(FeuilleRoute feuilleRoute) {
+        m_feuilleRoute = feuilleRoute;
+        resetTroncons();
+        if (feuilleRoute == null) {
+            return;
+        }
+
+        for (Chemin chemin : m_feuilleRoute.getChemins()) {
+            for (Troncon troncon : chemin.getListeTroncons()) {
+                VueTroncon vueT = m_troncons.get(troncon.getPair());
+                vueT.ajouterChemin(chemin);
+            }
+        }
+
+        repaint();
+    }
+
 
     public void resetTroncons() {
         //Supprime les chemins des vues de tronçons
@@ -134,6 +144,8 @@ public class VuePlan extends JPanel {
 
     // Other methods
     private void updateSize() {
+        m_x_max = -1;
+        m_y_max = -1;
         for (VueNoeud n : m_noeuds.values()) {
             m_x_max = n.getM_x() + n.getM_rayon() > m_x_max ? n.getM_x() + n.getM_rayon() : m_x_max;
             m_y_max = n.getM_y() + n.getM_rayon() > m_y_max ? n.getM_y() + n.getM_rayon() : m_y_max;
@@ -284,6 +296,10 @@ public class VuePlan extends JPanel {
             vueTroncon.drawBase(g2);
         }
 
+        // Dessin des lignes de départition des tronçons
+        for (VueTroncon vueTroncon : m_troncons.values()) {
+            vueTroncon.drawMidline(g2);
+        }
         // Dessin des chemins sur les tronçons
         for (VueTroncon vueTroncon : m_troncons.values()) {
             vueTroncon.drawChemins(g2);
@@ -340,32 +356,5 @@ public class VuePlan extends JPanel {
         m_focusedNoeud = focused;
     }
 
-
-    public void setM_feuilleRoute(FeuilleRoute feuilleRoute) {
-        m_feuilleRoute = feuilleRoute;
-        resetTroncons();
-        if (feuilleRoute == null) {
-            return;
-        }
-
-        for (Chemin chemin : m_feuilleRoute.getChemins()) {
-            for (Troncon troncon : chemin.getListeTroncons()) {
-                VueTroncon vueT = getVueTroncon(troncon);
-                vueT.ajouterChemin(chemin);
-            }
-        }
-
-        repaint();
-    }
-
-    private VueTroncon getVueTroncon(Troncon t) {
-        if (m_troncons.containsKey(t.getPair())) {
-            return m_troncons.get(t.getPair());
-        } else if (m_troncons.containsKey(t.getOppositePair())) {
-            return m_troncons.get(t.getOppositePair());
-        } else {
-            return null;
-        }
-    }
 
 }
