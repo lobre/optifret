@@ -12,7 +12,7 @@ public class VueNoeud {
     private boolean m_focused;
 
     private static Color COULEUR_DEFAUT = new Color(202, 216, 255);
-    private static Color COULEUR_ENTREPOT = new Color(211, 5, 188);
+    private static Color COULEUR_ENTREPOT = new Color(193, 28, 185);
     private static Color COULEUR_LIVRAISON = new Color(143, 210, 53);
 
     public static int RAYON_DEFAUT = 13;
@@ -22,10 +22,10 @@ public class VueNoeud {
     // Facteur par lequel les coordonées de la vue sont amplifiées par rapport à ceux du modèle
     public static int AMPLIFICATION_FACTOR = 2;
 
-    private static int FOCUS_FACTOR = 2;
+    private static double FOCUS_FACTOR = 1.5;
     private static int BORDER_WIDTH = 1;
 
-    private static int FONT_SIZE = 18;
+    private static int FONT_SIZE = 16;
     private static Font ID_FONT = new Font("Arial", Font.BOLD, FONT_SIZE);
 
     public VueNoeud(Noeud noeud) {

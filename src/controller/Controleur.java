@@ -69,8 +69,7 @@ public class Controleur {
         String filename = fileDialog.getFile();
         if (filename != null) {
             return new File(fileDialog.getDirectory(), fileDialog.getFile());
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -95,87 +94,81 @@ public class Controleur {
     }
 
     public void chargerPlan() {
-        try{
-        m_demandeLivraison = null;
+        try {
+            m_demandeLivraison = null;
 
-        File fichierXML = ouvrirFichier();
+            File fichierXML = ouvrirFichier();
 
-        if (fichierXML == null) {
-            return;
-        }
+            if (fichierXML == null) {
+                return;
+            }
 
-        Document doc = lireDepuisXML(fichierXML);
+            Document doc = lireDepuisXML(fichierXML);
 
-        m_plan = new Plan();
-        int status = m_plan.fromXML(doc.getDocumentElement());
-
-
-        m_window.getM_vuePlan().setM_plan(m_plan);
-        m_window.getM_zoneNotification().setSuccessMessage("Le plan '" + fichierXML.getName() + "' a été chargé avec succès !");
+            m_plan = new Plan();
+            m_plan.fromXML(doc.getDocumentElement());
 
 
-        // Active l'action "Charger une demande de livraison"
-        m_window.getM_menuFichier().getItem(1).setEnabled(true);
-        // Désactive le menu "Édition"
-        m_window.getM_menuEdition().setEnabled(false);
-        // Désactive le bouton "Calculer feuille de route"
-        m_window.getM_calculerButton().setEnabled(false);
-        // Désactive l'action "Éditer version papier"
-        m_window.getM_menuFichier().getItem(2).setEnabled(false);
-        }
-        catch(ParseXmlException e){
+            m_window.getM_vuePlan().setM_plan(m_plan);
+            m_window.getM_zoneNotification().setSuccessMessage("Le plan '" + fichierXML.getName() + "' a été chargé avec succès !");
+
+
+            // Active l'action "Charger une demande de livraison"
+            m_window.getM_menuFichier().getItem(1).setEnabled(true);
+            // Désactive le menu "Édition"
+            m_window.getM_menuEdition().setEnabled(false);
+            // Désactive le bouton "Calculer feuille de route"
+            m_window.getM_calculerButton().setEnabled(false);
+            // Désactive l'action "Éditer version papier"
+            m_window.getM_menuFichier().getItem(2).setEnabled(false);
+        } catch (ParseXmlException e) {
             m_window.getM_zoneNotification().setErrorMessage("Erreur: impossible de charger le plan demandé. Cause : "
-            + e.getMessage());
-            return;
+                    + e.getMessage());
         }
     }
 
     public void chargerDemandeLivraison() {
-        try{
-        if (m_plan == null) {
-            m_window.getM_zoneNotification().setErrorMessage("Veuillez d'abord charger un plan avant de charger une demande de livraison.");
-            return;
-        }
+        try {
+            if (m_plan == null) {
+                m_window.getM_zoneNotification().setErrorMessage("Veuillez d'abord charger un plan avant de charger une demande de livraison.");
+                return;
+            }
 
-        File fichierXML = ouvrirFichier();
-        if (fichierXML == null) {
-            return;
-        }
-        Document doc = lireDepuisXML(fichierXML);
+            File fichierXML = ouvrirFichier();
+            if (fichierXML == null) {
+                return;
+            }
+            Document doc = lireDepuisXML(fichierXML);
 
-        // On réinitialise l'état des noeuds (livraison liée, entrepot ou pas)
-        m_plan.resetNoeuds();
-
-        // On parse la demande de livraison
-        m_demandeLivraison = new DemandeLivraison(m_window.getM_vuePlan().getM_plan());
-        int status;
-
-        m_demandeLivraison.fromXML(doc.getDocumentElement());
-
-
-        m_window.getM_zoneNotification().setSuccessMessage("La demande de livraison  '" + fichierXML.getName() + "' a été chargée avec succès !");
-
-        // Désactive l'action "Éditer version papier" et annule la feuille de route
-        m_feuilleRoute = null;
-        m_window.getM_vuePlan().setM_feuilleRoute(null);
-        m_window.getM_menuFichier().getItem(2).setEnabled(false);
-
-        // Active le menu "Édition"
-        m_window.getM_menuEdition().setEnabled(true);
-
-        // Activer le bouton "Calculer feuille de route"
-        m_window.getM_calculerButton().setEnabled(true);
-
-        // Réinitialise les vues troncons
-        m_window.getM_vuePlan().resetTroncons();
-
-        m_window.getM_vuePlan().repaint();
-        }
-        catch(ParseXmlException e){
-            m_window.getM_zoneNotification().setErrorMessage("Erreur: impossible de charger la demande de livraison" +
-                    " demandée. Cause : "+e.getMessage());
+            // On réinitialise l'état des noeuds (livraison liée, entrepot ou pas)
             m_plan.resetNoeuds();
-            return;
+
+            // On parse la demande de livraison
+            m_demandeLivraison = new DemandeLivraison(m_window.getM_vuePlan().getM_plan());
+            m_demandeLivraison.fromXML(doc.getDocumentElement());
+
+
+            m_window.getM_zoneNotification().setSuccessMessage("La demande de livraison  '" + fichierXML.getName() + "' a été chargée avec succès !");
+
+            // Désactive l'action "Éditer version papier" et annule la feuille de route
+            m_feuilleRoute = null;
+            m_window.getM_vuePlan().setM_feuilleRoute(null);
+            m_window.getM_menuFichier().getItem(2).setEnabled(false);
+
+            // Active le menu "Édition"
+            m_window.getM_menuEdition().setEnabled(true);
+
+            // Activer le bouton "Calculer feuille de route"
+            m_window.getM_calculerButton().setEnabled(true);
+
+            // Réinitialise les vues troncons
+            m_window.getM_vuePlan().resetTroncons();
+
+            m_window.getM_vuePlan().repaint();
+        } catch (ParseXmlException e) {
+            m_window.getM_zoneNotification().setErrorMessage("Erreur: impossible de charger la demande de livraison" +
+                    " demandée. Cause : " + e.getMessage());
+            m_plan.resetNoeuds();
         }
     }
 

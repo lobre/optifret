@@ -14,12 +14,12 @@ public class VueTroncon {
     private Boolean m_doubleVoie;
 
     private static Color COULEUR_TRONCON = new Color(89, 147, 221);
-    private static Color COULEUR_TRONCON_SIMPLE = new Color(0xE9E3FF); //COULEUR_TRONCON.darker();
-    private static Color COULEUR_CHEMIN_NEUTRE = new Color(45, 79, 144);
-    private static int LARGEUR_TRONCON = VueNoeud.RAYON_DEFAUT / 3;
+    private static Color COULEUR_MIDLINE = new Color(0xB8D6FF);
+    private static Color COULEUR_CHEMIN_NEUTRE = COULEUR_TRONCON.darker();
+    private static int LARGEUR_TRONCON = VueNoeud.RAYON_DEFAUT / 2;
 
-    private static Stroke STROKE_TRONCON_DOUBLE = new BasicStroke(LARGEUR_TRONCON * 2);
-    private static Stroke STROKE_TRONCON_SIMPLE = new BasicStroke(LARGEUR_TRONCON);
+    private static Stroke STROKE_TRONCON = new BasicStroke(LARGEUR_TRONCON * 2);
+    private static Stroke STROKE_MIDLINE = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{7}, 0);
     private static Stroke STROKE_CHEMIN = new BasicStroke(1);
 
     private static int NOMBRE_COULEURS = 10;
@@ -47,20 +47,12 @@ public class VueTroncon {
         }
     }
 
-    private int getGlobalOffset() {
-        return - LARGEUR_TRONCON;
-    }
-
-    private Color getColor() {
-        return m_doubleVoie ? COULEUR_TRONCON : COULEUR_TRONCON_SIMPLE;
-    }
-
     public void drawBase(Graphics2D g2) {
-        g2.setStroke(STROKE_TRONCON_DOUBLE);
-        g2.setColor(getColor());
+        g2.setStroke(STROKE_TRONCON);
+        g2.setColor(COULEUR_TRONCON);
 
         double angle = m_troncon.getAngle();
-        int offset = getGlobalOffset();
+        int offset = - LARGEUR_TRONCON;
         int dx = (int) (offset * Math.cos(Math.PI / 2 + angle));
         int dy = (int) (offset * Math.sin(Math.PI / 2 + angle));
 
@@ -73,12 +65,8 @@ public class VueTroncon {
     }
 
     public void drawMidline(Graphics2D g2) {
-        if (!m_doubleVoie) {
+        if (!m_doubleVoie || !m_troncon.estDeSensPositif()) {
             return;
-        }
-        else {
-            g2.setColor(COULEUR_TRONCON_SIMPLE);
-            g2.setStroke(STROKE_TRONCON_SIMPLE);
         }
 
         int x1 = m_troncon.getArrivee().getM_x() * VueNoeud.AMPLIFICATION_FACTOR;
@@ -86,8 +74,8 @@ public class VueTroncon {
         int x2 = m_troncon.getDepart().getM_x() * VueNoeud.AMPLIFICATION_FACTOR;
         int y2 = m_troncon.getDepart().getM_y() * VueNoeud.AMPLIFICATION_FACTOR;
 
-        g2.setColor(COULEUR_TRONCON_SIMPLE);
-        g2.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{7}, 0));
+        g2.setColor(COULEUR_MIDLINE);
+        g2.setStroke(STROKE_MIDLINE);
         g2.drawLine(x1, y1, x2, y2);
     }
 
@@ -108,7 +96,7 @@ public class VueTroncon {
             Chemin chemin = m_chemins.get(i);
             g2.setColor(getCouleurChemin(chemin));
 
-            double offset = getGlobalOffset() + getCheminOffset(i);
+            double offset = - LARGEUR_TRONCON + getCheminOffset(i);
             int dx = (int) (offset * Math.cos(Math.PI / 2 + angle));
             int dy = (int) (offset * Math.sin(Math.PI / 2 + angle));
 
@@ -146,7 +134,8 @@ public class VueTroncon {
         //Retourne la couleur associee au chemin
         Noeud depart = chemin.getDepart();
         Noeud arrivee = chemin.getArrivee();
-        if ((!depart.hasLivraison() || !arrivee.hasLivraison()) || (depart.getM_livraison().getM_plage() != arrivee.getM_livraison().getM_plage())) {
+        boolean noLivraison = !depart.hasLivraison() || !arrivee.hasLivraison();
+        if (noLivraison || (depart.getM_livraison().getM_plage() != arrivee.getM_livraison().getM_plage())) {
             return COULEUR_CHEMIN_NEUTRE;
         }
         else {

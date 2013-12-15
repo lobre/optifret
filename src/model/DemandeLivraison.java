@@ -37,41 +37,16 @@ public class DemandeLivraison {
     //
     // Accessor methods
     //
-
-
-    public Plan getPlan() {
-        return m_plan;
-    }
-
     public Noeud getEntrepot() {
         return m_entrepot;
     }
-
     public ArrayList<PlageHoraire> getM_plagesHoraires() {
         return m_plagesHoraires;
-    }
-
-    public void setEntrepot(Noeud entrepot) {
-        this.m_entrepot = entrepot;
     }
 
     private void ajouterPlageH(PlageHoraire plage) {
         m_plagesHoraires.add(plage);
     }
-
-    private void supprimerPlageH(PlageHoraire plage) {
-        m_plagesHoraires.remove(plage);
-    }
-
-    public void setM_plagesHoraires(ArrayList<PlageHoraire> m_plagesHoraires) {
-        this.m_plagesHoraires = m_plagesHoraires;
-    }
-
-    public void setM_plan(Plan m_plan) {
-        this.m_plan = m_plan;
-    }
-
-    // TODO : Il faudra remettre à zéro la feuille de route de la DemandeLivraison à l'ajout/suppression d'une livraison
 
     /**
      * Ajoute la livraison à la plage horaire correspondante dans la liste des plages horaires.
@@ -142,14 +117,13 @@ public class DemandeLivraison {
      * Parse un élément XML correspondant à une demande de livraison, afin d'en extraire tous les éléments. Met à jour
      * la liste de plage horaire en la remplissant avec les différentes livraisons correspondantes.
      * @param racineXML  (Element) correspondant au document XML à parser.
-     * @return  PARSE_ERROR :
+     * @throws ParseXmlException :
      *                  si les plages horaires se chevauchent
      *                  si il y a plusieurs ou aucun entrepôts,
- *                      si il y a plusieurs listes de plages horaires
+     *                  si il y a plusieurs listes de plages horaires
      *                  si les horaires sont mal formattés
      *                  si il y a plus d'une liste de livraisons par plage horaire,
      *                  si une livraison doit avoir lieu sur un noeud du graph (une adresse) non existant
-     *          PARSE_OK sinon.
      */
     public void fromXML(Element racineXML) throws ParseXmlException {
 

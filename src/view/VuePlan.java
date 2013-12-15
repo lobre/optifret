@@ -138,10 +138,6 @@ public class VuePlan extends JPanel {
         this.m_lastPosition = lastPosition;
     }
 
-    public void setM_lastPositionDrag(Point lastPosition) {
-        this.m_lastPositionDrag = lastPosition;
-    }
-
     // Other methods
     private void updateSize() {
         m_x_max = -1;
@@ -194,7 +190,7 @@ public class VuePlan extends JPanel {
 
                 // Mise à jour de valeurs utiles pour le déplacement par "drag" de la vue
                 setM_lastClick(MouseInfo.getPointerInfo().getLocation());
-                setM_lastPositionDrag(getLocation());
+                m_lastPositionDrag = getLocation();
 
                 if (m_controleur.getM_demandeLivraison() == null) {
                     return;
@@ -202,6 +198,7 @@ public class VuePlan extends JPanel {
                 VueNoeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
                 if (clickedNoeud != m_selectedNoeud) {
                     setM_selectedNoeud(clickedNoeud);
+                    repaint();
                 }
             }
 
@@ -218,7 +215,7 @@ public class VuePlan extends JPanel {
                 int x = (int) (m_lastPositionDrag.getX() + p.getX() - m_lastClick.getX());
                 int y = (int) (m_lastPositionDrag.getY() + p.getY() - m_lastClick.getY());
                 setLocation(x, y);
-                setM_lastPosition(new Point(x, y));
+                m_lastPosition = new Point(x, y);
 
                 //pour empecher une partie du graph non visible de disparaitre quand on le drag
                 setSize((int) (m_x_max * m_zoom), (int) (m_y_max * m_zoom));
@@ -279,6 +276,9 @@ public class VuePlan extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        if (m_plan == null) {
+            return;
+        }
 
         Graphics2D g2 = (Graphics2D) g;
 
@@ -289,10 +289,6 @@ public class VuePlan extends JPanel {
         AffineTransform tr2 = g2.getTransform();
         tr2.scale(m_zoom, m_zoom);
         g2.setTransform(tr2);
-
-        if (m_plan == null) {
-            return;
-        }
 
         // Dessin des tronçons
         for (VueTroncon vueTroncon : m_troncons.values()) {
