@@ -5,8 +5,8 @@ import libs.ParseXmlException;
 import model.*;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+import view.FenetreImprimerFeuilleRoute;
 import view.FenetrePrincipale;
-import view.VueFeuilleRoutePapier;
 
 import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
@@ -147,7 +147,7 @@ public class Controleur {
             m_plan.fromXML(doc.getDocumentElement());
 
 
-            m_window.getM_vuePlan().setM_plan(m_plan);
+            m_window.getM_vuePlan().setPlan(m_plan);
             m_window.getM_zoneNotification().setSuccessMessage("Le plan '" + fichierXML.getName() + "' a été chargé avec succès !");
 
 
@@ -190,7 +190,7 @@ public class Controleur {
             m_plan.resetNoeuds();
 
             // On parse la demande de livraison
-            m_demandeLivraison = new DemandeLivraison(m_window.getM_vuePlan().getM_plan());
+            m_demandeLivraison = new DemandeLivraison(m_window.getM_vuePlan().getPlan());
             m_demandeLivraison.fromXML(doc.getDocumentElement());
 
 
@@ -198,7 +198,7 @@ public class Controleur {
 
             // Désactive l'action "Éditer version papier" et annule la feuille de route
             m_feuilleRoute = null;
-            m_window.getM_vuePlan().setM_feuilleRoute(null);
+            m_window.getM_vuePlan().setFeuilleRoute(null);
             m_window.getM_menuFichier().getItem(2).setEnabled(false);
 
             // Active le menu "Édition"
@@ -229,7 +229,7 @@ public class Controleur {
         }
         // TODO : gérer les erreurs au calcul d'une feuille de route
         m_feuilleRoute = m_demandeLivraison.calculerFeuilleDeRoute();
-        m_window.getM_vuePlan().setM_feuilleRoute(m_feuilleRoute);
+        m_window.getM_vuePlan().setFeuilleRoute(m_feuilleRoute);
 
         m_window.getM_zoneNotification().setSuccessMessage("Feuille de route calculée avec succès !");
 
@@ -240,15 +240,15 @@ public class Controleur {
     }
 
     /**
-     * Affiche en console la dernière tournée calculée
+     * Édite et affiche la version papier de la feuille de route actuelle (s'il y en a une)
      */
     public void editerFeuilleRoutePapier() {
         if (m_feuilleRoute == null) {
             throw new IllegalStateException("Aucune feuille de route n'est chargée.");
         }
-        // TODO => Ajouter des choses ici (afficher une fenêtre, etc.)
-        VueFeuilleRoutePapier feuilleRoutePapier = new VueFeuilleRoutePapier(m_feuilleRoute);
-        System.out.println(feuilleRoutePapier.getVersionPapier());
+        FenetreImprimerFeuilleRoute dialog = new FenetreImprimerFeuilleRoute(m_feuilleRoute);
+        dialog.pack();
+        dialog.setVisible(true);
     }
 
     /**
@@ -261,7 +261,7 @@ public class Controleur {
 
         // Annulation de la feuille de route (s'il y en avait une)
         m_feuilleRoute = null;
-        m_window.getM_vuePlan().setM_feuilleRoute(null);
+        m_window.getM_vuePlan().setFeuilleRoute(null);
     }
 
     /**
@@ -274,7 +274,7 @@ public class Controleur {
 
         // Annulation de la feuille de route (s'il y en avait une)
         m_feuilleRoute = null;
-        m_window.getM_vuePlan().setM_feuilleRoute(null);
+        m_window.getM_vuePlan().setFeuilleRoute(null);
     }
 
     /**

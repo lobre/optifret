@@ -7,7 +7,7 @@ import model.Troncon;
 import java.awt.*;
 import java.util.ArrayList;
 /**
- Vue d'un objet Troncon et (éventuellement) des chemins le traversant
+ Vue d'un objet Troncon et (&eacute;ventuellement) des chemins le traversant
  */
 public class VueTroncon {
 
@@ -33,6 +33,11 @@ public class VueTroncon {
 
     private static double ANGLE_TOLERANCE = Math.PI / 10;
 
+    /**
+     * Constructeur de la VueTroncon
+     * @param troncon le Troncon &agrave; repr&eacute;senter
+     * @see model.Troncon
+     */
     public VueTroncon(Troncon troncon) {
         m_troncon = troncon;
         m_doubleVoie = false;
@@ -49,6 +54,10 @@ public class VueTroncon {
         }
     }
 
+    /**
+     * Dessine la base du tron&ccedil;on (sans chemin ni ligne s&eacute;paratrice)
+     * @param g2 le contexte Graphics2D sur lequel se fait le dessin
+     */
     public void drawBase(Graphics2D g2) {
         g2.setStroke(STROKE_TRONCON);
         g2.setColor(COULEUR_TRONCON);
@@ -66,6 +75,11 @@ public class VueTroncon {
         g2.drawLine(x1 + dx, y1 + dy, x2 + dx, y2 + dy);
     }
 
+    /**
+     * Dessine une ligne s&eacute;paratrice si ce tron&ccedil;on est l'une des deux voies d'un chemin &agrave;
+     * double voie.
+     * @param g2 le contexte Graphics2D sur lequel se fait le dessin
+     */
     public void drawMidline(Graphics2D g2) {
         if (!m_doubleVoie || !m_troncon.estDeSensPositif()) {
             return;
@@ -81,6 +95,10 @@ public class VueTroncon {
         g2.drawLine(x1, y1, x2, y2);
     }
 
+    /**
+     * Dessine les chemins qui passe par le tron&ccedil;on repr&eacute;sent&eacute;, s'il y en a.
+     * @param g2 le contexte Graphics2D sur lequel se fait le dessin
+     */
     public void drawChemins(Graphics2D g2) {
         if (m_chemins.size() == 0) {
             return;
@@ -107,8 +125,11 @@ public class VueTroncon {
     }
 
 
-    // Affichage du nom de la rue
     // TODO : Corriger ça pour que ce soit plus clair, ou... l'enlever
+    /**
+     * Dessine le nom de la rue dont fait partie le tron&ccedil;on.
+     * @param g2 le contexte Graphics2D sur lequel se fait le dessin
+     */
     public void drawNomRue(Graphics2D g2) {
         g2.setColor(COULEUR_TRONCON.brighter());
         g2.setFont(RUE_FONT);
@@ -128,10 +149,18 @@ public class VueTroncon {
         g2.drawString(m_troncon.getM_nom(), t_x, t_y);
     }
 
+    /**
+     * R&eacute;initialise la liste de chemins qui passent par le tron&ccedil;on.
+     */
     public void supprimerChemins(){
         m_chemins.clear();
     }
 
+    /**
+     * Définit la couleur du chemin qui passe par le tronçon selon sa nature.
+     * @param chemin le chemin dont la couleur doit être déterminée
+     * @return la couleur avec laquelle le chemin doit être dessiné
+     */
     private Color getCouleurChemin(Chemin chemin){
         //Retourne la couleur associee au chemin
         Noeud depart = chemin.getDepart();
@@ -146,11 +175,19 @@ public class VueTroncon {
         }
     }
 
+    /**
+     * Ajoute un chemin &agrave; la liste des chemins passant par le tron&ccedil;on
+     * @param chemin un Chemin passant par le tron&ccedil;on représenté
+     */
     public void ajouterChemin(Chemin chemin){
         m_chemins.add(chemin);
     }
 
     // Getters/Setters
+    /**
+     * Indique si le tron&ccedil;on repr&eacute;sent&eacute; est l'une des deux voies d'une rue &agrave; double voie.
+     * @param doubleVoie booléen quiset à true si le tronçon est une voie d'une rue à double voie.
+     */
     public void setM_doubleVoie(Boolean doubleVoie) {
         m_doubleVoie = doubleVoie;
     }
