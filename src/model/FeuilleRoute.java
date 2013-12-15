@@ -12,9 +12,7 @@ import java.util.Map;
  * Class FeuilleRoute
  */
 public class FeuilleRoute {
-    private enum EtatLivrason {RESOLU, SOLUBLE, INSOLUBLE, INCERTAIN}
-
-    ;
+    private enum EtatLivrason {RESOLU, SOLUBLE, INSOLUBLE, INCERTAIN};
     //
     // Fields
     //
@@ -47,16 +45,6 @@ public class FeuilleRoute {
     //
     // Methods
     //
-    private boolean contains(PlageHoraire plageHoraire, Heure heure) {
-        return (heure.estAvant(plageHoraire.getHeureFin()) && plageHoraire.getHeureDebut().estAvant(heure));
-    }
-
-    private void osef() {
-        for (PlageHoraire plageHoraire : m_demandeLivraison.getM_plagesHoraires()) {
-
-        }
-    }
-
     private void fill(TSP tsp, Map<Integer, Map<Integer, Chemin>> chemins, int[] matches) {
         int[] tspNext = tsp.getNext();
         int idEntrepot = getReverseMatch(m_demandeLivraison.getEntrepot().getM_id(), matches);

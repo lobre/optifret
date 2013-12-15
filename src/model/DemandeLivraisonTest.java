@@ -1,12 +1,10 @@
 package model;
 
-//import libs.ExampleFileFilter;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import libs.ParseXmlException;
-import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -14,11 +12,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
-/**
- * Created by vzantedeschi on 05/12/13.
- */
 public class DemandeLivraisonTest {
 
     static final String cheminXml = "xml_tests/planTestDijkstra.xml";
