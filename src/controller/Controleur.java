@@ -40,7 +40,9 @@ public class Controleur {
         new Controleur();
     }
 
-
+    /**
+     * Class constructor
+     */
     public Controleur() {
         m_plan = null;
         m_demandeLivraison = null;
@@ -54,6 +56,10 @@ public class Controleur {
         return m_demandeLivraison;
     }
 
+    /**
+     * Permet de choisir un fichier et en récupère le chemin
+     * @return une instance de File correspondante au fichier choisi
+     */
     private File ouvrirFichier() {
         FileDialog fileDialog = new FileDialog(m_window.getM_frame());
         fileDialog.setModal(true);
@@ -74,6 +80,11 @@ public class Controleur {
         }
     }
 
+    /**
+     * instancie un parseur xml et récupère la balise racine du fichier passé en paramètre
+     * @param fichierXML fichier d'extension 'xml'
+     * @return racine du fichier xml
+     */
     private Document lireDepuisXML(File fichierXML) {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = null;
@@ -93,6 +104,12 @@ public class Controleur {
         }
     }
 
+    /**
+     * à partir du fichier choisi par l'utilisateur, instancie un nouveau plan de la zone géographique,
+     * c'est-à-dire les noeuds et les tronçons la composant, et rend possible, dans la suite, le chargement
+     * d'une demande de livraisons. Pourque l'analyse soit faite, le fichier xml doit avoir la même structure
+     * que le fichier 'xml_data/plan10x10.xml'
+     */
     public void chargerPlan() {
         try {
             m_demandeLivraison = null;
@@ -127,6 +144,14 @@ public class Controleur {
         }
     }
 
+    /**
+     * à partir du fichier choisi par l'utilisateur, instancie une nouvelle demande de livraisons, ainsi que
+     * les plages horaires et livraisons la composant, associe les livraisons aux noeuds correspondants et
+     * repère l'adresse de l'entrepôt. Rend aussi possible, dans la suite, le calcul d'une feuille de route.
+     * Pourque l'analyse soit faite, un plan de la zone où seront effectuées les livraisons doit être
+     * précedemment chargé et le fichier xml doit avoir la même structure que le fichier
+     * 'xml_data/livraison10x10-1.xml'
+     */
     public void chargerDemandeLivraison() {
         try {
             if (m_plan == null) {
@@ -172,6 +197,11 @@ public class Controleur {
         }
     }
 
+    /**
+     * calcule la tournée la plus efficace pour l'ensemble de livraisons du jour et la zone courants et
+     * rend possible, dans la suite, l'édition en format papier de la feuille de route.
+     * Pourque l'analyse soit faite, un plan et une demande de livraisons doivent être chargés.
+     */
     public void calculerFeuilleRoute() {
         if (m_demandeLivraison == null) {
             return;
@@ -188,6 +218,9 @@ public class Controleur {
         System.out.println("Chemins calculés : " + m_feuilleRoute.getChemins());
     }
 
+    /**
+     * affiche sur la console la dernière tournée calculée
+     */
     public void editerFeuilleRoutePapier() {
         if (m_feuilleRoute == null) {
             throw new IllegalStateException("Aucune feuille de route n'est chargée.");
@@ -197,7 +230,11 @@ public class Controleur {
         System.out.println(feuilleRoutePapier.getVersionPapier());
     }
 
-
+    /**
+     * ajoute une livraison à la demande de livraison courante et, le cas écheant, élimine la
+     * feuille de route calculée
+     * @param livraison à rajouter
+     */
     public void ajouterLivraison(Livraison livraison) {
         m_commandes.executer(new CommandeAjout(m_demandeLivraison, livraison));
 
@@ -206,6 +243,11 @@ public class Controleur {
         m_window.getM_vuePlan().setM_feuilleRoute(null);
     }
 
+    /**
+     * supprime une livraison à la demande de livraison courante et, le cas écheant, élimine la
+     * feuille de route calculée
+     * @param livraison
+     */
     public void supprimerLivraison(Livraison livraison) {
         m_commandes.executer(new CommandeSuppression(m_demandeLivraison, livraison));
 
@@ -214,24 +256,42 @@ public class Controleur {
         m_window.getM_vuePlan().setM_feuilleRoute(null);
     }
 
+    /**
+     * permet d'exécuter la dernière commande annulée et met à jour le panel du plan
+     */
     public void reexecuter() {
         m_commandes.reexecuter();
         m_window.getM_vuePlan().repaint();
     }
 
+    /**
+     * permet de annuler la dernière commande exécutée et met à jour le panel du plan
+     */
     public void annuler() {
         m_commandes.annuler();
         m_window.getM_vuePlan().repaint();
     }
 
+    /**
+     * affiche un panel contenant les informations d'une livraison
+     * @param livraison dont les informations vont être affichées
+     */
     public void showInfosLivraison(Livraison livraison) {
         m_window.showInfosLivraison(livraison);
     }
 
+    /**
+     * affiche le panel d'ajout d'une nouvelle livraison
+     * @param noeud auquel la nouvelle livraison va être associée
+     */
     public void showAjouterLivraison(Noeud noeud) {
         m_window.showAjouterLivraison(noeud);
     }
 
+    /**
+     * ferme la barre latérale droite contenant les informations de la livraison ou du noeud
+     * sélectionnés
+     */
     public void hideSidebar() {
         m_window.hideSidebar();
     }
