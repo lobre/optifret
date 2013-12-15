@@ -18,15 +18,6 @@ import static com.sun.org.apache.xalan.internal.lib.ExsltMath.abs;
  * @see model.Plan
  */
 public class VuePlan extends JPanel {
-    /**
-     * Couleur d'arri&egrave;re-plan de la VuePlan
-     */
-    static public Color COULEUR_BACKGROUND = new Color(50, 80, 180);
-
-    /**
-     * Marge en pixels entre les points extr&ecirc;mes du plan et son bords.
-     */
-    static private int MARGIN = 10;
 
     /**
      * Le plan repr&eacute;sent&eacute; par la VuePlan
@@ -91,6 +82,30 @@ public class VuePlan extends JPanel {
      * Cr&eacute;ation de la VuePlan.
      * @param controleur le contr&ocirc;leur de l'application
      */
+
+    //
+    // CONSTANTES
+    //
+
+    /**
+     * Couleur d'arri&egrave;re-plan de la VuePlan
+     */
+    static public Color COULEUR_BACKGROUND = new Color(50, 80, 180);
+
+    /**
+     * Marge en pixels entre les points extr&ecirc;mes du plan et son bords.
+     */
+    static private int MARGIN = 10;
+
+    /**
+     * Largeur minimale de la VuePlan
+     */
+    static private int LARGEUR_MINI = 150;
+
+    /**
+     * Constructeur de la VuePlan
+     * @param controleur contr&ocirc;leur de l'application
+     */
     public VuePlan(Controleur controleur) {
 
         setBackground(COULEUR_BACKGROUND);
@@ -104,7 +119,7 @@ public class VuePlan extends JPanel {
         m_x_max = m_largeur + MARGIN;
         m_y_max = m_hauteur + MARGIN;
 
-        setZoom(1);
+        m_zoom = 1;
         m_noeuds = new HashMap<Integer, VueNoeud>();
 
         // Drag attributes
@@ -395,6 +410,12 @@ public class VuePlan extends JPanel {
 
                 float zoom = m_zoom * (1 - (float) e.getWheelRotation() / 10);
                 float deltaZoom = zoom - m_zoom;
+
+                if (deltaZoom < 0 && getWidth() <= LARGEUR_MINI) {
+                    // Si on dézoom et que la vue est déjà trop petite, le dézoom est annulé
+                    return;
+                }
+
                 setZoom(zoom);
 
                 // On fait en sorte que le plan zoom là où la souris est. 0.1 est le ratio de ce déplacement
