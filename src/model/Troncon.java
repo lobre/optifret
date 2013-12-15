@@ -106,7 +106,7 @@ public class Troncon {
     }
 
     public double angleAvec(Troncon t2) {
-        return getAngle() - t2.getAngle();
+        return t2.getAngle()-getAngle() ;
     }
 
 }
