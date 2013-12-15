@@ -13,43 +13,83 @@ import java.util.HashMap;
 import static com.sun.org.apache.xalan.internal.lib.ExsltMath.abs;
 
 /**
- * Vue d'un objet Plan. Affiche les noeuds et les tronçons les reliant (qu'ils soient à double sens ou à sens unique),
- * peut aussi être zoomé et décalé avec la souris.
+ * Vue d'un objet Plan. Affiche les noeuds et les tron&ccedil;ons les reliant (qu'ils soient &agrave; double sens
+ * ou &agrave; sens unique), peut aussi &ecirc;tre zoom&eacute; et d&eacute;cal&eacute; avec la souris.
  * @see model.Plan
  */
 public class VuePlan extends JPanel {
-
+    /**
+     * Couleur d'arri&egrave;re-plan de la VuePlan
+     */
     static public Color COULEUR_BACKGROUND = new Color(50, 80, 180);
+
+    /**
+     * Marge en pixels entre les points extr&ecirc;mes du plan et son bords.
+     */
     static private int MARGIN = 10;
 
+    /**
+     * Le plan repr&eacute;sent&eacute; par la VuePlan
+     */
     private Plan m_plan;
+
+    /**
+     * La feuille de route courante.
+     */
     private FeuilleRoute m_feuilleRoute;
 
+    /**
+     * Liste des VueNoeud repr&eacute;sent&eacute;s par le plan.
+     */
     private HashMap<Integer, VueNoeud> m_noeuds;
+    /**
+     * Liste des VueTroncon repr&eacute;sent&eacute;s par le plan.
+     */
     private HashMap<Pair, VueTroncon> m_troncons;
+
+
+    /**
+     * Facteur de zoom de la vue.
+     */
+    private float m_zoom;
 
     private int m_largeur;
     private int m_hauteur;
     private int m_x_max;
     private int m_y_max;
 
-    // Facteur de zoom de la vue
-    private float m_zoom;
 
-    // Attributs utilisés pour "dragger" la VuePlan
+    /**
+     * Utilis&eacute; pour le "drag" de la VuePlan
+     */
     private Point m_lastClick;
+    /**
+     * Utilis&eacute; pour le "drag" de la VuePlan
+     */
     private Point m_lastPosition;
+    /**
+     * Utilis&eacute; pour le "drag" de la VuePlan
+     */
     private Point m_lastPositionDrag;
 
+    /**
+     * Contr&ocirc;leur de l'application
+     */
     private Controleur m_controleur;
 
-    // Gère la selection et le survol de noeuds
+    /**
+     * G&egrave;re la selection et le survol de noeuds
+     */
     private VueNoeud m_selectedNoeud;
+
+    /**
+     * G&egrave;re la selection et le survol de noeuds
+     */
     private VueNoeud m_focusedNoeud;
 
     /**
-     * Création de la VuePlan.
-     * @param controleur, le contrôleur de l'application
+     * Cr&eacute;ation de la VuePlan.
+     * @param controleur le contr&ocirc;leur de l'application
      */
     public VuePlan(Controleur controleur) {
 
@@ -83,8 +123,8 @@ public class VuePlan extends JPanel {
     //
 
     /**
-     * Mise en place du plan représenté par la VuePlan
-     * @param plan, le plan à représenter
+     * Mise en place du plan repr&eacute;sent&eacute; par la VuePlan
+     * @param plan le plan &agrave; repr&eacute;senter
      * @see model.Plan
      */
     public void setM_plan(Plan plan) {
@@ -115,7 +155,7 @@ public class VuePlan extends JPanel {
 
     /**
      * Mise en place de la feuille de route de la livraison courante.
-     * @param feuilleRoute, la feuille de route à afficher
+     * @param feuilleRoute la feuille de route &agrave; afficher
      * @see model.FeuilleRoute
      */
     public void setM_feuilleRoute(FeuilleRoute feuilleRoute) {
@@ -144,10 +184,10 @@ public class VuePlan extends JPanel {
     }
 
     /**
-     * Change le noeud actuellement sélectionné. Se centre sur le noeud et affiche la fenêtre d'ajout de livraison si
-     * le noeud n'en contient pas, ou la fenêtre d'infos/suppression de livraison s'il en contient une. Si le nouveau noeud sélectionné est
-     * nul (null), cache la barre latérale.
-     * @param selected le noeud actuellement sélectionné
+     * Change le noeud actuellement s&eacute;lectionn&eacute;. Se centre sur le noeud et affiche la fen&ecirc;tre d'ajout de livraison si
+     * le noeud n'en contient pas, ou la fen&ecirc;tre d'infos/suppression de livraison s'il en contient une. Si le nouveau noeud s&eacute;lectionn&eacute; est
+     * nul (null), cache la barre lat&eacute;rale.
+     * @param selected le noeud actuellement s&eacute;lectionn&eacute;
      */
     private void setM_selectedNoeud(VueNoeud selected) {
         if (m_selectedNoeud != null) {
