@@ -95,6 +95,7 @@ public class Controleur {
     }
 
     public void chargerPlan() {
+        try{
         m_demandeLivraison = null;
 
         File fichierXML = ouvrirFichier();
@@ -108,10 +109,6 @@ public class Controleur {
         m_plan = new Plan();
         int status = m_plan.fromXML(doc.getDocumentElement());
 
-        if (status != Plan.PARSE_OK) {
-            m_window.getM_zoneNotification().setErrorMessage("Erreur: impossible de charger le plan demandé.");
-            return;
-        }
 
         m_window.getM_vuePlan().setM_plan(m_plan);
         m_window.getM_zoneNotification().setSuccessMessage("Le plan '" + fichierXML.getName() + "' a été chargé avec succès !");
@@ -125,6 +122,12 @@ public class Controleur {
         m_window.getM_calculerButton().setEnabled(false);
         // Désactive l'action "Éditer version papier"
         m_window.getM_menuFichier().getItem(2).setEnabled(false);
+        }
+        catch(ParseXmlException e){
+            m_window.getM_zoneNotification().setErrorMessage("Erreur: impossible de charger le plan demandé. Cause : "
+            + e.getMessage());
+            return;
+        }
     }
 
     public void chargerDemandeLivraison() {
