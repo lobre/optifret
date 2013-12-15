@@ -1,12 +1,14 @@
 package controller;
 
 import libs.CustomFilenameFilter;
+import libs.ParseXmlException;
 import model.*;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import view.FenetrePrincipale;
 import view.VueFeuilleRoutePapier;
 
+import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -24,6 +26,21 @@ public class Controleur {
     private FeuilleRoute m_feuilleRoute;
     private HistoriqueCommandes m_commandes;
 
+
+    // Point d'entrée de l'application:
+    public static void main(String[] args) {
+        // Paramètre Swing pour utiliser une apparence native
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            System.err.println("Interface native non gérée, fallback sur l'interface Swing par défaut.");
+        }
+
+        new Controleur();
+    }
+
+
     public Controleur() {
         m_plan = null;
         m_demandeLivraison = null;
@@ -39,13 +56,12 @@ public class Controleur {
 
     private File ouvrirFichier() {
         FileDialog fileDialog = new FileDialog(m_window.getM_frame());
-        fileDialog.setDirectory("xml_data");
+        fileDialog.setModal(true);
 
         FilenameFilter filter = new CustomFilenameFilter(".xml");
         fileDialog.setFilenameFilter(filter);
 
-        fileDialog.setModal(true);
-        fileDialog.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+        fileDialog.setDirectory("xml_data");
         fileDialog.setAlwaysOnTop(true);
 
         fileDialog.setVisible(true);
@@ -112,7 +128,7 @@ public class Controleur {
     }
 
     public void chargerDemandeLivraison() {
-
+        try{
         if (m_plan == null) {
             m_window.getM_zoneNotification().setErrorMessage("Veuillez d'abord charger un plan avant de charger une demande de livraison.");
             return;
@@ -129,7 +145,10 @@ public class Controleur {
 
         // On parse la demande de livraison
         m_demandeLivraison = new DemandeLivraison(m_window.getM_vuePlan().getM_plan());
-        int status = m_demandeLivraison.fromXML(doc.getDocumentElement());
+        int status;
+
+        status = m_demandeLivraison.fromXML(doc.getDocumentElement());
+
 
         if (status != DemandeLivraison.PARSE_OK) {
             m_window.getM_zoneNotification().setErrorMessage("Erreur: impossible de charger la demande de livraison demandée.");
@@ -154,7 +173,10 @@ public class Controleur {
         m_window.getM_vuePlan().resetTroncons();
 
         m_window.getM_vuePlan().repaint();
-
+        }
+        catch(ParseXmlException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public void calculerFeuilleRoute() {
@@ -169,6 +191,8 @@ public class Controleur {
 
         // Active l'action "Éditer version papier"
         m_window.getM_menuFichier().getItem(2).setEnabled(true);
+
+        System.out.println("Chemins calculés : " + m_feuilleRoute.getChemins());
     }
 
     public void editerFeuilleRoutePapier() {

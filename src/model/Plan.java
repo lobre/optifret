@@ -1,5 +1,6 @@
 package model;
 
+import libs.ParseXmlException;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -86,7 +87,7 @@ public class Plan {
         NodeList liste_noeuds = racineXML.getElementsByTagName("Noeud");
 
         if (liste_noeuds.getLength() < 1) {
-            return Plan.PARSE_ERROR;
+            throw new ParseXmlException("liste de noeud vide");
         }
 
         // On commence par parser la "base" des noeuds (sans les tronçons)
@@ -95,10 +96,15 @@ public class Plan {
             Noeud noeud = new Noeud();
             int status = noeud.fromXML(noeud_xml);
             if (status != Noeud.PARSE_OK) {
-                return Plan.PARSE_ERROR;
+                throw new ParseXmlException("parsing noeud vide");
             }
-
-            noeuds.put(noeud.getM_id(), noeud);
+            if (noeuds.get(noeud.getM_id())==null)
+            {
+                noeuds.put(noeud.getM_id(), noeud);
+            }
+            else {
+                throw new ParseXmlException("Id noeud non-unique");
+            }
         }
 
         // Une fois le parsing des noeuds complétés, on rajoute à chaque noeud ses tronçons

@@ -20,7 +20,7 @@ public class VueNoeud {
     private static int RAYON_ENTREPOT = 30;
 
     // Facteur par lequel les coordonées de la vue sont amplifiées par rapport à ceux du modèle
-    public static int AMPLIFICATION_FACTOR = 3;
+    public static int AMPLIFICATION_FACTOR = 2;
 
     private static int FOCUS_FACTOR = 2;
     private static int BORDER_WIDTH = 1;

@@ -75,6 +75,10 @@ public class VueTroncon {
         if (!m_doubleVoie) {
             return;
         }
+        else {
+            g2.setColor(COULEUR_TRONCON_SIMPLE);
+            g2.setStroke(STROKE_TRONCON_SIMPLE);
+        }
 
         int x1 = m_troncon.getArrivee().getM_x() * VueNoeud.AMPLIFICATION_FACTOR;
         int y1 = m_troncon.getArrivee().getM_y() * VueNoeud.AMPLIFICATION_FACTOR;

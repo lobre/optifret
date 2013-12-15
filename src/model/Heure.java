@@ -26,6 +26,12 @@ public class Heure {
     public Heure() {
     }
 
+    public Heure(int heures, int minutes, int secondes) {
+        this.m_heures = heures;
+        this.m_minutes = minutes;
+        this.m_secondes = secondes;
+    }
+
     //
     // Methods
     //

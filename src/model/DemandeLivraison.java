@@ -5,6 +5,7 @@ import model.tsp.TSP;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import libs.ParseXmlException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -150,30 +151,30 @@ public class DemandeLivraison {
      *                  si une livraison doit avoir lieu sur un noeud du graph (une adresse) non existant
      *          PARSE_OK sinon.
      */
-    public int fromXML(Element racineXML) {
+    public int fromXML(Element racineXML) throws ParseXmlException {
 
         //récupération de l'entrepôt
         NodeList entre = racineXML.getElementsByTagName("Entrepot");
         if (entre.getLength() != 1) {
-            return DemandeLivraison.PARSE_ERROR;
+            throw new ParseXmlException("Element Entrepot");
         }
 
         String ad = ((Element) entre.item(0)).getAttribute("adresse");
         m_entrepot = m_plan.getNoeudParID(Integer.parseInt(ad));
         if (m_entrepot == null) {
-            return DemandeLivraison.PARSE_ERROR;
+            throw new ParseXmlException("Adresse entrepot introuvable");
         }
         m_entrepot.setM_entrepot(true);
 
         //récupération des plages horaires
         NodeList n_plages = racineXML.getElementsByTagName("PlagesHoraires");
         if (n_plages.getLength() != 1) {
-            return DemandeLivraison.PARSE_ERROR;
+            throw new ParseXmlException("Element<PlagesHoraires> introuvable");
         }
 
         NodeList liste_plages = racineXML.getElementsByTagName("Plage");
         if (liste_plages.getLength() < 1) {
-            return DemandeLivraison.PARSE_ERROR;
+            throw new ParseXmlException("Element <Plage> introuvable");
         }
 
         for (int i = 0; i < liste_plages.getLength(); i++) {
@@ -188,14 +189,14 @@ public class DemandeLivraison {
             Heure hFin = new Heure();
 
             if (hDepart.fromString(h1) == PARSE_ERROR || hFin.fromString(h2) == PARSE_ERROR || !hDepart.estAvant(hFin)) {
-                return DemandeLivraison.PARSE_ERROR;
+                throw new ParseXmlException("Heure non valide");
             }
             PlageHoraire plage = new PlageHoraire(hDepart, hFin);
 
             //récupération des livraisons de la plage horaire
             NodeList livraisons = e_plage.getElementsByTagName("Livraisons");
             if (livraisons.getLength() != 1) {
-                return DemandeLivraison.PARSE_ERROR;
+                throw new ParseXmlException("Element <Livraisons> introuvable");
             }
 
             NodeList listeLivraisons = ((Element) livraisons.item(0)).getElementsByTagName("Livraison");
@@ -205,9 +206,13 @@ public class DemandeLivraison {
                 int client = Integer.parseInt(eLivraison.getAttribute("client"));
                 int adNoeud = Integer.parseInt(eLivraison.getAttribute("adresse"));
                 Noeud noeud = m_plan.getNoeudParID(adNoeud);
-
+                for ( Livraison l: plage.getM_livraisons() ){
+                    if (l.getM_id()==id){
+                        throw new ParseXmlException("id livraison non-unique");
+                    }
+                }
                 if (noeud == null) {
-                    return DemandeLivraison.PARSE_ERROR;
+                    throw new ParseXmlException("null node exception");
                 }
                 Livraison livraison = new Livraison(id, client, noeud, plage);
                 plage.addLivraison(livraison);
@@ -222,7 +227,7 @@ public class DemandeLivraison {
             PlageHoraire ph2 = m_plagesHoraires.get(i + 1);
             if (ph2.getHeureDebut().estAvant(ph1.getHeureFin())) {
                 // Chevauchement de deux plages horaires
-                return DemandeLivraison.PARSE_ERROR;
+                throw new ParseXmlException("plages horaires en conflit");
             }
             ph1.setM_indice(i);
             ph2.setM_indice(i + 1);
