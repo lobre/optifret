@@ -151,7 +151,7 @@ public class DemandeLivraison {
      *                  si une livraison doit avoir lieu sur un noeud du graph (une adresse) non existant
      *          PARSE_OK sinon.
      */
-    public int fromXML(Element racineXML) throws ParseXmlException {
+    public void fromXML(Element racineXML) throws ParseXmlException {
 
         //récupération de l'entrepôt
         NodeList entre = racineXML.getElementsByTagName("Entrepot");
@@ -233,7 +233,6 @@ public class DemandeLivraison {
             ph2.setM_indice(i + 1);
         }
 
-        return DemandeLivraison.PARSE_OK;
     }
 
     /**
