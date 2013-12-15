@@ -24,9 +24,20 @@ public class Livraison {
     //
     // Constructors
     //
+
+    /**
+     * Constructeur par défaut d'une livraison
+     */
     public Livraison() {
     }
 
+    /**
+     * Constructeur avec paramètres
+     * @param id, l'identifiant de la livraison
+     * @param client, le numéro du client correspondant
+     * @param adresse, Noeud correspondant à la livraison
+     * @param plage, plage horaire de la livraison
+     */
     public Livraison(int id, int client, Noeud adresse, PlageHoraire plage) {
         m_id = id;
         m_noClient = client;
@@ -45,19 +56,34 @@ public class Livraison {
     //
 
 
-
+    /**
+     * Donne l'id de la livraison
+     * @return l'id de la livraison
+     */
     public int getM_id() {
         return m_id;
     }
 
+    /**
+     * Donne l'id du client de la livraison
+     * @return l'id du client de la livraison
+     */
     public int getM_noClient() {
         return m_noClient;
     }
 
+    /**
+     * Donne la plage horaire correspondant à la livraison
+     * @return la plage horaire correspondant à la livraison
+     */
     public PlageHoraire getM_plage() {
         return m_plage;
     }
 
+    /**
+     * Donne le noeud associé à la livraison
+     * @return le noeud associé à la livraison
+     */
     public Noeud getM_adresse() {
         return m_adresse;
     }
