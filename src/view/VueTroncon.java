@@ -14,9 +14,9 @@ public class VueTroncon {
     private Boolean m_doubleVoie;
 
     private static Color COULEUR_TRONCON = new Color(89, 147, 221);
-    private static Color COULEUR_TRONCON_SIMPLE = COULEUR_TRONCON.darker();
+    private static Color COULEUR_TRONCON_SIMPLE = new Color(0xE9E3FF); //COULEUR_TRONCON.darker();
     private static Color COULEUR_CHEMIN_NEUTRE = new Color(45, 79, 144);
-    private static int LARGEUR_TRONCON = VueNoeud.RAYON_DEFAUT / 4;
+    private static int LARGEUR_TRONCON = VueNoeud.RAYON_DEFAUT / 3;
 
     private static Stroke STROKE_TRONCON_DOUBLE = new BasicStroke(LARGEUR_TRONCON * 2);
     private static Stroke STROKE_TRONCON_SIMPLE = new BasicStroke(LARGEUR_TRONCON);
@@ -87,7 +87,7 @@ public class VueTroncon {
         int y2 = m_troncon.getDepart().getM_y() * VueNoeud.AMPLIFICATION_FACTOR;
 
         g2.setColor(COULEUR_TRONCON_SIMPLE);
-        g2.setStroke(new BasicStroke(1));
+        g2.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{7}, 0));
         g2.drawLine(x1, y1, x2, y2);
     }
 

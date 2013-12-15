@@ -15,9 +15,9 @@ public class VueNoeud {
     private static Color COULEUR_ENTREPOT = new Color(211, 5, 188);
     private static Color COULEUR_LIVRAISON = new Color(143, 210, 53);
 
-    public static int RAYON_DEFAUT = 20;
-    private static int RAYON_LIVRAISON = 25;
-    private static int RAYON_ENTREPOT = 30;
+    public static int RAYON_DEFAUT = 13;
+    private static int RAYON_LIVRAISON = 17;
+    private static int RAYON_ENTREPOT = 17;
 
     // Facteur par lequel les coordonées de la vue sont amplifiées par rapport à ceux du modèle
     public static int AMPLIFICATION_FACTOR = 2;
