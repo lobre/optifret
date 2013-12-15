@@ -3,7 +3,7 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 
-public class ZoneNotification extends JFormattedTextField {
+public class ZoneNotification extends JLabel {
 
     private Font m_font;
 
@@ -15,28 +15,28 @@ public class ZoneNotification extends JFormattedTextField {
     private static Color COULEUR_ERREUR = new Color(230, 68, 25);
 
     public ZoneNotification() {
-        setEditable(false);
-
         m_font = new Font("Arial", Font.BOLD, 14);
         setFont(m_font);
         setForeground(Color.white);
+        setOpaque(true);
+        setBackground(COULEUR_INFO);
 
         setPreferredSize(new Dimension(LARGEUR_DEFAUT, HAUTEUR_DEFAUT));
     }
 
     public void setSuccessMessage(String text) {
         setBackground(COULEUR_SUCCES);
-        setValue("  " + text);
+        setText("  " + text);
     }
 
     public void setErrorMessage(String text) {
         setBackground(COULEUR_ERREUR);
-        setValue("  " + text);
+        setText("  " + text);
     }
 
     public void setInfoMessage(String text) {
         setBackground(COULEUR_INFO);
-        setValue("  " + text);
+        setText("  " + text);
     }
 
 
