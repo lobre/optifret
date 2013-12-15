@@ -186,7 +186,7 @@ public class VuePlan extends JPanel {
     }
 
     private void initListeners() {
-        // Mouse listeners
+        // Listener au clic de la souris
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -207,6 +207,7 @@ public class VuePlan extends JPanel {
 
         });
 
+        // Listener au déplacement de la souris (drag, hover)
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
@@ -221,7 +222,6 @@ public class VuePlan extends JPanel {
 
                 //pour empecher une partie du graph non visible de disparaitre quand on le drag
                 setSize((int) (m_x_max * m_zoom), (int) (m_y_max * m_zoom));
-                getParent().repaint();
             }
 
             //Permet d'augmenter la taille dun noeud survolé par la souris
@@ -236,6 +236,8 @@ public class VuePlan extends JPanel {
             }
         });
 
+
+        // Listener au défilement de la souris (zoom)
         addMouseWheelListener(new MouseWheelListener() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
@@ -276,6 +278,8 @@ public class VuePlan extends JPanel {
     // Fonction de dessin du plan
     @Override
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
         Graphics2D g2 = (Graphics2D) g;
 
         // Antialiasing
@@ -285,7 +289,6 @@ public class VuePlan extends JPanel {
         AffineTransform tr2 = g2.getTransform();
         tr2.scale(m_zoom, m_zoom);
         g2.setTransform(tr2);
-        super.paintComponent(g2);
 
         if (m_plan == null) {
             return;
@@ -316,8 +319,6 @@ public class VuePlan extends JPanel {
     }
 
     // Getters/Setters
-
-
     private void setM_selectedNoeud(VueNoeud selected) {
         if (m_selectedNoeud != null) {
             m_selectedNoeud.setM_selected(false);

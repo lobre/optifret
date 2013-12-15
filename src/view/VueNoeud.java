@@ -25,7 +25,7 @@ public class VueNoeud {
     private static int FOCUS_FACTOR = 2;
     private static int BORDER_WIDTH = 1;
 
-    private static int FONT_SIZE = 8;
+    private static int FONT_SIZE = 18;
     private static Font ID_FONT = new Font("Arial", Font.BOLD, FONT_SIZE);
 
     public VueNoeud(Noeud noeud) {

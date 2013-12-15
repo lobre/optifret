@@ -18,7 +18,6 @@ public class VueTroncon {
     private static Color COULEUR_CHEMIN_NEUTRE = new Color(45, 79, 144);
     private static int LARGEUR_TRONCON = VueNoeud.RAYON_DEFAUT / 4;
 
-    private static Stroke STROKE_TRONCON_SIMPLE = new BasicStroke(LARGEUR_TRONCON);
     private static Stroke STROKE_TRONCON_DOUBLE = new BasicStroke(LARGEUR_TRONCON * 2);
     private static Stroke STROKE_CHEMIN = new BasicStroke(1);
 
