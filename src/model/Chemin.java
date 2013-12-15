@@ -42,6 +42,7 @@ public class Chemin {
 
     /**
      * Ajoute un tronçons au début du chemin.
+     * @param troncon, le troncon à ajouter
      */
     public void ajouterTronconDebut(Troncon troncon) {
         listeTroncons.addFirst(troncon);
