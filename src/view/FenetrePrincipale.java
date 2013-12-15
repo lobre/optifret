@@ -66,10 +66,8 @@ public class FenetrePrincipale {
         initListeners();
 
         // Style du bouton "Cacher"
-        m_hideSidebarButton.setBackground(Color.white);
-        m_hideSidebarButton.setContentAreaFilled(false);
+        m_hideSidebarButton.setContentAreaFilled(true);
         m_hideSidebarButton.setBackground(VuePlan.COULEUR_BACKGROUND);
-        //m_hideSidebarButton.setBorder(BorderFactory.createRaisedBevelBorder());
 
         // Sidebar cachée par défaut
         hideSidebar();
@@ -142,33 +140,6 @@ public class FenetrePrincipale {
                 hideSidebar();
                 m_vuePlan.centerMapOnSelected();
                 m_frame.repaint();
-            }
-        });
-
-        m_hideSidebarButton.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                m_hideSidebarButton.setBorder(BorderFactory.createRaisedBevelBorder());
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                m_hideSidebarButton.setBorder(null);
             }
         });
 
