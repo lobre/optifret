@@ -1,12 +1,16 @@
 package model;
 
+import libs.ParseXmlException;
+import org.w3c.dom.Element;
+
 /**
  * Class Livraison
  */
 public class Livraison {
 
     // TODO : ajouter le temps de livraison prévisionnel (mis à jour par les feuilles de route)
-
+    public static int PARSE_ERROR = -1;
+    public static int PARSE_OK = 0;
     //
     // Fields
     //
@@ -28,7 +32,8 @@ public class Livraison {
     /**
      * Constructeur par défaut d'une livraison
      */
-    public Livraison() {
+    public Livraison(PlageHoraire plage) {
+        m_plage = plage;
     }
 
     /**
@@ -49,6 +54,26 @@ public class Livraison {
     //
     // Methods
     //
+    public int fromXML(Element eLivraison, Plan plan, PlageHoraire plage) {
+        try {
+            m_id = Integer.parseInt(eLivraison.getAttribute("id"));
+            m_noClient = Integer.parseInt(eLivraison.getAttribute("client"));
+            int adNoeud = Integer.parseInt(eLivraison.getAttribute("adresse"));
+            m_adresse = plan.getNoeudParID(adNoeud);
+            for (Livraison l: plage.getM_livraisons()){
+                if (l.getId() == m_id){
+                    throw new ParseXmlException("id livraison non-unique");
+                }
+            }
+            if (m_adresse == null) {
+                throw new ParseXmlException("null node exception");
+            }
+        } catch (NullPointerException ne) {
+            return PARSE_ERROR;
+        }
+        m_adresse.setM_livraison(this);
+        return PARSE_OK;
+    }
 
 
     //
