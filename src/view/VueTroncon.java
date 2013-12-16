@@ -23,7 +23,7 @@ public class VueTroncon {
     private static Stroke STROKE_CHEMIN = new BasicStroke(1);
 
     private static int NOMBRE_COULEURS = 10;
-    private static Color tableauCouleurs[] = new Color[] {Color.BLUE, Color.RED, Color.YELLOW, Color.GREEN,Color.CYAN,Color.MAGENTA,Color.ORANGE,Color.WHITE,Color.PINK,Color.BLACK};
+    private static Color tableauCouleurs[] = new Color[]{Color.BLUE, Color.RED, Color.YELLOW, Color.GREEN, Color.CYAN, Color.MAGENTA, Color.ORANGE, Color.WHITE, Color.PINK, Color.BLACK};
 
     private static int RUE_FONTSIZE = 6;
     private static Font RUE_FONT = new Font("Arial", Font.PLAIN, RUE_FONTSIZE);
@@ -38,12 +38,11 @@ public class VueTroncon {
     }
 
     // Methods
-    private float getOffset(int position){
-        if (m_chemins.size() == 1){
+    private float getOffset(int position) {
+        if (m_chemins.size() == 1) {
             return 0;
-        }
-        else {
-            return - LARGEUR_TRONCON + position * (2 * LARGEUR_TRONCON / (m_chemins.size() - 1));
+        } else {
+            return -LARGEUR_TRONCON + position * (2 * LARGEUR_TRONCON / (m_chemins.size() - 1));
         }
     }
 
@@ -56,8 +55,7 @@ public class VueTroncon {
         if (m_doubleVoie) {
             g2.setColor(COULEUR_TRONCON);
             g2.setStroke(STROKE_TRONCON_DOUBLE);
-        }
-        else {
+        } else {
             g2.setColor(COULEUR_TRONCON_SIMPLE);
             g2.setStroke(STROKE_TRONCON_SIMPLE);
         }
@@ -78,7 +76,7 @@ public class VueTroncon {
 
         g2.setStroke(STROKE_CHEMIN);
 
-        for (int i = 0 ;i < m_chemins.size(); i++) {
+        for (int i = 0; i < m_chemins.size(); i++) {
             Chemin chemin = m_chemins.get(i);
             g2.setColor(getCouleurChemin(chemin));
 
@@ -94,8 +92,8 @@ public class VueTroncon {
     }
 
 
-        // Affichage du nom de la rue
-        // TODO : Corriger ça pour que ce soit plus clair, ou... l'enlever
+    // Affichage du nom de la rue
+    // TODO : Corriger ça pour que ce soit plus clair, ou... l'enlever
     public void drawNomRue(Graphics2D g2) {
         g2.setColor(COULEUR_TRONCON.brighter());
         g2.setFont(RUE_FONT);
@@ -109,31 +107,30 @@ public class VueTroncon {
         double angle = m_troncon.getAngle();
         int t_x = (x1 + x2) / 2;
         int t_y = (y1 + y2) / 2;
-        if ( Math.abs(angle - Math.PI / 2) < ANGLE_TOLERANCE) {
+        if (Math.abs(angle - Math.PI / 2) < ANGLE_TOLERANCE) {
             t_y += RUE_Y_OFFSET;
         }
 
         g2.drawString(m_troncon.getM_nom(), t_x, t_y);
     }
 
-    public void supprimerChemins(){
+    public void supprimerChemins() {
         m_chemins.clear();
     }
 
-    private Color getCouleurChemin(Chemin chemin){
+    private Color getCouleurChemin(Chemin chemin) {
         //Retourne la couleur associee au chemin
         Noeud depart = chemin.getDepart();
         Noeud arrivee = chemin.getArrivee();
-        if ((!depart.hasLivraison() || !arrivee.hasLivraison()) || (depart.getM_livraison().getM_plage() != arrivee.getM_livraison().getM_plage())) {
+        if ((!depart.hasLivraison() || !arrivee.hasLivraison()) || (depart.getM_livraison().getPlage() != arrivee.getM_livraison().getPlage())) {
             return COULEUR_CHEMIN_NEUTRE;
-        }
-        else {
-            int plageID = depart.getM_livraison().getM_plage().getM_indice();
+        } else {
+            int plageID = depart.getM_livraison().getPlage().getM_indice();
             return tableauCouleurs[plageID % NOMBRE_COULEURS];
         }
     }
 
-    public void ajouterChemin(Chemin chemin){
+    public void ajouterChemin(Chemin chemin) {
         m_chemins.add(chemin);
     }
 

@@ -155,18 +155,19 @@ public class FenetrePrincipale {
         m_sidebar.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
-               m_vuePlan.centerMapOnSelected();
+                m_vuePlan.centerMapOnSelected();
             }
+
             @Override
             public void componentHidden(ComponentEvent e) {
-               m_vuePlan.centerMapOnSelected();
+                m_vuePlan.centerMapOnSelected();
             }
         });
         //gère le centrage du graph sur le noeud selectionné lors d'un redimensionnement de fenetre
         m_frame.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-               m_vuePlan.centerMapOnSelected();
+                m_vuePlan.centerMapOnSelected();
             }
         });
     }
@@ -272,11 +273,11 @@ public class FenetrePrincipale {
         m_selectedLivraison = livraison;
 
         // Mise à jour des informations
-        m_notificationInfos.setInfoMessage("Informations sur la livraison n°" + m_selectedLivraison.getM_id());
-        m_labelNumClient.setText(Integer.toString(livraison.getM_noClient()));
-        m_labelAdresse.setText(Integer.toString(livraison.getM_adresse().getM_id()));
-        m_labelCoordonnees.setText(livraison.getM_adresse().toString());
-        m_labelPlageHoraire.setText(livraison.getM_plage().toString());
+        m_notificationInfos.setInfoMessage("Informations sur la livraison n°" + m_selectedLivraison.getId());
+        m_labelNumClient.setText(Integer.toString(livraison.getNoClient()));
+        m_labelAdresse.setText(Integer.toString(livraison.getAdresse().getM_id()));
+        m_labelCoordonnees.setText(livraison.getAdresse().toString());
+        m_labelPlageHoraire.setText(livraison.getPlage().toString());
 
         panelInfosLivraison.setVisible(true);
         panelAjouterLivraison.setVisible(false);

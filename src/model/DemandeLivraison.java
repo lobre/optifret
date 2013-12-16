@@ -74,11 +74,12 @@ public class DemandeLivraison {
 
     /**
      * Ajoute la livraison à la plage horaire correspondante dans la liste des plages horaires.
-     * @param livraison  livraison que l'on veut ajouter dans sa plage horaire.
+     *
+     * @param livraison livraison que l'on veut ajouter dans sa plage horaire.
      */
     public void ajouterLivraison(Livraison livraison) {
         for (PlageHoraire ph : m_plagesHoraires) {
-            if (ph == livraison.getM_plage()) {
+            if (ph == livraison.getPlage()) {
                 ph.addLivraison(livraison);
                 return;
             }
@@ -87,11 +88,12 @@ public class DemandeLivraison {
 
     /**
      * Supprime la livraison de sa plage horaire correspondante dans la liste des plages horaires.
+     *
      * @param livraison livraison que l'on veut supprimer de sa plage horaire.
      */
     public void supprimerLivraison(Livraison livraison) {
         for (PlageHoraire ph : m_plagesHoraires) {
-            if (ph == livraison.getM_plage()) {
+            if (ph == livraison.getPlage()) {
                 ph.removeLivraison(livraison);
                 return;
             }
@@ -105,13 +107,14 @@ public class DemandeLivraison {
     /**
      * Obtient un ID numérique servant à identifier les livraisons. Cet ID est garanti unique, non utilisé pour une
      * autre livraison parmi l'ensemble des livraisons présentes dans toutes les plage horaire.
+     *
      * @return un ID encore non utilisé pour identifier de façon unique une livraison.
      */
     public int getUniqueID() {
         int maxID = 0;
         for (PlageHoraire ph : m_plagesHoraires) {
             for (Livraison livraison : ph.getM_livraisons()) {
-                maxID = livraison.getM_id() > maxID ? livraison.getM_id() : maxID;
+                maxID = livraison.getId() > maxID ? livraison.getId() : maxID;
             }
         }
 
@@ -134,21 +137,22 @@ public class DemandeLivraison {
         TSP tsp = new TSP(graph);
         // On tente de le résoudre en X\1000 secondes.
         tsp.solve(10000, graph.getNbVertices() * graph.getMaxArcCost() + 1);
-        return new FeuilleRoute(tsp, m_chemins, graph.getMatches(), this);
+        return new FeuilleRoute(tsp, m_chemins, graph.getMatches(), graph.getCost(), this);
     }
 
     /**
      * Parse un élément XML correspondant à une demande de livraison, afin d'en extraire tous les éléments. Met à jour
      * la liste de plage horaire en la remplissant avec les différentes livraisons correspondantes.
-     * @param racineXML  (Element) correspondant au document XML à parser.
-     * @return  PARSE_ERROR :
-     *                  si les plages horaires se chevauchent
-     *                  si il y a plusieurs ou aucun entrepôts,
- *                      si il y a plusieurs listes de plages horaires
-     *                  si les horaires sont mal formattés
-     *                  si il y a plus d'une liste de livraisons par plage horaire,
-     *                  si une livraison doit avoir lieu sur un noeud du graph (une adresse) non existant
-     *          PARSE_OK sinon.
+     *
+     * @param racineXML (Element) correspondant au document XML à parser.
+     * @return PARSE_ERROR :
+     *         si les plages horaires se chevauchent
+     *         si il y a plusieurs ou aucun entrepôts,
+     *         si il y a plusieurs listes de plages horaires
+     *         si les horaires sont mal formattés
+     *         si il y a plus d'une liste de livraisons par plage horaire,
+     *         si une livraison doit avoir lieu sur un noeud du graph (une adresse) non existant
+     *         PARSE_OK sinon.
      */
     public int fromXML(Element racineXML) {
 
@@ -241,9 +245,9 @@ public class DemandeLivraison {
      */
     private void doSomeFirstCalc(PlageHoraire i, Noeud noeud, GraphImpl graph, Plan plan) {
         for (Livraison livraison : i.getM_livraisons()) {
-            Chemin chemin = Dijkstra.dijkstra_c(noeud, livraison.getM_adresse(), plan);
+            Chemin chemin = Dijkstra.dijkstra_c(noeud, livraison.getAdresse(), plan);
             int id1 = noeud.getM_id();
-            int id2 = livraison.getM_adresse().getM_id();
+            int id2 = livraison.getAdresse().getM_id();
             fillCost(id1, id2, chemin.getLongueur(), graph);
             fillChemin(id1, id2, chemin);
         }
@@ -262,17 +266,17 @@ public class DemandeLivraison {
         for (Livraison livraison : i.getM_livraisons()) {
             for (Livraison autreLivraisonDeRangI : i.getM_livraisons()) {
                 if (!livraison.equals(autreLivraisonDeRangI)) {
-                    Chemin chemin = Dijkstra.dijkstra_c(livraison.getM_adresse(), autreLivraisonDeRangI.getM_adresse(), plan);
-                    int id1 = livraison.getM_adresse().getM_id();
-                    int id2 = autreLivraisonDeRangI.getM_adresse().getM_id();
+                    Chemin chemin = Dijkstra.dijkstra_c(livraison.getAdresse(), autreLivraisonDeRangI.getAdresse(), plan);
+                    int id1 = livraison.getAdresse().getM_id();
+                    int id2 = autreLivraisonDeRangI.getAdresse().getM_id();
                     fillCost(id1, id2, chemin.getLongueur(), graph);
                     fillChemin(id1, id2, chemin);
                 }
             }
             for (Livraison autreLivraisonDeRangIPluzun : iPluzun.getM_livraisons()) {
-                Chemin chemin = Dijkstra.dijkstra_c(livraison.getM_adresse(), autreLivraisonDeRangIPluzun.getM_adresse(), plan);
-                int id1 = livraison.getM_adresse().getM_id();
-                int id2 = autreLivraisonDeRangIPluzun.getM_adresse().getM_id();
+                Chemin chemin = Dijkstra.dijkstra_c(livraison.getAdresse(), autreLivraisonDeRangIPluzun.getAdresse(), plan);
+                int id1 = livraison.getAdresse().getM_id();
+                int id2 = autreLivraisonDeRangIPluzun.getAdresse().getM_id();
                 fillCost(id1, id2, chemin.getLongueur(), graph);
                 fillChemin(id1, id2, chemin);
             }
@@ -292,15 +296,15 @@ public class DemandeLivraison {
         for (Livraison livraison : i.getM_livraisons()) {
             for (Livraison autreLivraisonDeRangI : i.getM_livraisons()) {
                 if (!livraison.equals(autreLivraisonDeRangI)) {
-                    Chemin chemin = Dijkstra.dijkstra_c(livraison.getM_adresse(), autreLivraisonDeRangI.getM_adresse(), plan);
-                    int id1 = livraison.getM_adresse().getM_id();
-                    int id2 = autreLivraisonDeRangI.getM_adresse().getM_id();
+                    Chemin chemin = Dijkstra.dijkstra_c(livraison.getAdresse(), autreLivraisonDeRangI.getAdresse(), plan);
+                    int id1 = livraison.getAdresse().getM_id();
+                    int id2 = autreLivraisonDeRangI.getAdresse().getM_id();
                     fillCost(id1, id2, chemin.getLongueur(), graph);
                     fillChemin(id1, id2, chemin);
                 }
             }
-            Chemin chemin = Dijkstra.dijkstra_c(livraison.getM_adresse(), noeud, plan);
-            int id1 = livraison.getM_adresse().getM_id();
+            Chemin chemin = Dijkstra.dijkstra_c(livraison.getAdresse(), noeud, plan);
+            int id1 = livraison.getAdresse().getM_id();
             int id2 = noeud.getM_id();
             fillCost(id1, id2, chemin.getLongueur(), graph);
             fillChemin(id1, id2, chemin);
@@ -309,8 +313,9 @@ public class DemandeLivraison {
 
     /**
      * Ajoute le chemin <chemin>, partant de <from> et arrivant <to> dans l'attribut m_chemin de notre classe.
-     * @param from ID de la livraison de départ
-     * @param to  ID de la livraison d'arrivé du chemin
+     *
+     * @param from   ID de la livraison de départ
+     * @param to     ID de la livraison d'arrivé du chemin
      * @param chemin chemin entre deux livraisons.
      */
     private void fillChemin(int from, int to, Chemin chemin) {
@@ -323,9 +328,10 @@ public class DemandeLivraison {
     /**
      * Donne le cout (poids) <cost> au chemin partant de la livraison d'ID <from> à la livraison d'ID <to>
      * dans le graphique <graph>
-     * @param from ID de la livraison d'où commence le chemin auquel on veut donner un cout (poids)
-     * @param to ID de la livraison d'où fini le chemin auquel on veut donner un cout (poids)
-     * @param cost coût (poids) à donner au chemin
+     *
+     * @param from  ID de la livraison d'où commence le chemin auquel on veut donner un cout (poids)
+     * @param to    ID de la livraison d'où fini le chemin auquel on veut donner un cout (poids)
+     * @param cost  coût (poids) à donner au chemin
      * @param graph graphique sur lequel on veut donner un cout (poids) à un chemin.
      */
     private void fillCost(int from, int to, int cost, GraphImpl graph) {

@@ -42,12 +42,12 @@ public class PlageHoraire implements Comparable<PlageHoraire> {
     // Accessor methods
     //
     public void addLivraison(Livraison livraison) {
-        livraison.getM_adresse().setM_livraison(livraison);
+        livraison.getAdresse().setM_livraison(livraison);
         m_livraisons.add(livraison);
     }
 
     public void removeLivraison(Livraison livraison) {
-        livraison.getM_adresse().setM_livraison(null);
+        livraison.getAdresse().setM_livraison(null);
         m_livraisons.remove(livraison);
     }
 

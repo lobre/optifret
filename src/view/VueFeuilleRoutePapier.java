@@ -41,12 +41,11 @@ public class VueFeuilleRoutePapier {
 
 
                 if (!dernierTroncon) {
-                    Troncon t2 = troncons.get(i +1);
+                    Troncon t2 = troncons.get(i + 1);
                     double angle = t.angleAvec(t2);
                     if (Math.abs(angle - Math.PI / 2) < 0.6) {
                         r += "  . Tournez à droite.\n";
-                    }
-                    else if (Math.abs(angle + Math.PI / 2) < 0.6) {
+                    } else if (Math.abs(angle + Math.PI / 2) < 0.6) {
                         r += "  . Tournez à gauche.\n";
                     }
 
@@ -58,7 +57,7 @@ public class VueFeuilleRoutePapier {
 
 
             if (t.getArrivee().hasLivraison()) {
-                r += "  * Réalisez la livraison " + t.getArrivee().getM_livraison().getM_id() + "\n";
+                r += "  * Réalisez la livraison " + t.getArrivee().getM_livraison().getId() + "\n";
             }
 
         }

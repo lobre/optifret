@@ -19,7 +19,7 @@ public class Livraison {
 
     private Noeud m_adresse;
 
-    public Heure m_heureLivraison;
+    private Heure m_heureLivraison;
 
     //
     // Constructors
@@ -45,21 +45,28 @@ public class Livraison {
     //
 
 
+    public Heure getHeureLivraison() {
+        return m_heureLivraison;
+    }
 
-    public int getM_id() {
+    public int getId() {
         return m_id;
     }
 
-    public int getM_noClient() {
+    public int getNoClient() {
         return m_noClient;
     }
 
-    public PlageHoraire getM_plage() {
+    public PlageHoraire getPlage() {
         return m_plage;
     }
 
-    public Noeud getM_adresse() {
+    public Noeud getAdresse() {
         return m_adresse;
+    }
+
+    public void setHeureLivraison(Heure m_heureLivraison) {
+        this.m_heureLivraison = m_heureLivraison;
     }
 
     //
