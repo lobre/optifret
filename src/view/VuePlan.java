@@ -12,6 +12,9 @@ import java.util.HashMap;
 
 import static com.sun.org.apache.xalan.internal.lib.ExsltMath.abs;
 
+// TODO : Annuler la feuille de route sur UNDO/REDO
+// TODO : Afficher les livraisons qui dépassent de leur plage horaire
+
 /**
  * Vue d'un objet Plan. Affiche les noeuds et les tron&ccedil;ons les reliant (qu'ils soient &agrave; double sens
  * ou &agrave; sens unique), peut aussi &ecirc;tre zoom&eacute; et d&eacute;cal&eacute; avec la souris.
@@ -165,6 +168,9 @@ public class VuePlan extends JPanel {
 
         updateSize();
         centerOnCenter();
+
+        // Valeur du zoom par défaut pour que le plan prenne toute la largeur
+        setZoom((float) getParent().getWidth() / m_x_max);
     }
 
 
