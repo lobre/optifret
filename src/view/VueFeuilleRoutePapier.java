@@ -50,7 +50,7 @@ public class VueFeuilleRoutePapier {
 
                 // On peut alors arriver à un noeud de livraison que l'on doit livrer ou à l'entrepot à la fin de la tournée
                 if (t.getArrivee().hasLivraison() && pointDansNoeudsFeuille) {
-                    r += "  * Réalisez la livraison " + t.getArrivee().getM_livraison().getM_id() + " adresse "+
+                    r += "  * Réalisez la livraison " + t.getArrivee().getM_livraison().getId() + " adresse "+
                             t.getArrivee().getM_id()+"\n";
                     indexNodeFeuilleRoute++;
                 }

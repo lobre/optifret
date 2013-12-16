@@ -63,9 +63,9 @@ public class DemandeLivraisonTest {
         assertTrue(myDemande.getEntrepot().getM_id() == 14)   ;
         assertTrue(myDemande.getM_plagesHoraires().get(0).getHeureDebut().toString().equals(new Heure(8,0,0).toString())) ;
         assertTrue(myDemande.getM_plagesHoraires().get(0).getHeureFin().toString().equals(new Heure(9,30,0).toString())) ;
-        assertTrue(myDemande.getM_plagesHoraires().get(0).getM_livraisons().get(0).getM_id()==1); ;
-        assertTrue(myDemande.getM_plagesHoraires().get(0).getM_livraisons().get(0).getM_adresse().getM_id()==77); ;
-        assertTrue(myDemande.getM_plagesHoraires().get(0).getM_livraisons().get(0).getM_noClient()==608); ;
+        assertTrue(myDemande.getM_plagesHoraires().get(0).getM_livraisons().get(0).getId()==1); ;
+        assertTrue(myDemande.getM_plagesHoraires().get(0).getM_livraisons().get(0).getAdresse().getM_id()==77); ;
+        assertTrue(myDemande.getM_plagesHoraires().get(0).getM_livraisons().get(0).getNoClient()==608); ;
     }
 
 

@@ -166,7 +166,7 @@ public class VueTroncon {
         Noeud depart = chemin.getDepart();
         Noeud arrivee = chemin.getArrivee();
         boolean noLivraison = !depart.hasLivraison() || !arrivee.hasLivraison();
-        if (noLivraison || (depart.getM_livraison().getM_plage() != arrivee.getM_livraison().getM_plage())) {
+        if (noLivraison || (depart.getM_livraison().getPlage() != arrivee.getM_livraison().getPlage())) {
             return COULEUR_CHEMIN_NEUTRE;
         } else {
             int plageID = depart.getM_livraison().getPlage().getM_indice();

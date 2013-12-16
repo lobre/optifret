@@ -184,7 +184,7 @@ public class DemandeLivraison {
                 int adNoeud = Integer.parseInt(eLivraison.getAttribute("adresse"));
                 Noeud noeud = m_plan.getNoeudParID(adNoeud);
                 for ( Livraison l: plage.getM_livraisons() ){
-                    if (l.getM_id()==id){
+                    if (l.getId()==id){
                         throw new ParseXmlException("id livraison non-unique");
                     }
                 }

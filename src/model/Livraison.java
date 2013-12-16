@@ -92,6 +92,10 @@ public class Livraison {
         this.m_heureLivraison = m_heureLivraison;
     }
 
+    public Heure getHeureLivraison() {
+        return m_heureLivraison;
+    }
+
     //
     // Other methods
     //
