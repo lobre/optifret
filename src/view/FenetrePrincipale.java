@@ -36,6 +36,7 @@ public class FenetrePrincipale {
     private JLabel m_adresseNouvelleLivraison;
     private JButton m_ajouterButton;
     private ZoneNotification m_notificationAjout;
+    private JLabel m_horaireLivraison;
 
 
     /**
@@ -298,6 +299,12 @@ public class FenetrePrincipale {
         m_labelAdresse.setText(Integer.toString(livraison.getAdresse().getM_id()));
         m_labelCoordonnees.setText(livraison.getAdresse().toString());
         m_labelPlageHoraire.setText(livraison.getPlage().toString());
+        if (livraison.getHeureLivraison() != null) {
+            m_horaireLivraison.setText(livraison.getHeureLivraison().toString());
+        }
+        else {
+            m_horaireLivraison.setText(" - ");
+        }
 
         panelInfosLivraison.setVisible(true);
         panelAjouterLivraison.setVisible(false);

@@ -2,6 +2,7 @@ package view;
 
 import model.Chemin;
 import model.Noeud;
+import model.PlageHoraire;
 import model.Troncon;
 
 import java.awt.*;
@@ -174,9 +175,17 @@ public class VueTroncon {
         if (noLivraison || (depart.getM_livraison().getPlage() != arrivee.getM_livraison().getPlage())) {
             return COULEUR_CHEMIN_NEUTRE;
         } else {
-            int plageID = depart.getM_livraison().getPlage().getM_indice();
-            return tableauCouleurs[plageID % NOMBRE_COULEURS];
+            return getCouleurPlageHoraire(depart.getM_livraison().getPlage());
         }
+    }
+
+    /**
+     * Renvoie la couleur associée aux chemins d'une plage horaire.
+     * @param plage la plage horaire dont la couleur doit être renvoyée.
+     * @return Color, la couleur de la plage horaire.
+     */
+    public static Color getCouleurPlageHoraire(PlageHoraire plage) {
+        return tableauCouleurs[plage.getM_indice() % NOMBRE_COULEURS];
     }
 
     /**
