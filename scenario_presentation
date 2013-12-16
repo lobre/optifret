@@ -1,0 +1,28 @@
+
+# Introduction (application, équipe)
+
+# Démonstration "normale" de l'application
+
+* Charger le plan 2
+* Montrer les capacités de zoom/dézoom
+* Charger la demande de livraison 10x10-3
+* Montrer les sidebars (clic sur livraison à l'adresse 22, clic sur noeud 12)
+* Calculer la feuille de route
+* Zoomer sur des tronçons où on a plusieurs chemins (autour de la livraison à l'adresse 6)
+* Ajouter des livraisons (à l'adresse 25 et à l'adresse 41, client 257)
+* Supprimer la livraison à l'adresse 2. 
+* Montrer UNDO / REDO (avec le menu édition et les raccourcis)
+* Ajouter pleins de livraisons de manière à ce que certaines dépassent de leur plage et montrer que c'est mis en valeur dans le plan.
+* Recalculer la feuille de route
+* Éditer la version papier de la feuille de route
+* FIN DE LA PRÉSENTATION.
+
+# Démonstration de la robustesse de l'application
+
+* Plan avec tronçon sens-unique.
+* Plan mal formé (noeuds non uniques, erreur de syntaxe)
+* Demande de livraison avec une adresse inexistante
+* Demande de livraison mal formée (plages horaires qui se chevauchent, ...)
+* Ajout d'un numéro de client incorrect (vide, avec des caractères non numériques: poney-du-69, trop grand: 9000000000)
+
+# Conclusion
