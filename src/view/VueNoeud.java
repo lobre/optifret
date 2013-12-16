@@ -57,15 +57,21 @@ public class VueNoeud {
         g2.setColor(color.darker());
         g2.drawOval(x, y, 2 * r, 2 * r);
 
-        // Si un noeud est sélectionné, on affiche son ID
-        if (m_selected) {
+        // Si un noeud est sélectionné, on affiche son ID ; Si c'est un entrepot, on affiche un grand E par dessus
+        if (m_selected || m_noeud.isEntrepot()) {
             g2.setFont(ID_FONT);
-            String idString = Integer.toString(m_noeud.getM_id());
 
-            int text_x = x + r - (int) (idString.length() * FONT_SIZE * 0.3);
+            String message;
+            if (m_noeud.isEntrepot()) {
+                message = "E";
+            } else {
+                message = Integer.toString(m_noeud.getM_id());
+            }
+
+            int text_x = x + r - (int) (message.length() * FONT_SIZE * 0.3);
             int text_y = y + r + (int) (FONT_SIZE * 0.3);
 
-            g2.drawString(idString, text_x, text_y);
+            g2.drawString(message, text_x, text_y);
         }
     }
 
@@ -99,7 +105,7 @@ public class VueNoeud {
         if (m_noeud.isEntrepot()) {
             color = COULEUR_ENTREPOT;
         } else if (m_noeud.hasLivraison()) {
-            color = COULEUR_LIVRAISON;
+            color = VueTroncon.getCouleurPlageHoraire(m_noeud.getM_livraison().getPlage()); //COULEUR_LIVRAISON;
         }
 
         if (m_selected) {
