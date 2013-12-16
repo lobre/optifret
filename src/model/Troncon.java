@@ -39,7 +39,6 @@ public class Troncon {
     //
     // Accessor methods
     //
-    // TODO : replace private statements where needed
 
 
     public String getM_nom() {

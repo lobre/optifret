@@ -8,7 +8,6 @@ import org.w3c.dom.Element;
  */
 public class Livraison {
 
-    // TODO : ajouter le temps de livraison prévisionnel (mis à jour par les feuilles de route)
     public static int PARSE_ERROR = -1;
     public static int PARSE_OK = 0;
     //

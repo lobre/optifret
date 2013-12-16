@@ -257,9 +257,7 @@ public class Controleur {
     public void ajouterLivraison(Livraison livraison) {
         m_commandes.executer(new CommandeAjout(m_demandeLivraison, livraison));
 
-        // Annulation de la feuille de route (s'il y en avait une)
-        m_feuilleRoute = null;
-        m_window.getM_vuePlan().setFeuilleRoute(null);
+        annulerFeuilleRoute();
     }
 
     /**
@@ -270,9 +268,7 @@ public class Controleur {
     public void supprimerLivraison(Livraison livraison) {
         m_commandes.executer(new CommandeSuppression(m_demandeLivraison, livraison));
 
-        // Annulation de la feuille de route (s'il y en avait une)
-        m_feuilleRoute = null;
-        m_window.getM_vuePlan().setFeuilleRoute(null);
+        annulerFeuilleRoute();
     }
 
     /**
@@ -280,6 +276,8 @@ public class Controleur {
      */
     public void reexecuter() {
         m_commandes.reexecuter();
+        annulerFeuilleRoute();
+
         m_window.getM_vuePlan().repaint();
     }
 
@@ -288,7 +286,17 @@ public class Controleur {
      */
     public void annuler() {
         m_commandes.annuler();
+        annulerFeuilleRoute();
+
         m_window.getM_vuePlan().repaint();
+    }
+
+    /**
+     * Annulation de la feuille de route (s'il y en avait une)
+     */
+    private void annulerFeuilleRoute() {
+        m_feuilleRoute = null;
+        m_window.getM_vuePlan().setFeuilleRoute(null);
     }
 
     /**

@@ -12,7 +12,6 @@ import java.util.HashMap;
 
 import static com.sun.org.apache.xalan.internal.lib.ExsltMath.abs;
 
-// TODO : Annuler la feuille de route sur UNDO/REDO
 // TODO : Afficher les livraisons qui dépassent de leur plage horaire
 
 /**
