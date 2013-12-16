@@ -9,9 +9,7 @@ import java.util.*;
  * Class FeuilleRoute
  */
 public class FeuilleRoute {
-    private enum EtatFeuille {RESOLU, SOLUBLE, INSOLUBLE, INCERTAIN}
-
-    ;
+    private enum EtatFeuille {RESOLU, SOLUBLE, INSOLUBLE, INCERTAIN};
     //
     // Fields
     //
@@ -197,6 +195,22 @@ public class FeuilleRoute {
                 return i;
         }
         return -1;
+    }
+
+
+    public ArrayList<Noeud> getNodes(){
+        ArrayList<Noeud> noeuds=new ArrayList<>();
+        int i=0;
+          for( Chemin c : m_chemins){
+              if((i>0) && c.getDepart().getM_id()!=noeuds.get(i).getM_id()){
+                noeuds.add(c.getDepart());
+                  System.out.println(c.getDepart().getM_id());
+              }
+              noeuds.add(c.getArrivee());
+              System.out.println(c.getArrivee().getM_id());
+
+          }
+        return noeuds;
     }
 
     public ArrayList<Troncon> getTroncons() {

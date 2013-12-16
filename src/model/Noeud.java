@@ -126,6 +126,6 @@ public class Noeud {
     }
 
     public String toString() {
-        return "[x=" + m_x + ", y=" + m_y + "]";
+        return " x = " + m_x + ", y = " + m_y;
     }
 }

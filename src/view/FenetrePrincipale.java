@@ -9,6 +9,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+
+
+/**
+ * Fen&ecirc;tre principale de l'application: contient les menus, le composant VuePlan et une sidebar pour
+ * l'ajout/suppression de livraison
+ */
 public class FenetrePrincipale {
     private JPanel m_mainPanel;
     private ZoneNotification m_zoneNotification;
@@ -30,17 +36,43 @@ public class FenetrePrincipale {
     private JLabel m_adresseNouvelleLivraison;
     private JButton m_ajouterButton;
     private ZoneNotification m_notificationAjout;
-    private JFrame m_frame;
 
+
+    /**
+     * Menu "Fichier"
+     */
     private JMenu m_menuFichier;
+    /**
+     * Menu "&Eacute;dition"
+     */
     private JMenu m_menuEdition;
 
+    /**
+     * Fen&ecirc;tre Swing contenant l'interface de l'application.
+     */
+    private JFrame m_frame;
+
+    /**
+     * Contr&ocirc;leur de l'application.
+     * @see controller.Controleur
+     */
     private Controleur m_controleur;
 
+    /**
+     * La livraison actuellement s&eacute;lectionn&eacute;e (pour la sidebar InfosLivraison)
+     */
     private Livraison m_selectedLivraison;
+
+    /**
+     * Le noeud actuellement s&eacute;lectionn&eacute; (pour la sidebar AjouterLivraison)
+     */
     private Noeud m_selectedNoeud;
 
-    // Constructor(s)
+
+    /**
+     * Constructeur de la fen&ecirc;tre principale.
+     * @param controleur contr&ocirc;leur de l'application
+     */
     public FenetrePrincipale(Controleur controleur) {
         m_controleur = controleur;
         m_selectedLivraison = null;
@@ -66,9 +98,8 @@ public class FenetrePrincipale {
         initListeners();
 
         // Style du bouton "Cacher"
-        m_hideSidebarButton.setBackground(Color.white);
-        m_hideSidebarButton.setContentAreaFilled(false);
-        m_hideSidebarButton.setBorderPainted(false);
+        m_hideSidebarButton.setContentAreaFilled(true);
+        m_hideSidebarButton.setBackground(VuePlan.COULEUR_BACKGROUND);
 
         // Sidebar cachée par défaut
         hideSidebar();
@@ -78,15 +109,19 @@ public class FenetrePrincipale {
 
     }
 
-    // Appelé à la création de l'interface
-    private void createUIComponents() {
+    /**
+     * Cr&eacute;ation des composants personnalis&eacute;s
+     */
+     private void createUIComponents() {
         // Intialisation de la vu du Plan
         m_vuePlan = new VuePlan(m_controleur);
         m_vuePlan.repaint();
     }
 
+    /**
+     * Initialisation des listeners de la fen&ecirc;tre (raccourcis clavier, actions des boutons, ...)
+     */
     private void initListeners() {
-
         m_frame.setFocusable(true);
 
         m_frame.addKeyListener(new KeyAdapter() {
@@ -104,8 +139,6 @@ public class FenetrePrincipale {
             }
 
         });
-        // Pour adapter la map au redimensionnement de la fenêtre
-
 
         // Bouton "Supprimer"
         m_supprimerButton.addActionListener(new ActionListener() {
@@ -151,7 +184,8 @@ public class FenetrePrincipale {
                 m_frame.repaint();
             }
         });
-        //gère le centrage du graph sur le noeud selectionné lors de la selection d'un noeud, faisant apparaitre m_slide
+
+        // Gère le centrage du graph sur le noeud selectionné lors de la selection d'un noeud, faisant apparaitre m_slide
         m_sidebar.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
@@ -194,6 +228,11 @@ public class FenetrePrincipale {
     }
 
     // Other methods
+
+    /**
+     * Initialisation des menus de la fen&ecirc;tre principale (Menu "Fichier", menu "&Eacute;dition" et leurs
+     * sous-&eacute;l&eacute;ments)
+     */
     private void creerMenus() {
         //// Menu "Fichier"
         m_menuFichier = new JMenu("Fichier");
@@ -262,13 +301,17 @@ public class FenetrePrincipale {
         m_frame.setJMenuBar(menuBar);
     }
 
-
     private void ajoutItem(String intitule, JMenu menu, ActionListener a) {
         JMenuItem item = new JMenuItem(intitule);
         menu.add(item);
         item.addActionListener(a);
     }
 
+    /**
+     * Active une barre lat&eacute;rale affichant des informations sur une livraison, ainsi qu'un bouton permettant de
+     * supprimer cette derni&egrave;re.
+     * @param livraison la livraison dont les informations doivent &ecirc;tre affich&eacute;es
+     */
     public void showInfosLivraison(Livraison livraison) {
         m_selectedLivraison = livraison;
 
@@ -284,6 +327,12 @@ public class FenetrePrincipale {
         m_sidebar.setVisible(true);
     }
 
+    /**
+     * Active une barre lat&eacute;rale affichant des informations sur un noeud et permettant &agrave; l'utilisateur d'y ajouter
+     * une livraison en choisissant num&eacute;ro de client et plage horaire parmi celles existantes dans la demande de
+     * livraison en cours.
+     * @param noeud le noeud o&ugrave; doit &ecirc;tre ajout&eacute;e la livraison saisie par l'utilisateur
+     */
     public void showAjouterLivraison(Noeud noeud) {
         panelInfosLivraison.setVisible(false);
         panelAjouterLivraison.setVisible(true);
@@ -302,6 +351,9 @@ public class FenetrePrincipale {
         m_sidebar.setVisible(true);
     }
 
+    /**
+     * Cache la barre lat&eacute;rale.
+     */
     public void hideSidebar() {
         m_sidebar.setVisible(false);
     }

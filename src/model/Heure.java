@@ -26,10 +26,10 @@ public class Heure {
     public Heure() {
     }
 
-    public Heure(int m_heures, int m_minutes, int m_secondes) {
-        this.m_heures = m_heures;
-        this.m_minutes = m_minutes;
-        this.m_secondes = m_secondes;
+    public Heure(int heures, int minutes, int secondes) {
+        this.m_heures = heures;
+        this.m_minutes = minutes;
+        this.m_secondes = secondes;
     }
 
     //

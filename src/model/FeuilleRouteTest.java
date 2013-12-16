@@ -1,5 +1,6 @@
 package model;
 
+import libs.ParseXmlException;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -45,7 +46,12 @@ public class FeuilleRouteTest {
         plan.fromXML(docPlan.getDocumentElement());
 
         DemandeLivraison demande = new DemandeLivraison(plan);
-        demande.fromXML(docDemande.getDocumentElement());
+        try{
+            demande.fromXML(docDemande.getDocumentElement());
+        }
+        catch(ParseXmlException e){
+            System.out.println(e.getMessage());
+        }
 
         // When : on crée la FeuilleRoute correspondante
         FeuilleRoute feuilleRoute = null;

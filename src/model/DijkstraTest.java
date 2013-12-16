@@ -12,12 +12,6 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created with IntelliJ IDEA.
- * User: karimalaoui
- * Date: 09/12/2013
- * Time: 10:40
- */
 public class DijkstraTest {
 
     static final String cheminXml = "xml_tests/planTestDijkstra.xml";

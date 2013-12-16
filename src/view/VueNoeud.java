@@ -12,17 +12,20 @@ public class VueNoeud {
     private boolean m_focused;
 
     private static Color COULEUR_DEFAUT = new Color(202, 216, 255);
-    private static Color COULEUR_ENTREPOT = new Color(211, 5, 188);
+    private static Color COULEUR_ENTREPOT = new Color(193, 28, 185);
     private static Color COULEUR_LIVRAISON = new Color(143, 210, 53);
 
-    private static int RAYON_DEFAUT = 6;
-    private static int RAYON_LIVRAISON = 8;
-    private static int RAYON_ENTREPOT = 14;
+    public static int RAYON_DEFAUT = 13;
+    private static int RAYON_LIVRAISON = 17;
+    private static int RAYON_ENTREPOT = 17;
 
-    private static int ZOOM_FACTOR = 2;
+    // Facteur par lequel les coordonées de la vue sont amplifiées par rapport à ceux du modèle
+    public static int AMPLIFICATION_FACTOR = 2;
+
+    private static double FOCUS_FACTOR = 1.5;
     private static int BORDER_WIDTH = 1;
 
-    private static int FONT_SIZE = 8;
+    private static int FONT_SIZE = 16;
     private static Font ID_FONT = new Font("Arial", Font.BOLD, FONT_SIZE);
 
     public VueNoeud(Noeud noeud) {
@@ -37,11 +40,11 @@ public class VueNoeud {
 
         int r = getM_rayon();
         if (!m_noeud.isEntrepot() && (m_selected || m_focused)) {
-            r *= ZOOM_FACTOR;
+            r *= FOCUS_FACTOR;
         }
 
-        int x = m_noeud.getM_x() - r;
-        int y = m_noeud.getM_y() - r;
+        int x = getM_x() - r;
+        int y = getM_y() - r;
 
         Color color = getM_couleur();
 
@@ -74,11 +77,11 @@ public class VueNoeud {
     }
 
     public int getM_x() {
-        return m_noeud.getM_x();
+        return m_noeud.getM_x() * AMPLIFICATION_FACTOR;
     }
 
     public int getM_y() {
-        return m_noeud.getM_y();
+        return m_noeud.getM_y() * AMPLIFICATION_FACTOR;
     }
 
     public int getM_rayon() {
