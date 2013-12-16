@@ -433,7 +433,9 @@ public class VuePlan extends JPanel {
         AffineTransform tr2 = g2.getTransform();
         tr2.scale(m_zoom, m_zoom);
         tr2.translate(m_x_off / m_zoom, m_y_off / m_zoom);
-        g2.setTransform(tr2);
+        g2.transform(tr2);
+
+
 
         // Dessin des tronçons
         for (VueTroncon vueTroncon : m_troncons.values()) {

@@ -17,7 +17,7 @@ public class VueNoeud {
 
     public static int RAYON_DEFAUT = 13;
     private static int RAYON_LIVRAISON = 17;
-    private static int RAYON_ENTREPOT = 17;
+    private static int RAYON_ENTREPOT = 22;
 
     // Facteur par lequel les coordonées de la vue sont amplifiées par rapport à ceux du modèle
     public static int AMPLIFICATION_FACTOR = 2;
