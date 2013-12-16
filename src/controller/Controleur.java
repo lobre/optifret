@@ -146,10 +146,8 @@ public class Controleur {
             m_plan = new Plan();
             m_plan.fromXML(doc.getDocumentElement());
 
-
             m_window.getM_vuePlan().setPlan(m_plan);
             m_window.getM_zoneNotification().setSuccessMessage("Le plan '" + fichierXML.getName() + "' a été chargé avec succès !");
-
 
             // Active l'action "Charger une demande de livraison"
             m_window.getM_menuFichier().getItem(1).setEnabled(true);
@@ -267,7 +265,7 @@ public class Controleur {
     /**
      * Supprime une livraison &agrave; la demande de livraison courante et, le cas &eacute;cheant, &eacute;limine la
      * feuille de route calcul&eacute;e
-     * @param livraison
+     * @param livraison la livraison à supprimer
      */
     public void supprimerLivraison(Livraison livraison) {
         m_commandes.executer(new CommandeSuppression(m_demandeLivraison, livraison));
