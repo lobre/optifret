@@ -35,14 +35,14 @@ public class Chemin {
     public int getLongueur() {
         int longueur = 0;
         for (Troncon troncon : listeTroncons) {
-            longueur += troncon.getM_longueur();
+            longueur += troncon.getM_longueur()/troncon.getM_vitesse();
         }
         return longueur;
     }
 
     /**
      * Ajoute un tronçons au début du chemin.
-     * @param troncon, le troncon à ajouter
+     * @param troncon le troncon à ajouter
      */
     public void ajouterTronconDebut(Troncon troncon) {
         listeTroncons.addFirst(troncon);

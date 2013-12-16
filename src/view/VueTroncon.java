@@ -22,10 +22,10 @@ public class VueTroncon {
 
     private static Stroke STROKE_TRONCON = new BasicStroke(LARGEUR_TRONCON * 2);
     private static Stroke STROKE_MIDLINE = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{7}, 0);
-    private static Stroke STROKE_CHEMIN = new BasicStroke(1);
+    private static Stroke STROKE_CHEMIN = new BasicStroke(2);
 
-    private static int NOMBRE_COULEURS = 10;
-    private static Color tableauCouleurs[] = new Color[]{Color.BLUE, Color.RED, Color.YELLOW, Color.GREEN, Color.CYAN, Color.MAGENTA, Color.ORANGE, Color.WHITE, Color.PINK, Color.BLACK};
+    private static int NOMBRE_COULEURS = 8;
+    private static Color tableauCouleurs[] = new Color[] {new Color(166, 20, 40), new Color(222, 63, 0), new Color(214, 202, 27), new Color(48, 177, 39), new Color(161, 4, 177), Color.CYAN, Color.PINK, Color.BLACK};
 
     private static int RUE_FONTSIZE = 6;
     private static Font RUE_FONT = new Font("Arial", Font.PLAIN, RUE_FONTSIZE);
@@ -131,6 +131,11 @@ public class VueTroncon {
      * @param g2 le contexte Graphics2D sur lequel se fait le dessin
      */
     public void drawNomRue(Graphics2D g2) {
+        // Condition pour éviter de dupliquer le nom d'une rue
+        if (m_doubleVoie && !m_troncon.estDeSensPositif()) {
+            return;
+        }
+
         g2.setColor(COULEUR_TRONCON.brighter());
         g2.setFont(RUE_FONT);
 

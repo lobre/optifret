@@ -1,5 +1,9 @@
 package model;
 
+import libs.ParseXmlException;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
 import java.util.ArrayList;
 
 
@@ -8,6 +12,8 @@ import java.util.ArrayList;
  */
 public class PlageHoraire implements Comparable<PlageHoraire> {
 
+    static public int PARSE_ERROR = -1;
+    static public int PARSE_OK = 0;
     //
     // Fields
     //
@@ -29,6 +35,11 @@ public class PlageHoraire implements Comparable<PlageHoraire> {
         m_indice = 0;
     }
 
+    public PlageHoraire() {
+        m_livraisons = new ArrayList<Livraison>();
+        m_indice = 0;
+    }
+
     //
     // Methods
     //
@@ -38,6 +49,36 @@ public class PlageHoraire implements Comparable<PlageHoraire> {
         return m_heureDebut.getTotalSeconds() - ph.getHeureDebut().getTotalSeconds();
     }
 
+    public int fromXML(Element e_plage, Plan plan) throws ParseXmlException {
+
+        //récupération heures de début et de départ
+        String h1 = e_plage.getAttribute("heureDebut");
+        String h2 = e_plage.getAttribute("heureFin");
+        Heure hDepart = new Heure();
+        Heure hFin = new Heure();
+
+        if (hDepart.fromString(h1) == PARSE_ERROR || hFin.fromString(h2) == PARSE_ERROR || !hDepart.estAvant(hFin)) {
+            throw new ParseXmlException("Heure non valide");
+        }
+        this.setHeureDebut(hDepart);
+        this.setHeureFin(hFin);
+
+        //récupération des livraisons de la plage horaire
+        NodeList livraisons = e_plage.getElementsByTagName("Livraisons");
+        if (livraisons.getLength() != 1) {
+            throw new ParseXmlException("Element <Livraisons> introuvable");
+        }
+
+        NodeList listeLivraisons = ((Element) livraisons.item(0)).getElementsByTagName("Livraison");
+        for (int j = 0; j < listeLivraisons.getLength(); j++) {
+            Element eLivraison = (Element) listeLivraisons.item(j);
+            Livraison livraison = new Livraison(this);
+            livraison.fromXML(eLivraison,plan,this);
+            this.addLivraison(livraison);
+        }
+
+        return PARSE_OK;
+    }
     //
     // Accessor methods
     //

@@ -12,6 +12,9 @@ import java.util.HashMap;
 
 import static com.sun.org.apache.xalan.internal.lib.ExsltMath.abs;
 
+// TODO : Annuler la feuille de route sur UNDO/REDO
+// TODO : Afficher les livraisons qui dépassent de leur plage horaire
+
 /**
  * Vue d'un objet Plan. Affiche les noeuds et les tron&ccedil;ons les reliant (qu'ils soient &agrave; double sens
  * ou &agrave; sens unique), peut aussi &ecirc;tre zoom&eacute; et d&eacute;cal&eacute; avec la souris.
@@ -49,6 +52,12 @@ public class VuePlan extends JPanel {
     private int m_x_max;
     private int m_y_max;
 
+    /**
+     * Utiles pour le décalage de la map
+     */
+    private int m_x_off;
+    private int m_y_off;
+
 
     /**
      * Utilis&eacute; pour le "drag" de la VuePlan
@@ -78,10 +87,6 @@ public class VuePlan extends JPanel {
      */
     private VueNoeud m_focusedNoeud;
 
-    /**
-     * Cr&eacute;ation de la VuePlan.
-     * @param controleur le contr&ocirc;leur de l'application
-     */
 
     //
     // CONSTANTES
@@ -103,8 +108,8 @@ public class VuePlan extends JPanel {
     static private int LARGEUR_MINI = 150;
 
     /**
-     * Constructeur de la VuePlan
-     * @param controleur contr&ocirc;leur de l'application
+     * Cr&eacute;ation de la VuePlan.
+     * @param controleur le contr&ocirc;leur de l'application
      */
     public VuePlan(Controleur controleur) {
 
@@ -119,13 +124,15 @@ public class VuePlan extends JPanel {
         m_x_max = m_largeur + MARGIN;
         m_y_max = m_hauteur + MARGIN;
 
+        m_x_off = 0;
+        m_y_off = 0;
+
         m_zoom = 1;
         m_noeuds = new HashMap<Integer, VueNoeud>();
 
         // Drag attributes
-        m_lastClick = getLocation();
-        m_lastPositionDrag = getLocation();
-        m_lastPosition = getLocation();
+        m_lastClick = new Point(m_x_off, m_y_off);
+        m_lastPositionDrag = new Point(m_x_off, m_y_off);
 
         // Selection / Focus
         m_selectedNoeud = null;
@@ -163,8 +170,13 @@ public class VuePlan extends JPanel {
             m_noeuds.put(n.getM_id(), vueNoeud);
         }
 
+        // Mise à jour de la taille du plan (à partir des coordonnées des noeuds)
         updateSize();
-        centerOnCenter();
+
+        // Valeur du zoom par défaut pour que le plan prenne toute la largeur
+        setZoom((float) getParent().getWidth() / m_x_max);
+
+        repaint();
     }
 
 
@@ -192,15 +204,10 @@ public class VuePlan extends JPanel {
 
     public void setZoom(float zoom) {
         m_zoom = zoom;
-        updateSize();
     }
 
     public Plan getPlan() {
         return m_plan;
-    }
-
-    private void setLastPosition(Point lastPosition) {
-        this.m_lastPosition = lastPosition;
     }
 
     /**
@@ -221,15 +228,12 @@ public class VuePlan extends JPanel {
             return;
         }
 
-        if (selected.getM_noeud().isEntrepot()) {
-            return;
-        }
-
-
         selected.setM_selected(true);
+
         if (selected.getM_noeud().hasLivraison()) {
             m_controleur.showInfosLivraison(selected.getM_noeud().getM_livraison());
-        } else {
+        }
+        else if (!selected.getM_noeud().isEntrepot()) {
             m_controleur.showAjouterLivraison(selected.getM_noeud());
         }
 
@@ -260,37 +264,21 @@ public class VuePlan extends JPanel {
      * @see view.VueTroncon
      */
     public void resetTroncons() {
+        // TODO : Ajouter aussi une remise à zéro des horaires prévus des livraisons
         //Supprime les chemins des vues de tronçons
         for (VueTroncon vueTroncon : m_troncons.values()) {
             vueTroncon.supprimerChemins();
         }
     }
 
-    /**
-     * Mise à jour de la taille de la VuePlan (après une mise à jour des noeuds, etc.)
-     */
-    private void updateSize() {
-        m_x_max = -1;
-        m_y_max = -1;
-        for (VueNoeud n : m_noeuds.values()) {
-            m_x_max = n.getM_x() + n.getM_rayon() > m_x_max ? n.getM_x() + n.getM_rayon() : m_x_max;
-            m_y_max = n.getM_y() + n.getM_rayon() > m_y_max ? n.getM_y() + n.getM_rayon() : m_y_max;
-        }
-        m_x_max += MARGIN;
-        m_y_max += MARGIN;
-
-        // Redimensionnement du panel
-        setSize((int) (m_x_max * m_zoom), (int) (m_y_max * m_zoom));
-    }
 
     /**
      * Centrage du plan sur la fenêtre.
      */
     private void centerOnCenter() {
-        int x = (getParent().getWidth() - getWidth()) / 2;
-        int y = (getParent().getHeight() - getHeight()) / 2;
-        setLastPosition(new Point(x, y));
-        setLocation(x, y);
+        m_x_off = (getParent().getWidth() - getWidth()) / 2;
+        m_y_off = (getParent().getHeight() - getHeight()) / 2;
+
         repaint();
     }
 
@@ -299,19 +287,13 @@ public class VuePlan extends JPanel {
      */
     //Fonction de recentrage du plan sur le noeud selectionné. Si aucun noeud selectionné, même position qu'avant.
     public void centerMapOnSelected() {
-        // Redimensionnement du panel
-        setSize((int) (m_x_max * m_zoom), (int) (m_y_max * m_zoom));
-
-        if (m_selectedNoeud != null) {
-            int x = (int) (-m_selectedNoeud.getM_x() * m_zoom - getX() + (getParent().getWidth() / 2));
-            int y = (int) (-m_selectedNoeud.getM_y() * m_zoom - getY() + (getParent().getHeight() / 2));
-            setLocation(x, y);
-            repaint();
-            setLastPosition(new Point(x, y));
-        } else {
-            setLocation(m_lastPosition);
-            repaint();
+        if (m_selectedNoeud == null) {
+            return;
         }
+
+        m_x_off = (int) (-m_selectedNoeud.getM_x() * m_zoom - getX() + (getParent().getWidth() / 2));
+        m_y_off = (int) (-m_selectedNoeud.getM_y() * m_zoom - getY() + (getParent().getHeight() / 2));
+        repaint();
     }
 
     /**
@@ -319,8 +301,8 @@ public class VuePlan extends JPanel {
      * @return la taille préférée de la VuePlan
      */
     @Override
-    public Dimension getPreferredSize() {
-        return new Dimension((int) (m_x_max * m_zoom), (int) (m_y_max * m_zoom));
+    public Dimension getMinimumSize() {
+        return new Dimension(800, 600);
     }
 
     /**
@@ -331,6 +313,10 @@ public class VuePlan extends JPanel {
      * @see view.VueNoeud
      */
     public VueNoeud getClickedNoeud(int x, int y) {
+        // On annule l'offset actuel sur les coordonnées cliquées
+        x -= m_x_off;
+        y -= m_y_off;
+
         for (VueNoeud vueNoeud : m_noeuds.values()) {
             int n_x = (int) (m_zoom * vueNoeud.getM_x());
             int n_y = (int) (m_zoom * vueNoeud.getM_y());
@@ -356,7 +342,7 @@ public class VuePlan extends JPanel {
 
                 // Mise à jour de valeurs utiles pour le déplacement par "drag" de la vue
                 m_lastClick = MouseInfo.getPointerInfo().getLocation();
-                m_lastPositionDrag = getLocation();
+                m_lastPositionDrag = new Point(m_x_off, m_y_off);
 
                 if (m_controleur.getM_demandeLivraison() == null) {
                     return;
@@ -364,6 +350,7 @@ public class VuePlan extends JPanel {
                 VueNoeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
                 if (clickedNoeud != m_selectedNoeud) {
                     setSelectedNoeud(clickedNoeud);
+                    centerMapOnSelected();
                     repaint();
                 }
             }
@@ -378,13 +365,10 @@ public class VuePlan extends JPanel {
 
                 Point p = MouseInfo.getPointerInfo().getLocation();
 
-                int x = (int) (m_lastPositionDrag.getX() + p.getX() - m_lastClick.getX());
-                int y = (int) (m_lastPositionDrag.getY() + p.getY() - m_lastClick.getY());
-                setLocation(x, y);
-                m_lastPosition = new Point(x, y);
+                m_x_off = (int) (m_lastPositionDrag.getX() + p.getX() - m_lastClick.getX());
+                m_y_off = (int) (m_lastPositionDrag.getY() + p.getY() - m_lastClick.getY());
 
-                //pour empecher une partie du graph non visible de disparaitre quand on le drag
-                setSize((int) (m_x_max * m_zoom), (int) (m_y_max * m_zoom));
+                repaint();
             }
 
             //Permet d'augmenter la taille dun noeud survolé par la souris
@@ -406,7 +390,6 @@ public class VuePlan extends JPanel {
             public void mouseWheelMoved(MouseWheelEvent e) {
                 // Mise à jour de valeurs utiles pour le déplacement par "drag" de la vue
                 m_lastClick = MouseInfo.getPointerInfo().getLocation();
-                m_lastPositionDrag = getLocation();
 
                 float zoom = m_zoom * (1 - (float) e.getWheelRotation() / 10);
                 float deltaZoom = zoom - m_zoom;
@@ -419,10 +402,10 @@ public class VuePlan extends JPanel {
                 setZoom(zoom);
 
                 // On fait en sorte que le plan zoom là où la souris est. 0.1 est le ratio de ce déplacement
-                int x = (int) (getX() - (0.1 * (deltaZoom / abs(deltaZoom)) * (e.getPoint().getX())));
-                int y = (int) (getY() - (0.1 * (deltaZoom / abs(deltaZoom))) * (e.getPoint().getY()));
-                setLastPosition(new Point(x, y));
-                setLocation(x, y);
+                m_x_off = (int) (m_x_off - (0.1 * deltaZoom / abs(deltaZoom)) * (e.getX() - m_x_off));
+                m_y_off = (int) (m_y_off - (0.1 * deltaZoom / abs(deltaZoom)) * (e.getY() - m_y_off));
+
+                //setLocation(x, y);
                 repaint();
             }
         });
@@ -449,6 +432,7 @@ public class VuePlan extends JPanel {
         // Transformée pour appliquer le zoom
         AffineTransform tr2 = g2.getTransform();
         tr2.scale(m_zoom, m_zoom);
+        tr2.translate(m_x_off / m_zoom, m_y_off / m_zoom);
         g2.setTransform(tr2);
 
         // Dessin des tronçons
@@ -472,6 +456,20 @@ public class VuePlan extends JPanel {
             vueNoeud.draw(g2);
         }
 
+    }
+
+    /**
+     * Mise à jour de la taille de la VuePlan (après une mise à jour des noeuds, etc.)
+     */
+    private void updateSize() {
+        m_x_max = -1;
+        m_y_max = -1;
+        for (VueNoeud n : m_noeuds.values()) {
+            m_x_max = n.getM_x() + n.getM_rayon() > m_x_max ? n.getM_x() + n.getM_rayon() : m_x_max;
+            m_y_max = n.getM_y() + n.getM_rayon() > m_y_max ? n.getM_y() + n.getM_rayon() : m_y_max;
+        }
+        m_x_max += MARGIN;
+        m_y_max += MARGIN;
     }
 
 

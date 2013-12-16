@@ -20,6 +20,7 @@ public class FenetreImprimerFeuilleRoute extends JDialog {
         getRootPane().setDefaultButton(m_buttonFermer);
 
 
+        // TODO : Rajouter un bouton qui permet de sauvegarder la feuille de route dans un fichier texte
         m_buttonFermer.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();

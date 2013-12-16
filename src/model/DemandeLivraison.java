@@ -1,11 +1,11 @@
 package model;
 
+import libs.ParseXmlException;
 import model.tsp.GraphImpl;
 import model.tsp.TSP;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import libs.ParseXmlException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -155,49 +155,23 @@ public class DemandeLivraison {
         }
 
         for (int i = 0; i < liste_plages.getLength(); i++) {
-
             //nouvelle plage horaire
             Element e_plage = (Element) liste_plages.item(i);
-
-            //récupération heures de début et de départ
-            String h1 = e_plage.getAttribute("heureDebut");
-            String h2 = e_plage.getAttribute("heureFin");
-            Heure hDepart = new Heure();
-            Heure hFin = new Heure();
-
-            if (hDepart.fromString(h1) == PARSE_ERROR || hFin.fromString(h2) == PARSE_ERROR || !hDepart.estAvant(hFin)) {
-                throw new ParseXmlException("Heure non valide");
-            }
-            PlageHoraire plage = new PlageHoraire(hDepart, hFin);
-
-            //récupération des livraisons de la plage horaire
-            NodeList livraisons = e_plage.getElementsByTagName("Livraisons");
-            if (livraisons.getLength() != 1) {
-                throw new ParseXmlException("Element <Livraisons> introuvable");
-            }
-
-            NodeList listeLivraisons = ((Element) livraisons.item(0)).getElementsByTagName("Livraison");
-            for (int j = 0; j < listeLivraisons.getLength(); j++) {
-                Element eLivraison = (Element) listeLivraisons.item(j);
-                int id = Integer.parseInt(eLivraison.getAttribute("id"));
-                int client = Integer.parseInt(eLivraison.getAttribute("client"));
-                int adNoeud = Integer.parseInt(eLivraison.getAttribute("adresse"));
-                Noeud noeud = m_plan.getNoeudParID(adNoeud);
-                for ( Livraison l: plage.getM_livraisons() ){
-                    if (l.getId()==id){
-                        throw new ParseXmlException("id livraison non-unique");
-                    }
-                }
-                if (noeud == null) {
-                    throw new ParseXmlException("null node exception");
-                }
-                Livraison livraison = new Livraison(id, client, noeud, plage);
-                plage.addLivraison(livraison);
+            PlageHoraire plage = new PlageHoraire();
+            if (plage.fromXML(e_plage,m_plan) != PlageHoraire.PARSE_OK) {
+                throw new ParseXmlException("parsing plage horaire vide");
             }
             this.ajouterPlageH(plage);
         }
 
         // Validation des plages horaires
+        if (validationPlagesH() != PARSE_OK) {
+            throw new ParseXmlException("Les plages horaires se chevauchent");
+        }
+
+    }
+
+    private int validationPlagesH(){
         Collections.sort(m_plagesHoraires);
         for (int i = 0; i < m_plagesHoraires.size() - 1; i++) {
             PlageHoraire ph1 = m_plagesHoraires.get(i);
@@ -210,7 +184,9 @@ public class DemandeLivraison {
             ph2.setM_indice(i + 1);
         }
 
+        return PARSE_OK;
     }
+
 
     /**
      * Calcule le poids optimal du trajet entre un noeud particulier du graphe et les noeuds d'ordre i.

@@ -20,7 +20,7 @@ public class FenetrePrincipale {
     private ZoneNotification m_zoneNotification;
     private JButton m_calculerButton;
     private VuePlan m_vuePlan;
-    private JPanel planWrapper;
+    private JPanel m_planWrapper;
     private JPanel m_sidebar;
     private JLabel m_labelNumClient;
     private JLabel m_labelAdresse;
@@ -93,7 +93,7 @@ public class FenetrePrincipale {
         creerMenus();
 
         m_frame.getContentPane().setBackground(VuePlan.COULEUR_BACKGROUND);
-        planWrapper.setBackground(VuePlan.COULEUR_BACKGROUND);
+        m_planWrapper.setBackground(VuePlan.COULEUR_BACKGROUND);
 
         initListeners();
 
@@ -106,7 +106,6 @@ public class FenetrePrincipale {
 
         // Affichage de la fenêtre
         m_frame.setVisible(true);
-
     }
 
     /**
@@ -115,7 +114,6 @@ public class FenetrePrincipale {
      private void createUIComponents() {
         // Intialisation de la vu du Plan
         m_vuePlan = new VuePlan(m_controleur);
-        m_vuePlan.repaint();
     }
 
     /**
@@ -146,7 +144,6 @@ public class FenetrePrincipale {
             public void actionPerformed(ActionEvent e) {
                 m_controleur.supprimerLivraison(m_selectedLivraison);
                 hideSidebar();
-                m_vuePlan.centerMapOnSelected();
                 m_frame.repaint();
             }
         });
@@ -172,7 +169,6 @@ public class FenetrePrincipale {
             @Override
             public void actionPerformed(ActionEvent e) {
                 hideSidebar();
-                m_vuePlan.centerMapOnSelected();
                 m_frame.repaint();
             }
         });
@@ -185,25 +181,6 @@ public class FenetrePrincipale {
             }
         });
 
-        // Gère le centrage du graph sur le noeud selectionné lors de la selection d'un noeud, faisant apparaitre m_slide
-        m_sidebar.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentShown(ComponentEvent e) {
-                m_vuePlan.centerMapOnSelected();
-            }
-
-            @Override
-            public void componentHidden(ComponentEvent e) {
-                m_vuePlan.centerMapOnSelected();
-            }
-        });
-        //gère le centrage du graph sur le noeud selectionné lors d'un redimensionnement de fenetre
-        m_frame.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                m_vuePlan.centerMapOnSelected();
-            }
-        });
     }
 
     // Accessors
