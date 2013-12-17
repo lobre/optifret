@@ -3,7 +3,10 @@ package model;
 import model.tsp.SolutionState;
 import model.tsp.TSP;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Class FeuilleRoute
@@ -11,7 +14,7 @@ import java.util.*;
 public class FeuilleRoute {
     private static final int TEMPS_ENTRE_DEUX_LIVRAISONS = 600;
 
-    private enum EtatFeuille {RESOLU, SOLUBLE, INSOLUBLE, INCERTAIN}
+    private enum EtatFeuille {RESOLU, SOLUBLE, INSOLUBLE}
 
     ;
     //
@@ -20,20 +23,30 @@ public class FeuilleRoute {
     private final DemandeLivraison m_demandeLivraison;
     private final List<Chemin> m_chemins;
     private LinkedList<Livraison> m_livraisonsOrdonnees;
-    private EtatFeuille m_etat = EtatFeuille.INCERTAIN;
-    private final Map<Livraison, PlageHoraire> m_reSchedule;
-    private final TSP m_tsp;
+    private EtatFeuille m_etat = EtatFeuille.RESOLU;
+    private final List<Livraison> m_reSchedule;
 
+    //
+    // Methods
+    //
 
+    /**
+     * TODO : javadoc here
+     *
+     * @param tsp
+     * @param chemins
+     * @param matches
+     * @param cost
+     * @param demandeLivraison
+     */
     public FeuilleRoute(TSP tsp, Map<Integer, Map<Integer, Chemin>> chemins, int[] matches, int[][] cost, DemandeLivraison demandeLivraison) {
         m_demandeLivraison = demandeLivraison;
         m_chemins = new LinkedList<>();
-        m_reSchedule = new HashMap<>();
+        m_reSchedule = new ArrayList<>();
         m_livraisonsOrdonnees = new LinkedList<>();
-        m_tsp = tsp;
         switch (tsp.getSolutionState()) {
             case INCONSISTENT:
-                m_etat = EtatFeuille.INCERTAIN;
+                m_etat = EtatFeuille.INSOLUBLE;
                 break;
             case OPTIMAL_SOLUTION_FOUND:
                 fill(tsp, chemins, matches, cost);
@@ -49,13 +62,25 @@ public class FeuilleRoute {
         }
     }
 
-    //
-    // Methods
-    //
     private boolean contains(PlageHoraire plageHoraire, Heure heure) {
         return (heure.estAvant(plageHoraire.getHeureFin()) && plageHoraire.getHeureDebut().estAvant(heure));
     }
 
+    /**
+     * Fixe de manière non triviale les horaires des livraisons dans les plages voulues.
+     * - Si une livraison entre dans la plage voulue, elle entre dans la plage voulue.
+     * - Si une livraison n'entre pas dans la plage voulue :
+     * - si la plage suivante est directement consécutive à la plage voulue, la livraison empiètera sur la plage suivante.
+     * - si la plage suivante n'est pas directement consécutive à la plage voulue :
+     * toutes les livraisons dépassant de cette plage (voulue) seront programmées directement après ladite plage.
+     * Cas limite : si trop de livraisons sont reprogrammées, elles peuvent empiéter sur une plage existante.
+     * - Une livraison ne peut pas êre programmée avant le début de la plage indiquée.
+     * Dans ce cas, la livraison sera programmée pour la première heure disponible de la plage.
+     *
+     * @param tsp     la TSP à la base du calcul du trajet.
+     * @param matches tableau des correspondances entre les index des vertices de la tsp et des noeuds du modèle.
+     * @param cost    tableau des coûts des chemins optimaux entre deux vertices du graphe fondant la TSP.
+     */
     private void fixerLesHeuresDeLivraison(TSP tsp, int[] matches, int[][] cost) {
         int pH = 0;
         Duree tempsEntreDeuxLivraisons = new Duree(TEMPS_ENTRE_DEUX_LIVRAISONS);
@@ -88,7 +113,7 @@ public class FeuilleRoute {
                 } else
                     livraison = null;
                 if (livraison == null) {
-                    m_etat = EtatFeuille.INCERTAIN;
+                    m_etat = EtatFeuille.INSOLUBLE;
                     break;
                 }
             }
@@ -96,30 +121,10 @@ public class FeuilleRoute {
                     [getReverseMatch(chemin.getArrivee().getM_id(), matches)]).ajouterA(departDerniereLivraison);
             if (plageHoraire.getHeureFin().estAvant(heureLivraison)) {
                 // Livraison en retard : on prévient la secrétaire du retard et du fait qu'il faut reschedule cette livraison.
-                // On passe la feuille de route en état SOLUBLE. Si le décalage est toujours présent en fin de journée, elle
-                // passera en état INSOLUBLE. Dans le cas contraire, elle passera en RESOLU.
-                // Pour l'heure, on ne tient pas compte de la plage due.
+                // On passe la feuille de route en état SOLUBLE car au moins une livraison dépasse de sa plage.
                 m_etat = EtatFeuille.SOLUBLE;
-                // On détermine la plage idéale de cette livraison.
-                int pI = pH;
-                PlageHoraire plageIdeale = null;
-                if (++pI < m_demandeLivraison.getM_plagesHoraires().size())
-                    plageIdeale = m_demandeLivraison.getM_plagesHoraires().get(pI);
-                while ((plageIdeale != null) &&
-                        !(plageIdeale.getHeureDebut().estAvant(heureLivraison) && heureLivraison.estAvant(plageIdeale.getHeureFin()))) {
-                    if (heureLivraison.estAvant(plageIdeale.getHeureDebut())) {
-                        heureLivraison = new Duree(1).ajouterA(plageIdeale.getHeureDebut());
-                    } else if (pI < m_demandeLivraison.getM_plagesHoraires().size()) {
-                        plageIdeale = m_demandeLivraison.getM_plagesHoraires().get(pI);
-                        pI++;
-                    } else plageIdeale = null;
-                }
-                if (plageIdeale == null) {
-                    m_etat = EtatFeuille.INSOLUBLE;
-                    return;
-                    // Un peu violent, mais signifie que cette livraison ne peut pas être effectuée dans la journée.
-                }
-                m_reSchedule.put(livraison, plageIdeale);
+                // Insertion dans la liste des livraisons reprogrammées.
+                m_reSchedule.add(livraison);
                 // Indicateur de cas final.
                 if (i == m_chemins.size() - 1) {
                     estSoluble = false;
@@ -174,10 +179,6 @@ public class FeuilleRoute {
     //
     // Accessor methods
     //
-    public SolutionState getTspSolutionState() {
-        return m_tsp.getSolutionState();
-    }
-
     public List<Chemin> getChemins() {
         return m_chemins;
     }
@@ -186,7 +187,7 @@ public class FeuilleRoute {
         return m_livraisonsOrdonnees;
     }
 
-    public Map<Livraison, PlageHoraire> getM_reSchedule() {
+    public List<Livraison> getM_reSchedule() {
         return m_reSchedule;
     }
 
