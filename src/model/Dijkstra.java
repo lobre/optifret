@@ -3,7 +3,6 @@ package model;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-
 public class Dijkstra {
 
     /**
@@ -63,11 +62,6 @@ public class Dijkstra {
             int idOrigine = noeudParcouru.getM_rejointDepuis().getDepart().getM_id();
             noeudParcouru = noeudOrigine(noeudsVisites, idOrigine);
         }
-        /*System.out.println("Chemin entre "+n_depart.getId() +" et "+n_arrivee.getId());
-        for (Troncon troncon : pcchemin.getListeTroncons()) {
-            System.out.println("Départ : "+troncon.getDepart().getId() + ",arrivée : "+troncon.getArrivee().getId());
-        }
-        System.out.println("Poids du noeud : "+ dernierNoeudVisite.getM_poids());*/
         return pcchemin;
     }
 
