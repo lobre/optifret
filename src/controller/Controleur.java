@@ -7,15 +7,14 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import view.FenetreImprimerFeuilleRoute;
 import view.FenetrePrincipale;
+import view.VueFeuilleRoutePapier;
 
 import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Classe Controleur
@@ -23,6 +22,8 @@ import java.io.IOException;
 public class Controleur {
 
     private static final int DUREE_CALCUL = 3000;
+    private static final String FEUILLES_ROUTE_FOLDER = "feuilles_route";
+    private static final String XML_DATA_FOLDER = "xml_data";
     /**
      * Interface de l'application
      */
@@ -90,7 +91,7 @@ public class Controleur {
         FilenameFilter filter = new CustomFilenameFilter(".xml");
         fileDialog.setFilenameFilter(filter);
 
-        fileDialog.setDirectory("xml_data");
+        fileDialog.setDirectory(XML_DATA_FOLDER);
         fileDialog.setAlwaysOnTop(true);
 
         fileDialog.setVisible(true);
@@ -243,8 +244,6 @@ public class Controleur {
 
         // Active l'action "Éditer version papier"
         m_window.getM_menuFichier().getItem(2).setEnabled(true);
-
-        System.out.println("Chemins calculés : " + m_feuilleRoute.getChemins());
     }
 
     /**
@@ -254,9 +253,39 @@ public class Controleur {
         if (m_feuilleRoute == null) {
             throw new IllegalStateException("Aucune feuille de route n'est chargée.");
         }
-        FenetreImprimerFeuilleRoute dialog = new FenetreImprimerFeuilleRoute(m_feuilleRoute);
+        FenetreImprimerFeuilleRoute dialog = new FenetreImprimerFeuilleRoute(this, m_feuilleRoute);
         dialog.pack();
         dialog.setVisible(true);
+    }
+
+    /**
+     * Enregistrer la version papier d'une feuille de route
+     * @return true si la feuille de route a correctement été enregistrée, false sinon.
+     */
+    public boolean enregistrerFeuilleRoute(VueFeuilleRoutePapier vueFeuilleRoute) {
+        FileDialog fileDialog = new FileDialog(m_window.getM_frame());
+        fileDialog.setModal(true);
+
+        fileDialog.setDirectory(FEUILLES_ROUTE_FOLDER);
+        fileDialog.setAlwaysOnTop(true);
+
+        fileDialog.setVisible(true);
+
+        String filename = fileDialog.getFile();
+        if (filename != null) {
+            File f = new File(fileDialog.getDirectory(), fileDialog.getFile());
+            PrintWriter writer = null;
+            try {
+                writer = new PrintWriter(f.getAbsolutePath(), "UTF-8");
+            } catch (FileNotFoundException | UnsupportedEncodingException e) {
+                return false;
+            }
+            writer.print(vueFeuilleRoute.getVersionPapier());
+            writer.close();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
