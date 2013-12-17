@@ -104,7 +104,7 @@ public class VuePlan extends JPanel {
     /**
      * Largeur minimale de la VuePlan
      */
-    static private int LARGEUR_MINI = 150;
+    static private int LARGEUR_MINI = 300;
 
     /**
      * Cr&eacute;ation de la VuePlan.
@@ -174,6 +174,9 @@ public class VuePlan extends JPanel {
 
         // Valeur du zoom par défaut pour que le plan prenne toute la largeur
         setZoom((float) getParent().getWidth() / m_x_max);
+
+        // Centre la map par défaut
+        centerOnCenter();
 
         repaint();
     }
@@ -392,15 +395,18 @@ public class VuePlan extends JPanel {
                 // Mise à jour de valeurs utiles pour le déplacement par "drag" de la vue
                 m_lastClick = MouseInfo.getPointerInfo().getLocation();
 
-                float zoom = m_zoom * (1 - (float) e.getWheelRotation() / 10);
-                float deltaZoom = zoom - m_zoom;
+                float deltaZoom = - m_zoom * (float) e.getWheelRotation() / 10;
 
-                if (deltaZoom < 0 && getWidth() <= LARGEUR_MINI) {
-                    // Si on dézoom et que la vue est déjà trop petite, le dézoom est annulé
+                // Vrai si la vue plan est trop petite
+                boolean tropPetit = deltaZoom < 0 && m_x_max * m_zoom < LARGEUR_MINI;
+                // Vrai si un noeud est plus grand qu'un quart de la taille de la vue
+                boolean tropGrand = deltaZoom > 0 && VueNoeud.RAYON_DEFAUT * m_zoom > getWidth() / 4;
+                if (tropPetit || tropGrand) {
+                    // Le dézoom est annulé dans ces deux cas
                     return;
                 }
 
-                setZoom(zoom);
+                setZoom(m_zoom + deltaZoom);
 
                 // On fait en sorte que le plan zoom là où la souris est. 0.1 est le ratio de ce déplacement
                 m_x_off = (int) (m_x_off - (0.1 * deltaZoom / abs(deltaZoom)) * (e.getX() - m_x_off));
@@ -465,8 +471,8 @@ public class VuePlan extends JPanel {
      * Mise à jour de la taille de la VuePlan (après une mise à jour des noeuds, etc.)
      */
     private void updateSize() {
-        m_x_max = -1;
-        m_y_max = -1;
+        m_x_max = 1;
+        m_y_max = 1;
         for (VueNoeud n : m_noeuds.values()) {
             m_x_max = n.getM_x() + n.getM_rayon() > m_x_max ? n.getM_x() + n.getM_rayon() : m_x_max;
             m_y_max = n.getM_y() + n.getM_rayon() > m_y_max ? n.getM_y() + n.getM_rayon() : m_y_max;
