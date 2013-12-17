@@ -2,10 +2,14 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ZoneNotification extends JLabel {
 
+    private static final long NOTIFICATION_TIMEOUT = 3000;
     private Font m_font;
+    private Timer m_timer;
 
     private static int HAUTEUR_DEFAUT = 35;
     private static int LARGEUR_DEFAUT = 350;
@@ -15,6 +19,8 @@ public class ZoneNotification extends JLabel {
     private static Color COULEUR_ERREUR = new Color(230, 68, 25);
 
     public ZoneNotification() {
+        super("", SwingConstants.CENTER);
+        m_timer = new Timer();
         m_font = new Font("Arial", Font.BOLD, 14);
         setFont(m_font);
         setForeground(Color.white);
@@ -26,17 +32,36 @@ public class ZoneNotification extends JLabel {
 
     public void setSuccessMessage(String text) {
         setBackground(COULEUR_SUCCES);
-        setText("  " + text);
+        getFontMetrics(getFont()).stringWidth(text);
+        setText(text);
+        hideAfterTimeout();
     }
 
     public void setErrorMessage(String text) {
         setBackground(COULEUR_ERREUR);
-        setText("  " + text);
+        setText(text);
+        hideAfterTimeout();
     }
 
     public void setInfoMessage(String text) {
         setBackground(COULEUR_INFO);
-        setText("  " + text);
+        setText(text);
+        hideAfterTimeout();
+    }
+
+    private void hideAfterTimeout() {
+        setVisible(true);
+
+        m_timer.cancel();
+        m_timer.purge();
+        m_timer = new Timer();
+
+        m_timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                setInfoMessage(" ");
+            }
+        }, NOTIFICATION_TIMEOUT);
     }
 
 
