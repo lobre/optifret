@@ -63,7 +63,7 @@ public class DijkstraTest {
         assertTrue(resultat.getListeTroncons().get(1).getArrivee().getM_id() == 2);
     }
 
-    public Plan obtenirPlan(String chemin) {
+    public static Plan obtenirPlan(String chemin) {
         //Récupération du plan
         File xmlFile = new File(chemin);
 
