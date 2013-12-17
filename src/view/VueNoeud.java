@@ -57,12 +57,24 @@ public class VueNoeud {
         g2.setColor(color.darker());
         g2.drawOval(x, y, 2 * r, 2 * r);
 
+        //if ((m_noeud.hasLivraison() && m_noeud.getM_livraison().isHorsHoraire()))      {
+        /*    g2.setStroke(new BasicStroke(BORDER_WIDTH));
+            g2.setColor(color.darker());
+            Point hPoint=new Point(getM_x(),y);
+            Point bgPoint=new Point(x,getM_y()+((1/3)*r));
+            Point bdPoint=new Point(x+r,getM_y()+((1/3)*r));
+            //g2.drawLine(getM_x(),getM_y(),getM_x()+100,getM_y()+1000);
+            g2.drawLine((int)hPoint.getX(),(int)hPoint.getY(),(int)bgPoint.getX(),(int)bgPoint.getY());
+            //g2.drawLine((int)bgPoint.getX(),(int)bgPoint.getY(),(int)bdPoint.getX(),(int)bdPoint.getY());
+            //g2.drawLine((int)hPoint.getX(),(int)hPoint.getY(),(int)bdPoint.getX(),(int)bdPoint.getY());   */
+        //}
         // Si un noeud est sélectionné, on affiche son ID ; Si c'est un entrepot, on affiche un grand E par dessus
-        if (m_selected || m_noeud.isEntrepot()) {
+        if (m_selected || m_noeud.isEntrepot() || m_noeud.hasLivraison() ) {
             g2.setFont(ID_FONT);
-
             String message;
-            if (m_noeud.isEntrepot()) {
+            if(m_noeud.hasLivraison() && m_noeud.getM_livraison().isHorsHoraire()){
+                message = "!";
+            }else if (m_noeud.isEntrepot()) {
                 message = "E";
             } else {
                 message = Integer.toString(m_noeud.getM_id());
@@ -103,8 +115,13 @@ public class VueNoeud {
         Color color = COULEUR_DEFAUT;
         if (m_noeud.isEntrepot()) {
             color = COULEUR_ENTREPOT;
-        } else if (m_noeud.hasLivraison()) {
-            color = VueTroncon.getCouleurPlageHoraire(m_noeud.getM_livraison().getPlage()); //COULEUR_LIVRAISON;
+        }
+        else if (m_noeud.hasLivraison()) {
+            if (m_noeud.getM_livraison().isHorsHoraire())  {
+                color= new Color(255, 0, 0); // TODO a mettre en haut;
+            } else {
+                color = VueTroncon.getCouleurPlageHoraire(m_noeud.getM_livraison().getPlage()); //COULEUR_LIVRAISON;
+            }
         }
 
         if (m_selected) {

@@ -33,6 +33,7 @@ public class Livraison {
      */
     public Livraison(PlageHoraire plage) {
         m_plage = plage;
+        m_heureLivraison=null;
     }
 
     /**
@@ -116,9 +117,19 @@ public class Livraison {
         this.m_heureLivraison = m_heureLivraison;
     }
 
+    public boolean isHorsHoraire(){
+        if (m_heureLivraison!=null && (m_heureLivraison.compareTo(m_plage.getHeureFin())>0 ||
+                m_heureLivraison.compareTo(m_plage.getHeureFin())==0)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     public Heure getHeureLivraison() {
         return m_heureLivraison;
     }
+
 
     //
     // Other methods

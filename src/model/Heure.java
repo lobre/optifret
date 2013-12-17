@@ -30,6 +30,21 @@ public class Heure {
         this.m_secondes = secondes;
     }
 
+    public int compareTo(Heure a_comparer){
+       if (this.m_heures==a_comparer.m_heures){
+           if(this.m_minutes==a_comparer.m_minutes){
+               return this.m_secondes > a_comparer.m_secondes ? 1:-1;
+           }
+           else{
+               return this.m_minutes > a_comparer.m_minutes ? 1:-1;
+           }
+       }
+        else {
+           return this.m_heures > a_comparer.m_heures ? 1:-1;
+
+       }
+    }
+
     //
     // Methods
     //
