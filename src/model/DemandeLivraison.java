@@ -40,6 +40,7 @@ public class DemandeLivraison {
     public Noeud getEntrepot() {
         return m_entrepot;
     }
+
     public ArrayList<PlageHoraire> getM_plagesHoraires() {
         return m_plagesHoraires;
     }
@@ -102,7 +103,7 @@ public class DemandeLivraison {
      *
      * @return la feuille de route créée.
      */
-    public FeuilleRoute calculerFeuilleDeRoute() {
+    public FeuilleRoute calculerFeuilleDeRoute(int timeLimit) {
         GraphImpl graph = new GraphImpl();
         doSomeFirstCalc(m_plagesHoraires.get(0), m_entrepot, graph, m_plan);
         for (int i = 0; i < m_plagesHoraires.size() - 1; i++) {
@@ -112,21 +113,22 @@ public class DemandeLivraison {
 
         TSP tsp = new TSP(graph);
         // On tente de le résoudre en X\1000 secondes.
-        tsp.solve(10000, graph.getNbVertices() * graph.getMaxArcCost() + 1);
+        tsp.solve(timeLimit, graph.getNbVertices() * graph.getMaxArcCost() + 1);
         return new FeuilleRoute(tsp, m_chemins, graph.getMatches(), graph.getCost(), this);
     }
 
     /**
      * Parse un élément XML correspondant à une demande de livraison, afin d'en extraire tous les éléments. Met à jour
      * la liste de plage horaire en la remplissant avec les différentes livraisons correspondantes.
-     * @param racineXML  (Element) correspondant au document XML à parser.
+     *
+     * @param racineXML (Element) correspondant au document XML à parser.
      * @throws ParseXmlException :
-     *                  si les plages horaires se chevauchent
-     *                  si il y a plusieurs ou aucun entrepôts,
-     *                  si il y a plusieurs listes de plages horaires
-     *                  si les horaires sont mal formattés
-     *                  si il y a plus d'une liste de livraisons par plage horaire,
-     *                  si une livraison doit avoir lieu sur un noeud du graph (une adresse) non existant
+     *                           si les plages horaires se chevauchent
+     *                           si il y a plusieurs ou aucun entrepôts,
+     *                           si il y a plusieurs listes de plages horaires
+     *                           si les horaires sont mal formattés
+     *                           si il y a plus d'une liste de livraisons par plage horaire,
+     *                           si une livraison doit avoir lieu sur un noeud du graph (une adresse) non existant
      */
     public void fromXML(Element racineXML) throws ParseXmlException {
 
@@ -158,7 +160,7 @@ public class DemandeLivraison {
             //nouvelle plage horaire
             Element e_plage = (Element) liste_plages.item(i);
             PlageHoraire plage = new PlageHoraire();
-            if (plage.fromXML(e_plage,m_plan) != PlageHoraire.PARSE_OK) {
+            if (plage.fromXML(e_plage, m_plan) != PlageHoraire.PARSE_OK) {
                 throw new ParseXmlException("parsing plage horaire vide");
             }
             this.ajouterPlageH(plage);
@@ -171,7 +173,7 @@ public class DemandeLivraison {
 
     }
 
-    private int validationPlagesH(){
+    private int validationPlagesH() {
         Collections.sort(m_plagesHoraires);
         for (int i = 0; i < m_plagesHoraires.size() - 1; i++) {
             PlageHoraire ph1 = m_plagesHoraires.get(i);
