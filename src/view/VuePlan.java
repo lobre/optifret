@@ -210,6 +210,13 @@ public class VuePlan extends JPanel {
     }
 
     /**
+     * Déselectionne le noeud actuellement sélectionné (s'il y en a un)
+     */
+    public void unselectNoeud() {
+        setSelectedNoeud(null);
+    }
+
+    /**
      * Change le noeud actuellement s&eacute;lectionn&eacute;. Se centre sur le noeud et affiche la fen&ecirc;tre d'ajout de livraison si
      * le noeud n'en contient pas, ou la fen&ecirc;tre d'infos/suppression de livraison s'il en contient une. Si le nouveau noeud s&eacute;lectionn&eacute; est
      * nul (null), cache la barre lat&eacute;rale.
@@ -222,19 +229,10 @@ public class VuePlan extends JPanel {
 
         if (selected == null) {
             m_selectedNoeud = null;
-            m_controleur.hideSidebar();
-            repaint();
             return;
         }
 
         selected.setM_selected(true);
-
-        if (selected.getM_noeud().hasLivraison()) {
-            m_controleur.showInfosLivraison(selected.getM_noeud().getM_livraison());
-        }
-        else if (!selected.getM_noeud().isEntrepot()) {
-            m_controleur.showAjouterLivraison(selected.getM_noeud());
-        }
 
         m_selectedNoeud = selected;
     }
@@ -296,15 +294,6 @@ public class VuePlan extends JPanel {
     }
 
     /**
-     * Renvoie la taille préférée de la VuePlan.
-     * @return la taille préférée de la VuePlan
-     */
-    @Override
-    public Dimension getMinimumSize() {
-        return new Dimension(800, 600);
-    }
-
-    /**
      * Renvoie la VueNoeud qui se trouve aux coordonnées (x, y) de la VuePlan
      * @param x coordonée x du noeud recherché.
      * @param y coordonée y du noeud recherché.
@@ -337,21 +326,33 @@ public class VuePlan extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                super.mouseClicked(e);
+            super.mouseClicked(e);
 
-                // Mise à jour de valeurs utiles pour le déplacement par "drag" de la vue
-                m_lastClick = MouseInfo.getPointerInfo().getLocation();
-                m_lastPositionDrag = new Point(m_x_off, m_y_off);
+            // Mise à jour de valeurs utiles pour le déplacement par "drag" de la vue
+            m_lastClick = MouseInfo.getPointerInfo().getLocation();
+            m_lastPositionDrag = new Point(m_x_off, m_y_off);
 
-                if (m_controleur.getM_demandeLivraison() == null) {
-                    return;
-                }
-                VueNoeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
-                if (clickedNoeud != m_selectedNoeud) {
-                    setSelectedNoeud(clickedNoeud);
-                    centerMapOnSelected();
-                    repaint();
-                }
+            if (m_controleur.getM_demandeLivraison() == null) {
+                return;
+            }
+            VueNoeud selected = getClickedNoeud(e.getX(), e.getY());
+            if (selected == m_selectedNoeud) {
+                return;
+            }
+            setSelectedNoeud(selected);
+
+            // En fonctino du noeud sélectionné, plusieurs actions possibles:
+            if (selected == null) {
+                m_controleur.hideSidebar();
+            }
+            else if (selected.getM_noeud().hasLivraison()) {
+                m_controleur.showInfosLivraison(selected.getM_noeud().getM_livraison());
+            }
+            else if (!selected.getM_noeud().isEntrepot()) {
+                m_controleur.showAjouterLivraison(selected.getM_noeud());
+            }
+            centerMapOnSelected();
+
             }
 
         });
@@ -370,7 +371,7 @@ public class VuePlan extends JPanel {
                 repaint();
             }
 
-            //Permet d'augmenter la taille dun noeud survolé par la souris
+            // Permet d'augmenter la taille dun noeud survolé par la souris
             @Override
             public void mouseMoved(MouseEvent e) {
                 VueNoeud clickedNoeud = getClickedNoeud(e.getX(), e.getY());
@@ -378,8 +379,9 @@ public class VuePlan extends JPanel {
                     setFocusedNoeud(clickedNoeud);
                     repaint();
                 }
-
             }
+
+
         });
 
 

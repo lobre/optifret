@@ -170,6 +170,7 @@ public class FenetrePrincipale {
             @Override
             public void actionPerformed(ActionEvent e) {
                 hideSidebar();
+                m_frame.requestFocus();
                 m_frame.repaint();
             }
         });
@@ -308,6 +309,7 @@ public class FenetrePrincipale {
 
         panelInfosLivraison.setVisible(true);
         panelAjouterLivraison.setVisible(false);
+
         m_sidebar.setVisible(true);
     }
 
@@ -318,8 +320,6 @@ public class FenetrePrincipale {
      * @param noeud le noeud o&ugrave; doit &ecirc;tre ajout&eacute;e la livraison saisie par l'utilisateur
      */
     public void showAjouterLivraison(Noeud noeud) {
-        panelInfosLivraison.setVisible(false);
-        panelAjouterLivraison.setVisible(true);
 
         m_selectedNoeud = noeud;
         m_plagesHoraires.removeAllItems();
@@ -332,6 +332,9 @@ public class FenetrePrincipale {
         // Zone de notification
         m_notificationAjout.setInfoMessage("Ajout d'une livraison");
 
+        panelAjouterLivraison.setVisible(true);
+        panelInfosLivraison.setVisible(false);
+
         m_sidebar.setVisible(true);
     }
 
@@ -340,6 +343,7 @@ public class FenetrePrincipale {
      */
     public void hideSidebar() {
         m_sidebar.setVisible(false);
+        m_vuePlan.unselectNoeud();
     }
 
     // Getters/Setters

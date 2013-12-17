@@ -223,6 +223,13 @@ public class Controleur {
      */
     public void calculerFeuilleRoute() {
         if (m_demandeLivraison == null) {
+            m_window.getM_zoneNotification().setErrorMessage("Impossible de calculer une feuille de route sans" +
+                    "demande de livraison.");
+            return;
+        }
+        else if (m_demandeLivraison.isEmpty()) {
+            m_window.getM_zoneNotification().setErrorMessage("Impossible de calculer la feuille de route d'une" +
+                    "demande de livraison vide");
             return;
         }
         // TODO : gérer les erreurs au calcul d'une feuille de route
@@ -275,20 +282,25 @@ public class Controleur {
      * Permet d'ex&eacute;cuter la derni&egrave;re commande annul&eacute;e et met &agrave; jour le panel du plan
      */
     public void reexecuter() {
-        m_commandes.reexecuter();
-        annulerFeuilleRoute();
+        boolean executed = m_commandes.reexecuter();
+        if (executed) {
+            annulerFeuilleRoute();
 
-        m_window.getM_vuePlan().repaint();
+            hideSidebar();
+            m_window.getM_vuePlan().repaint();
+        }
     }
 
     /**
      * Permet de annuler la derni&egrave;re commande ex&eacute;cut&eacute;e et met &agrave; jour le panel du plan
      */
     public void annuler() {
-        m_commandes.annuler();
-        annulerFeuilleRoute();
-
-        m_window.getM_vuePlan().repaint();
+        boolean canceled = m_commandes.annuler();
+        if (canceled) {
+            annulerFeuilleRoute();
+            hideSidebar();
+            m_window.getM_vuePlan().repaint();
+        }
     }
 
     /**
