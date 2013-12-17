@@ -6,6 +6,7 @@ import java.awt.*;
 
 public class VueNoeud {
 
+
     private Noeud m_noeud;
 
     private boolean m_selected;
@@ -13,8 +14,7 @@ public class VueNoeud {
 
     private static Color COULEUR_DEFAUT = new Color(202, 216, 255);
     private static Color COULEUR_ENTREPOT = new Color(193, 28, 185);
-    private static Color COULEUR_LIVRAISON = new Color(143, 210, 53);
-
+    private static final Color COULEUR_LIVRAISON_HORSHORAIRE = new Color(207, 0, 11);
     public static int RAYON_DEFAUT = 13;
     private static int RAYON_LIVRAISON = 17;
     private static int RAYON_ENTREPOT = 24;
@@ -48,32 +48,28 @@ public class VueNoeud {
 
         Color color = getM_couleur();
 
+        if (m_noeud.hasLivraison() && m_noeud.getM_livraison().isHorsHoraire()) {
+            r += 3;
+        }
+
+        // Ombre du cercle
+        g2.setColor(color.darker());
+        g2.fillOval(x, y, 2 * (r + 1), 2 * (r + 1));
+
+
         // Remplissage du cercle
         g2.setColor(color);
         g2.fillOval(x, y, 2 * r, 2 * r);
 
-        // Bordure du cercle
-        g2.setStroke(new BasicStroke(BORDER_WIDTH));
-        g2.setColor(color.darker());
-        g2.drawOval(x, y, 2 * r, 2 * r);
 
-        //if ((m_noeud.hasLivraison() && m_noeud.getM_livraison().isHorsHoraire()))      {
-        /*    g2.setStroke(new BasicStroke(BORDER_WIDTH));
-            g2.setColor(color.darker());
-            Point hPoint=new Point(getM_x(),y);
-            Point bgPoint=new Point(x,getM_y()+((1/3)*r));
-            Point bdPoint=new Point(x+r,getM_y()+((1/3)*r));
-            //g2.drawLine(getM_x(),getM_y(),getM_x()+100,getM_y()+1000);
-            g2.drawLine((int)hPoint.getX(),(int)hPoint.getY(),(int)bgPoint.getX(),(int)bgPoint.getY());
-            //g2.drawLine((int)bgPoint.getX(),(int)bgPoint.getY(),(int)bdPoint.getX(),(int)bdPoint.getY());
-            //g2.drawLine((int)hPoint.getX(),(int)hPoint.getY(),(int)bdPoint.getX(),(int)bdPoint.getY());   */
-        //}
+
         // Si un noeud est sélectionné, on affiche son ID ; Si c'est un entrepot, on affiche un grand E par dessus
         if (m_selected || m_noeud.isEntrepot() || m_noeud.hasLivraison() ) {
             g2.setFont(ID_FONT);
             String message;
             if(m_noeud.hasLivraison() && m_noeud.getM_livraison().isHorsHoraire()){
                 message = "!";
+                g2.setColor(Color.WHITE);
             }else if (m_noeud.isEntrepot()) {
                 message = "E";
             } else {
@@ -117,10 +113,10 @@ public class VueNoeud {
             color = COULEUR_ENTREPOT;
         }
         else if (m_noeud.hasLivraison()) {
-            if (m_noeud.getM_livraison().isHorsHoraire())  {
-                color= new Color(255, 0, 0); // TODO a mettre en haut;
+            if (m_noeud.getM_livraison().isHorsHoraire()) {
+                return COULEUR_LIVRAISON_HORSHORAIRE;
             } else {
-                color = VueTroncon.getCouleurPlageHoraire(m_noeud.getM_livraison().getPlage()); //COULEUR_LIVRAISON;
+                color = VueTroncon.getCouleurPlageHoraire(m_noeud.getM_livraison().getPlage());
             }
         }
 

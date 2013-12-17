@@ -237,13 +237,15 @@ public class Controleur {
         if (m_feuilleRoute.getEtatFeuille() == FeuilleRoute.EtatFeuille.INSOLUBLE) {
             m_window.getM_zoneNotification().setErrorMessage("Impossible de calculer la feuille de route: Demande de" +
                     "livraison insoluble ou trop complexe.");
-            m_feuilleRoute = null;
+            annulerFeuilleRoute();
             return;
         }
-        else if (m_feuilleRoute.getEtatFeuille() == FeuilleRoute.EtatFeuille.SOLUBLE) {
+        else if (m_feuilleRoute.getM_reSchedule().size() != 0) {
             m_window.getM_zoneNotification().setErrorMessage("Certaines livraisons dépassent leur plage horaire " +
                     "dédiée.");
         }
+
+        System.out.println(m_feuilleRoute.getM_reSchedule());
 
         m_window.getM_vuePlan().setFeuilleRoute(m_feuilleRoute);
 
