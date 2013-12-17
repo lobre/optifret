@@ -75,7 +75,7 @@ public class VueFeuilleRoutePapier {
                     else if (Math.abs(angle - Math.PI / 2)%(2*Math.PI) < 0.6) {
                             r += "  . Tournez à droite.\n";
                     }
-                    else if (Math.abs(angle + Math.PI / 2)%(Math.PI / 2) < 0.6) {
+                    else if (Math.abs(angle + Math.PI / 2)%(Math.PI) < 0.6) {
                             r += "  . Tournez à gauche.\n";
                     }
 

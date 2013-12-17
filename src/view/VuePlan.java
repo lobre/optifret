@@ -21,6 +21,8 @@ import static com.sun.org.apache.xalan.internal.lib.ExsltMath.abs;
  */
 public class VuePlan extends JPanel {
 
+    private static int FACTOR_MINI_DRAG =4;
+
     /**
      * Le plan repr&eacute;sent&eacute; par la VuePlan
      */
@@ -369,10 +371,13 @@ public class VuePlan extends JPanel {
                 Point p = MouseInfo.getPointerInfo().getLocation();
                 int x= (int) (m_lastPositionDrag.getX() + p.getX() - m_lastClick.getX());
                 int y =  (int) (m_lastPositionDrag.getY() + p.getY() - m_lastClick.getY());
-                boolean isNotTooDown= y > ((m_x_max*m_zoom)/5-m_y_max*m_zoom) ;
-                boolean isNotTooUp= y < (getHeight()-(m_x_max*m_zoom)/5) ;
-                boolean isNotTooRight=x < (getWidth()-(m_x_max*m_zoom)/5);
-                boolean isNotTooLeft=x> (-m_x_max*m_zoom+(m_x_max*m_zoom)/5);
+
+                int largeurMap=(int)(m_x_max*m_zoom);
+                int hauteurMap=(int)(m_y_max*m_zoom);
+                boolean isNotTooDown= y > (getHeight())/ FACTOR_MINI_DRAG -hauteurMap ;
+                boolean isNotTooUp= y < ((-getHeight())/ FACTOR_MINI_DRAG +getHeight());
+                boolean isNotTooRight=x < (getWidth()-getWidth()/ FACTOR_MINI_DRAG) ;
+                boolean isNotTooLeft= x> (-largeurMap+getWidth()/ FACTOR_MINI_DRAG);
                 if (isNotTooDown && isNotTooUp) {
                     m_y_off = y;
                 }
@@ -414,7 +419,7 @@ public class VuePlan extends JPanel {
                 // Vrai si la vue plan est trop petite
                 boolean tropPetit = deltaZoom < 0 && m_x_max * m_zoom < LARGEUR_MINI;
                 // Vrai si un noeud est plus grand qu'un quart de la taille de la vue
-                boolean tropGrand = deltaZoom > 0 && VueNoeud.RAYON_DEFAUT * m_zoom > getWidth() / 4;
+                boolean tropGrand = deltaZoom > 0 && VueNoeud.RAYON_DEFAUT * m_zoom > getWidth() / 30;
                 if (tropPetit || tropGrand) {
                     // Le dézoom est annulé dans ces deux cas
                     return;
