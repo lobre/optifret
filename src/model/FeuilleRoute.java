@@ -9,6 +9,8 @@ import java.util.*;
  * Class FeuilleRoute
  */
 public class FeuilleRoute {
+    private static final int TEMPS_ENTRE_DEUX_LIVRAISONS = 600;
+
     private enum EtatFeuille {RESOLU, SOLUBLE, INSOLUBLE, INCERTAIN}
 
     ;
@@ -31,7 +33,7 @@ public class FeuilleRoute {
         m_tsp = tsp;
         switch (tsp.getSolutionState()) {
             case INCONSISTENT:
-                fillWithBlank(tsp);
+                m_etat = EtatFeuille.INCERTAIN;
                 break;
             case OPTIMAL_SOLUTION_FOUND:
                 fill(tsp, chemins, matches, cost);
@@ -40,7 +42,7 @@ public class FeuilleRoute {
                 fill(tsp, chemins, matches, cost);
                 break;
             case NO_SOLUTION_FOUND:
-                fillWithBlank(tsp);
+                m_etat = EtatFeuille.INSOLUBLE;
                 break;
             default:
                 throw new EnumConstantNotPresentException(SolutionState.class, tsp.getSolutionState().name());
@@ -56,7 +58,7 @@ public class FeuilleRoute {
 
     private void fixerLesHeuresDeLivraison(TSP tsp, int[] matches, int[][] cost) {
         int pH = 0;
-        Duree tempsEntreDeuxLivraisons = new Duree(600); // TODO : passer en constante
+        Duree tempsEntreDeuxLivraisons = new Duree(TEMPS_ENTRE_DEUX_LIVRAISONS);
         boolean estSoluble = true;
         // Résolution du cas initial
         Chemin chemin = m_chemins.get(1);
@@ -73,7 +75,7 @@ public class FeuilleRoute {
             // i==1 <--> Première livraison. On postule que l'heure de cette livraison est l'heure de début de sa plage.
             chemin = m_chemins.get(i);
             depart = chemin.getDepart();
-            plageHoraire = m_demandeLivraison.getM_plagesHoraires().get(pH); // TODO : voir si ça sert encore
+            plageHoraire = m_demandeLivraison.getM_plagesHoraires().get(pH);
             livraison = getLivraisonPourUnNoeudEtUnePlage(depart, plageHoraire);
             if (livraison == null) {
                 // On cherche cette livraison dans une autre plage.
@@ -98,7 +100,6 @@ public class FeuilleRoute {
                 // passera en état INSOLUBLE. Dans le cas contraire, elle passera en RESOLU.
                 // Pour l'heure, on ne tient pas compte de la plage due.
                 m_etat = EtatFeuille.SOLUBLE;
-                // TODO : prévenir la secrétaire.
                 // On détermine la plage idéale de cette livraison.
                 int pI = pH;
                 PlageHoraire plageIdeale = null;
@@ -115,8 +116,8 @@ public class FeuilleRoute {
                 }
                 if (plageIdeale == null) {
                     m_etat = EtatFeuille.INSOLUBLE;
-                    return; // Un peu violent, mais signifie que cette livraison ne peut pas être effectuée dans la journée.
-                    // TODO : check semantics
+                    return;
+                    // Un peu violent, mais signifie que cette livraison ne peut pas être effectuée dans la journée.
                 }
                 m_reSchedule.put(livraison, plageIdeale);
                 // Indicateur de cas final.
@@ -170,10 +171,6 @@ public class FeuilleRoute {
         fixerLesHeuresDeLivraison(tsp, matches, cost);
     }
 
-    private void fillWithBlank(TSP tsp) {
-        // TODO : @Ahmed faut décider ce qu'on fait ici
-    }
-
     //
     // Accessor methods
     //
@@ -192,7 +189,12 @@ public class FeuilleRoute {
     public Map<Livraison, PlageHoraire> getM_reSchedule() {
         return m_reSchedule;
     }
-//
+
+    public EtatFeuille getEtatFeuille() {
+        return m_etat;
+    }
+
+    //
     // Other methods
     //
 
