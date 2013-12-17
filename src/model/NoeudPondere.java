@@ -11,13 +11,11 @@ package model;
 public class NoeudPondere {
     private final Noeud m_noeud;
     private Double m_poids;
-    //private Noeud m_precedent;
     private Troncon m_rejointDepuis;
 
     //Constructor
     NoeudPondere(Noeud noeud) {
         this.m_noeud = noeud;
-        //this.m_precedent = null;
         this.m_poids = Double.POSITIVE_INFINITY;  //infini comme valeur par défaut, pour Dikjstra
     }
 
@@ -26,10 +24,6 @@ public class NoeudPondere {
     public void setM_poids(Double m_poids) {
         this.m_poids = m_poids;
     }
-
-    //public void setM_precedent(Noeud m_precedent) {
-    //    this.m_precedent = m_precedent;
-    //}
 
     public int get_id() {
         return this.m_noeud.getM_id();

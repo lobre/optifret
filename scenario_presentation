@@ -3,17 +3,20 @@
 
 # Démonstration "normale" de l'application
 
+* Montrer l'interface (boutons et raccourcis = ergonomique)
 * Charger le plan 2
 * Montrer les capacités de zoom/dézoom
-* Charger la demande de livraison 10x10-3
-* Montrer les sidebars (clic sur livraison à l'adresse 22, clic sur noeud 12)
-* Calculer la feuille de route
-* Zoomer sur des tronçons où on a plusieurs chemins (autour de la livraison à l'adresse 6)
-* Ajouter des livraisons (à l'adresse 25 et à l'adresse 41, client 257)
-* Supprimer la livraison à l'adresse 2. 
-* Montrer UNDO / REDO (avec le menu édition et les raccourcis)
-* Ajouter pleins de livraisons de manière à ce que certaines dépassent de leur plage et montrer que c'est mis en valeur dans le plan.
+* Charger la demande de livraison 20x20-1
+* Montrer le code couleur (noeuds colorés par plages horaires/entrepot)
+* Montrer les sidebars (clic sur livraison 42 (en haut à gauche), le noeud 41 au-dessus)
+* Calculer la feuille de route -> montrer le code couleur
+* Ajouter une livraison (noeud 0 en haut à gauche, plage 14h-16h, client n°12)
 * Recalculer la feuille de route
+* Montrer comment est géré le cas de plusieurs chemins sur un noeud (proche du noeud 0)
+* Supprimer la livraison à l'adresse 42 montrée auparavant (haut à gauche).
+* Recalculer la feuille de route
+* Montrer UNDO / REDO (avec le menu édition et les raccourcis)
+* Ajouter plusieurs livraisons dans la première plage, générer une feuille de route (qui aura des problèmes), montrer comment ils sont affichés.
 * Éditer la version papier de la feuille de route
 * FIN DE LA PRÉSENTATION.
 

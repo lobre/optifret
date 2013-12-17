@@ -1,0 +1,6 @@
+<Plage heureDebut="11:0:0" heureFin="12:30:0">
+    <Livraisons>
+        <Livraison id="1" client="523" adresse="89"/>
+        <Livraison id="2" client="363" adresse="7"/>
+    </Livraisons>
+</Plage>
