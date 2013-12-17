@@ -27,6 +27,10 @@ public class Plan {
     //
     // Constructors
     //
+
+    /**
+     * Constructeur de la classe
+     */
     public Plan() {
         m_noeuds = new HashMap<Integer, Noeud>();
         m_troncons = new ArrayList<Troncon>();
@@ -36,43 +40,9 @@ public class Plan {
     // Methods
     //
 
-
-    //
-    // Accessor methods
-    //
-
-    public Noeud getM_racine() {
-        return m_racine;
-    }
-
-    public void setM_racine(Noeud m_racine) {
-        this.m_racine = m_racine;
-    }
-
-    public Noeud getNoeudParID(int id) {
-        return m_noeuds.containsKey(id) ? m_noeuds.get(id) : null;
-    }
-
-    public HashMap<Integer, Noeud> getM_noeuds() {
-        return m_noeuds;
-    }
-
-    public void setM_noeuds(HashMap<Integer, Noeud> m_noeuds) {
-        this.m_noeuds = m_noeuds;
-    }
-
-    public void setM_troncons(ArrayList<Troncon> m_troncons) {
-        this.m_troncons = m_troncons;
-    }
-
-    public ArrayList<Troncon> getM_troncons() {
-        return m_troncons;
-    }
-
-    //
-    // Other methods
-    //
-
+    /**
+     * Dissocie les noeuds de 'm_noeuds' des livraisons et de l'entrepôt
+     */
     public void resetNoeuds() {
         for (Noeud n : m_noeuds.values()) {
             n.setM_entrepot(false);
@@ -80,6 +50,11 @@ public class Plan {
         }
     }
 
+    /**
+     * Instancie les noeuds et le tronçons composant l'instance de Plan
+     * @param racineXML balise 'Reseau' contenant des balises 'Noeud'
+     * @return          PARSE_OK, si l'instanciation est réussie
+     */
     public int fromXML(Element racineXML) {
         HashMap<Integer, Noeud> noeuds = new HashMap<Integer, Noeud>();
         ArrayList<Troncon> troncons = new ArrayList<Troncon>();
@@ -128,6 +103,38 @@ public class Plan {
 
         return Plan.PARSE_OK;
 
+    }
+
+    //
+    // Accessor methods
+    //
+
+    public Noeud getM_racine() {
+        return m_racine;
+    }
+
+    public void setM_racine(Noeud m_racine) {
+        this.m_racine = m_racine;
+    }
+
+    public Noeud getNoeudParID(int id) {
+        return m_noeuds.containsKey(id) ? m_noeuds.get(id) : null;
+    }
+
+    public HashMap<Integer, Noeud> getM_noeuds() {
+        return m_noeuds;
+    }
+
+    public void setM_noeuds(HashMap<Integer, Noeud> m_noeuds) {
+        this.m_noeuds = m_noeuds;
+    }
+
+    public void setM_troncons(ArrayList<Troncon> m_troncons) {
+        this.m_troncons = m_troncons;
+    }
+
+    public ArrayList<Troncon> getM_troncons() {
+        return m_troncons;
     }
 
 }
