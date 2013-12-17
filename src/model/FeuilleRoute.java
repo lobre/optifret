@@ -14,7 +14,7 @@ import java.util.Map;
 public class FeuilleRoute {
     private static final int TEMPS_ENTRE_DEUX_LIVRAISONS = 600;
 
-    private enum EtatFeuille {RESOLU, SOLUBLE, INSOLUBLE}
+    public enum EtatFeuille {RESOLU, SOLUBLE, INSOLUBLE}
 
     ;
     //

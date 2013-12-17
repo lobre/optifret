@@ -29,7 +29,6 @@ public class HistoriqueCommandes {
      * @param commande la commande &agrave; ex&eacute;cuter
      */
     public void executer(Commande commande) {
-        // TODO : Vérifier si on garde bien les commandes qu'il faut / S'il y a une meilleure méthode
         // Si on a annulé quelques commandes avant d'exécuter la commande
         // On enlève ces dernières de la liste des commandes
         if (m_derniere_commande != -1 && m_derniere_commande < m_commandes.size() - 1) {

@@ -204,8 +204,8 @@ public class Controleur {
             // Active le menu "Édition"
             m_window.getM_menuEdition().setEnabled(true);
 
-            // Réinitialise les vues troncons
-            m_window.getM_vuePlan().resetTroncons();
+            // Annule la feuille de route actuelle, s'il y en avait une
+            annulerFeuilleRoute();
 
             m_window.getM_vuePlan().repaint();
         } catch (ParseXmlException e) {
@@ -231,8 +231,20 @@ public class Controleur {
                     "demande de livraison vide");
             return;
         }
-        // TODO : gérer les erreurs au calcul d'une feuille de route
+
         m_feuilleRoute = m_demandeLivraison.calculerFeuilleDeRoute(DUREE_CALCUL);
+
+        if (m_feuilleRoute.getEtatFeuille() == FeuilleRoute.EtatFeuille.INSOLUBLE) {
+            m_window.getM_zoneNotification().setErrorMessage("Impossible de calculer la feuille de route: Demande de" +
+                    "livraison insoluble ou trop complexe.");
+            m_feuilleRoute = null;
+            return;
+        }
+        else if (m_feuilleRoute.getEtatFeuille() == FeuilleRoute.EtatFeuille.SOLUBLE) {
+            m_window.getM_zoneNotification().setErrorMessage("Certaines livraisons dépassent leur plage horaire " +
+                    "dédiée.");
+        }
+
         m_window.getM_vuePlan().setFeuilleRoute(m_feuilleRoute);
 
         m_window.getM_zoneNotification().setSuccessMessage("Feuille de route calculée avec succès !");
@@ -340,6 +352,8 @@ public class Controleur {
     private void annulerFeuilleRoute() {
         m_feuilleRoute = null;
         m_window.getM_vuePlan().setFeuilleRoute(null);
+        m_window.getM_vuePlan().resetTroncons();
+        m_demandeLivraison.razHeuresLivraisons();
     }
 
     /**

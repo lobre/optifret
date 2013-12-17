@@ -331,7 +331,10 @@ public class FenetrePrincipale {
         m_selectedLivraison = livraison;
 
         // Mise à jour des informations
-        m_notificationInfos.setInfoMessage("Informations sur la livraison n°" + m_selectedLivraison.getId());
+        String id = Integer.toString(m_selectedLivraison.getId());
+        String plage = m_selectedLivraison.getPlage().toString();
+
+        m_notificationInfos.setInfoMessage(String.format("Livraison n°%s sur la plage %s", id, plage));
         m_labelNumClient.setText(Integer.toString(livraison.getNoClient()));
         m_labelAdresse.setText(Integer.toString(livraison.getAdresse().getM_id()));
         m_labelCoordonnees.setText(livraison.getAdresse().toString());

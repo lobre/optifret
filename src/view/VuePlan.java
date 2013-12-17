@@ -258,7 +258,6 @@ public class VuePlan extends JPanel {
      * @see view.VueTroncon
      */
     public void resetTroncons() {
-        // TODO : Ajouter aussi une remise à zéro des horaires prévus des livraisons
         //Supprime les chemins des vues de tronçons
         for (VueTroncon vueTroncon : m_troncons.values()) {
             vueTroncon.supprimerChemins();
@@ -466,8 +465,7 @@ public class VuePlan extends JPanel {
         }
         // Dessin des chemins sur les tronçons
         for (VueTroncon vueTroncon : m_troncons.values()) {
-            vueTroncon.drawChemins(g2);
-            // TODO : remove this later
+             vueTroncon.drawChemins(g2);
              vueTroncon.drawNomRue(g2);
         }
 
