@@ -9,7 +9,9 @@ import java.util.*;
  * Class FeuilleRoute
  */
 public class FeuilleRoute {
-    private enum EtatFeuille {RESOLU, SOLUBLE, INSOLUBLE, INCERTAIN};
+    private enum EtatFeuille {RESOLU, SOLUBLE, INSOLUBLE, INCERTAIN}
+
+    ;
     //
     // Fields
     //
@@ -18,6 +20,7 @@ public class FeuilleRoute {
     private LinkedList<Livraison> m_livraisonsOrdonnees;
     private EtatFeuille m_etat = EtatFeuille.INCERTAIN;
     private final Map<Livraison, PlageHoraire> m_reSchedule;
+    private final TSP m_tsp;
 
 
     public FeuilleRoute(TSP tsp, Map<Integer, Map<Integer, Chemin>> chemins, int[] matches, int[][] cost, DemandeLivraison demandeLivraison) {
@@ -25,6 +28,7 @@ public class FeuilleRoute {
         m_chemins = new LinkedList<>();
         m_reSchedule = new HashMap<>();
         m_livraisonsOrdonnees = new LinkedList<>();
+        m_tsp = tsp;
         switch (tsp.getSolutionState()) {
             case INCONSISTENT:
                 fillWithBlank(tsp);
@@ -173,6 +177,9 @@ public class FeuilleRoute {
     //
     // Accessor methods
     //
+    public SolutionState getTspSolutionState() {
+        return m_tsp.getSolutionState();
+    }
 
     public List<Chemin> getChemins() {
         return m_chemins;
@@ -198,18 +205,18 @@ public class FeuilleRoute {
     }
 
 
-    public ArrayList<Noeud> getNodes(){
-        ArrayList<Noeud> noeuds=new ArrayList<>();
-        int i=0;
-          for( Chemin c : m_chemins){
-              if((i>0) && c.getDepart().getM_id()!=noeuds.get(i).getM_id()){
+    public ArrayList<Noeud> getNodes() {
+        ArrayList<Noeud> noeuds = new ArrayList<>();
+        int i = 0;
+        for (Chemin c : m_chemins) {
+            if ((i > 0) && c.getDepart().getM_id() != noeuds.get(i).getM_id()) {
                 noeuds.add(c.getDepart());
-                  System.out.println(c.getDepart().getM_id());
-              }
-              noeuds.add(c.getArrivee());
-              System.out.println(c.getArrivee().getM_id());
+                System.out.println(c.getDepart().getM_id());
+            }
+            noeuds.add(c.getArrivee());
+            System.out.println(c.getArrivee().getM_id());
 
-          }
+        }
         return noeuds;
     }
 

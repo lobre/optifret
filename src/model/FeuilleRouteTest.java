@@ -17,7 +17,6 @@ import static java.text.MessageFormat.format;
 import static org.junit.Assert.assertTrue;
 
 public class FeuilleRouteTest {
-    // TODO : WIP @adelmarre
 
     @Test
     public void devraitCreerUneFeuilleDeRouteCorrectement() {
@@ -46,21 +45,20 @@ public class FeuilleRouteTest {
         plan.fromXML(docPlan.getDocumentElement());
 
         DemandeLivraison demande = new DemandeLivraison(plan);
-        try{
+        try {
             demande.fromXML(docDemande.getDocumentElement());
-        }
-        catch(ParseXmlException e){
+        } catch (ParseXmlException e) {
             System.out.println(e.getMessage());
         }
 
         // When : on crée la FeuilleRoute correspondante
         FeuilleRoute feuilleRoute = null;
-        //try {
-        feuilleRoute = demande.calculerFeuilleDeRoute();
-        /*} catch (Exception e) {
+        try {
+            feuilleRoute = demande.calculerFeuilleDeRoute(1500);
+        } catch (Exception e) {
             System.out.println(e);
             return;
-        }*/
+        }
 
         // Then : on affiche le trajet obtenu dans la console
         int i = 0, j = 0;

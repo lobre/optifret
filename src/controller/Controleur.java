@@ -22,6 +22,7 @@ import java.io.IOException;
  */
 public class Controleur {
 
+    private static final int DUREE_CALCUL = 3000;
     /**
      * Interface de l'application
      */
@@ -79,6 +80,7 @@ public class Controleur {
 
     /**
      * Permet de choisir un fichier et en r&eacute;cup&egrave;re le chemin
+     *
      * @return une instance de File correspondante au fichier choisi
      */
     private File ouvrirFichier() {
@@ -103,6 +105,7 @@ public class Controleur {
 
     /**
      * Instancie un parseur xml et r&eacute;cup&egrave;re la balise racine d'en fichier
+     *
      * @param fichierXML fichier d'extension 'xml' dont le contenu est r&eacute;cup&eacute;r&eacute;
      * @return racine du fichier xml
      */
@@ -233,7 +236,7 @@ public class Controleur {
             return;
         }
         // TODO : gérer les erreurs au calcul d'une feuille de route
-        m_feuilleRoute = m_demandeLivraison.calculerFeuilleDeRoute();
+        m_feuilleRoute = m_demandeLivraison.calculerFeuilleDeRoute(DUREE_CALCUL);
         m_window.getM_vuePlan().setFeuilleRoute(m_feuilleRoute);
 
         m_window.getM_zoneNotification().setSuccessMessage("Feuille de route calculée avec succès !");
@@ -259,6 +262,7 @@ public class Controleur {
     /**
      * Ajoute une livraison &agrave; la demande de livraison courante et, le cas &eacute;cheant, &eacute;limine la
      * feuille de route calcul&eacute;e
+     *
      * @param livraison &agrave; rajouter
      */
     public void ajouterLivraison(Livraison livraison) {
@@ -270,6 +274,7 @@ public class Controleur {
     /**
      * Supprime une livraison &agrave; la demande de livraison courante et, le cas &eacute;cheant, &eacute;limine la
      * feuille de route calcul&eacute;e
+     *
      * @param livraison la livraison à supprimer
      */
     public void supprimerLivraison(Livraison livraison) {
@@ -313,6 +318,7 @@ public class Controleur {
 
     /**
      * Affiche le panel contenant les informations d'une livraison
+     *
      * @param livraison dont les informations vont &ecirc;tre affich&eacute;es
      */
     public void showInfosLivraison(Livraison livraison) {
@@ -321,6 +327,7 @@ public class Controleur {
 
     /**
      * Affiche le panel d'ajout d'une nouvelle livraison
+     *
      * @param noeud auquel la nouvelle livraison va &ecirc;tre associ&eacute;e
      */
     public void showAjouterLivraison(Noeud noeud) {
