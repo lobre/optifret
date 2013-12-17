@@ -10,13 +10,13 @@
 * Montrer le code couleur (noeuds colorés par plages horaires/entrepot)
 * Montrer les sidebars (clic sur livraison 42 (en haut à gauche), le noeud 41 au-dessus)
 * Calculer la feuille de route -> montrer le code couleur
-* Montrer des tronçons où on a plusieurs chemins (à droite du noeud 42, p.ex 161)
 * Ajouter une livraison (noeud 0 en haut à gauche, plage 14h-16h, client n°12)
 * Recalculer la feuille de route
+* Montrer comment est géré le cas de plusieurs chemins sur un noeud (proche du noeud 0)
 * Supprimer la livraison à l'adresse 42 montrée auparavant (haut à gauche).
 * Recalculer la feuille de route
 * Montrer UNDO / REDO (avec le menu édition et les raccourcis)
-* Ajouter plusieurs livraisons, générer une feuille de route (qui aura des problèmes), montrer comment ils sont affichés.
+* Ajouter plusieurs livraisons dans la première plage, générer une feuille de route (qui aura des problèmes), montrer comment ils sont affichés.
 * Éditer la version papier de la feuille de route
 * FIN DE LA PRÉSENTATION.
 
