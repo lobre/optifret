@@ -20,7 +20,6 @@ import java.awt.event.*;
 public class FenetrePrincipale {
     private JPanel m_mainPanel;
     private ZoneNotification m_zoneNotification;
-    private JButton m_calculerButton;
     private VuePlan m_vuePlan;
     private JPanel m_planWrapper;
     private JPanel m_sidebar;
@@ -39,6 +38,8 @@ public class FenetrePrincipale {
     private JButton m_ajouterButton;
     private ZoneNotification m_notificationAjout;
     private JLabel m_horaireLivraison;
+    private BarreOutils m_barreOutils;
+    private JPanel m_topWrapper;
 
 
     /**
@@ -116,6 +117,7 @@ public class FenetrePrincipale {
      private void createUIComponents() {
         // Intialisation de la vu du Plan
         m_vuePlan = new VuePlan(m_controleur);
+        m_barreOutils = new BarreOutils(m_controleur);
     }
 
     /**
@@ -176,13 +178,6 @@ public class FenetrePrincipale {
             }
         });
 
-        m_calculerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                m_controleur.calculerFeuilleRoute();
-                m_frame.repaint();
-            }
-        });
            /*
         m_frame.addComponentListener(new ComponentAdapter() {
             @Override
@@ -245,10 +240,6 @@ public class FenetrePrincipale {
 
     public JMenu getM_menuEdition() {
         return m_menuEdition;
-    }
-
-    public JButton getM_calculerButton() {
-        return m_calculerButton;
     }
 
     // Other methods

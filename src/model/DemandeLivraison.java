@@ -12,12 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Class DemandeLivraison
+ * Demande de livraison: un ensemble de plages horaires contenant chacune une ou plusieurs livraisons.
  */
 public class DemandeLivraison {
-
-    static public int PARSE_ERROR = -1;
-    static public int PARSE_OK = 0;
 
     private Plan m_plan;
     private Noeud m_entrepot;
@@ -28,6 +25,11 @@ public class DemandeLivraison {
     //
     // Constructors
     //
+
+    /**
+     * Constructeur d'une demande de livraison
+     * @param plan le plan de la zone g&eacute;ographique sur laquelle se fait la demande de livraison.
+     */
     public DemandeLivraison(Plan plan) {
         m_chemins = new HashMap<>();
         this.m_plagesHoraires = new ArrayList<>();
@@ -146,25 +148,25 @@ public class DemandeLivraison {
         //récupération de l'entrepôt
         NodeList entre = racineXML.getElementsByTagName("Entrepot");
         if (entre.getLength() != 1) {
-            throw new ParseXmlException("Element Entrepot");
+            throw new ParseXmlException("Pas d'élément entrepot");
         }
 
         String ad = ((Element) entre.item(0)).getAttribute("adresse");
         m_entrepot = m_plan.getNoeudParID(Integer.parseInt(ad));
         if (m_entrepot == null) {
-            throw new ParseXmlException("Adresse entrepot introuvable");
+            throw new ParseXmlException("Adresse de l'entrepot introuvable");
         }
         m_entrepot.setM_entrepot(true);
 
         //récupération des plages horaires
         NodeList n_plages = racineXML.getElementsByTagName("PlagesHoraires");
         if (n_plages.getLength() != 1) {
-            throw new ParseXmlException("Element<PlagesHoraires> introuvable");
+            throw new ParseXmlException("Élément '<PlagesHoraires>' introuvable");
         }
 
         NodeList liste_plages = racineXML.getElementsByTagName("Plage");
         if (liste_plages.getLength() < 1) {
-            throw new ParseXmlException("Element <Plage> introuvable");
+            throw new ParseXmlException("Élément '<Plage>' introuvable");
         }
 
         for (int i = 0; i < liste_plages.getLength(); i++) {
@@ -172,32 +174,36 @@ public class DemandeLivraison {
             Element e_plage = (Element) liste_plages.item(i);
             PlageHoraire plage = new PlageHoraire();
             if (plage.fromXML(e_plage, m_plan) != PlageHoraire.PARSE_OK) {
-                throw new ParseXmlException("parsing plage horaire vide");
+                throw new ParseXmlException("Plage horaire invalide");
             }
             this.ajouterPlageH(plage);
         }
 
         // Validation des plages horaires
-        if (validationPlagesH() != PARSE_OK) {
-            throw new ParseXmlException("Les plages horaires se chevauchent");
+        if (!plagesValides()) {
+            throw new ParseXmlException("Des plages horaires se chevauchent");
         }
 
     }
 
-    private int validationPlagesH() {
+    /**
+     * Valide les plages horaires de la demande de livraison: v&eacute;rifie qu'il n y a pas de chevauchement.
+     * @return true s'il n y a pas de chevauchement de plages horaires, false sinon.
+     */
+    private boolean plagesValides() {
         Collections.sort(m_plagesHoraires);
         for (int i = 0; i < m_plagesHoraires.size() - 1; i++) {
             PlageHoraire ph1 = m_plagesHoraires.get(i);
             PlageHoraire ph2 = m_plagesHoraires.get(i + 1);
             if (ph2.getHeureDebut().estAvant(ph1.getHeureFin())) {
                 // Chevauchement de deux plages horaires
-                throw new ParseXmlException("plages horaires en conflit");
+                throw new ParseXmlException("Plages horaires en conflit");
             }
             ph1.setM_indice(i);
             ph2.setM_indice(i + 1);
         }
 
-        return PARSE_OK;
+        return true;
     }
 
     /**

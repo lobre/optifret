@@ -157,8 +157,6 @@ public class Controleur {
             m_window.getM_menuFichier().getItem(1).setEnabled(true);
             // Désactive le menu "Édition"
             m_window.getM_menuEdition().setEnabled(false);
-            // Désactive le bouton "Calculer feuille de route"
-            m_window.getM_calculerButton().setEnabled(false);
             // Désactive l'action "Éditer version papier"
             m_window.getM_menuFichier().getItem(2).setEnabled(false);
         } catch (ParseXmlException e) {
@@ -206,9 +204,6 @@ public class Controleur {
             // Active le menu "Édition"
             m_window.getM_menuEdition().setEnabled(true);
 
-            // Activer le bouton "Calculer feuille de route"
-            m_window.getM_calculerButton().setEnabled(true);
-
             // Réinitialise les vues troncons
             m_window.getM_vuePlan().resetTroncons();
 
@@ -227,7 +222,7 @@ public class Controleur {
      */
     public void calculerFeuilleRoute() {
         if (m_demandeLivraison == null) {
-            m_window.getM_zoneNotification().setErrorMessage("Impossible de calculer une feuille de route sans" +
+            m_window.getM_zoneNotification().setErrorMessage("Impossible de calculer une feuille de route sans " +
                     "demande de livraison.");
             return;
         }
@@ -251,7 +246,9 @@ public class Controleur {
      */
     public void editerFeuilleRoutePapier() {
         if (m_feuilleRoute == null) {
-            throw new IllegalStateException("Aucune feuille de route n'est chargée.");
+            m_window.getM_zoneNotification().setErrorMessage("Veuillez d'abord calculer une feuille de route avant " +
+                    "d'éditer une version papier");
+            return;
         }
         FenetreImprimerFeuilleRoute dialog = new FenetreImprimerFeuilleRoute(this, m_feuilleRoute);
         dialog.pack();
@@ -274,7 +271,7 @@ public class Controleur {
         String filename = fileDialog.getFile();
         if (filename != null) {
             File f = new File(fileDialog.getDirectory(), fileDialog.getFile());
-            PrintWriter writer = null;
+            PrintWriter writer;
             try {
                 writer = new PrintWriter(f.getAbsolutePath(), "UTF-8");
             } catch (FileNotFoundException | UnsupportedEncodingException e) {
