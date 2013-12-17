@@ -26,22 +26,24 @@ public class HistoriqueCommandes {
     }
 
     // Annule la dernière commande exécutée
-    public void annuler() {
+    public boolean annuler() {
         if (m_derniere_commande < 0) {
-            return;
+            return false;
         }
 
         m_commandes.get(m_derniere_commande).annuler();
         m_derniere_commande -= 1;
+        return true;
     }
 
     // Réexécute la dernière commande annulée
-    public void reexecuter() {
+    public boolean reexecuter() {
         if (m_commandes.size() == 0 || (m_derniere_commande == m_commandes.size() - 1)) {
-            return;
+            return false;
         }
         m_derniere_commande += 1;
         m_commandes.get(m_derniere_commande).executer();
+        return true;
     }
 
 }

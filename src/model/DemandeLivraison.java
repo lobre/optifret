@@ -189,6 +189,20 @@ public class DemandeLivraison {
         return PARSE_OK;
     }
 
+    /**
+     * Signale si la demande de livraison est vide (ne contient aucune livraison).
+     * @return true si la demande de livraison ne contient aucune livraison, false sinon.
+     */
+    public boolean isEmpty() {
+        for (PlageHoraire ph : m_plagesHoraires) {
+            if (ph.getM_livraisons().size() != 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
     /**
      * Calcule le poids optimal du trajet entre un noeud particulier du graphe et les noeuds d'ordre i.
