@@ -6,6 +6,8 @@ import model.Noeud;
 import model.PlageHoraire;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -101,7 +103,6 @@ public class FenetrePrincipale {
         // Style du bouton "Cacher"
         m_hideSidebarButton.setContentAreaFilled(true);
         m_hideSidebarButton.setBackground(VuePlan.COULEUR_BACKGROUND);
-
         // Sidebar cachée par défaut
         hideSidebar();
 
@@ -180,6 +181,50 @@ public class FenetrePrincipale {
             public void actionPerformed(ActionEvent e) {
                 m_controleur.calculerFeuilleRoute();
                 m_frame.repaint();
+            }
+        });
+           /*
+        m_frame.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                m_vuePlan.centerMapOnSelected();
+            }
+        });
+
+        m_sidebar.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                m_vuePlan.centerMapOnSelected();
+            }
+           @Override
+        public void componentHidden(ComponentEvent e){
+                m_vuePlan.centerMapOnSelected();
+            }
+        });*/
+        //numéroclient checker
+        m_clientTextField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                changed();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                changed();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                changed();
+            }
+            public void changed(){
+                if (m_clientTextField.getText().equals(""))
+                {
+                    m_ajouterButton.setEnabled(false);
+                }
+                else{
+                    m_ajouterButton.setEnabled(true);
+                }
             }
         });
 

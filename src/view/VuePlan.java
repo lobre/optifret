@@ -293,7 +293,7 @@ public class VuePlan extends JPanel {
 
         m_x_off = (int) (-m_selectedNoeud.getM_x() * m_zoom - getX() + (getParent().getWidth() / 2));
         m_y_off = (int) (-m_selectedNoeud.getM_y() * m_zoom - getY() + (getParent().getHeight() / 2));
-        repaint();
+        getParent().repaint();
     }
 
     /**
@@ -367,10 +367,18 @@ public class VuePlan extends JPanel {
                 super.mouseDragged(e);
 
                 Point p = MouseInfo.getPointerInfo().getLocation();
-
-                m_x_off = (int) (m_lastPositionDrag.getX() + p.getX() - m_lastClick.getX());
-                m_y_off = (int) (m_lastPositionDrag.getY() + p.getY() - m_lastClick.getY());
-
+                int x= (int) (m_lastPositionDrag.getX() + p.getX() - m_lastClick.getX());
+                int y =  (int) (m_lastPositionDrag.getY() + p.getY() - m_lastClick.getY());
+                boolean isNotTooDown= y > ((m_x_max*m_zoom)/5-m_y_max*m_zoom) ;
+                boolean isNotTooUp= y < (getHeight()-(m_x_max*m_zoom)/5) ;
+                boolean isNotTooRight=x < (getWidth()-(m_x_max*m_zoom)/5);
+                boolean isNotTooLeft=x> (-m_x_max*m_zoom+(m_x_max*m_zoom)/5);
+                if (isNotTooDown && isNotTooUp) {
+                    m_y_off = y;
+                }
+                if (isNotTooLeft && isNotTooRight){
+                     m_x_off =  x;
+                }
                 repaint();
             }
 
@@ -385,6 +393,12 @@ public class VuePlan extends JPanel {
             }
 
 
+        });
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                centerMapOnSelected();
+            }
         });
 
 
@@ -442,7 +456,7 @@ public class VuePlan extends JPanel {
         tr2.translate(m_x_off / m_zoom, m_y_off / m_zoom);
         g2.transform(tr2);
 
-
+        // System.out.println(getHeight()+"   "+ getY());
 
         // Dessin des tronçons
         for (VueTroncon vueTroncon : m_troncons.values()) {

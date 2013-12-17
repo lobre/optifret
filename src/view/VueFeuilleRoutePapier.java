@@ -53,10 +53,15 @@ public class VueFeuilleRoutePapier {
                     r += "  * Réalisez la livraison " + t.getArrivee().getM_livraison().getId() + " adresse "+
                             t.getArrivee().getM_id()+"\n";
                     indexNodeFeuilleRoute++;
+                    pointDansNoeudsFeuille = (indexNodeFeuilleRoute < nodesFeuilleRoute.size() &&
+                            nodesFeuilleRoute.get(indexNodeFeuilleRoute).getM_id()==t.getArrivee().getM_id());
+
                 }
                 else if (t.getArrivee().isEntrepot() && pointDansNoeudsFeuille){
                     r += "  * Vous êtes de retour à l'entrepôt " + t.getArrivee().getM_id() + "\n";
                     indexNodeFeuilleRoute++;
+                    pointDansNoeudsFeuille = (indexNodeFeuilleRoute < nodesFeuilleRoute.size() &&
+                            nodesFeuilleRoute.get(indexNodeFeuilleRoute).getM_id()==t.getArrivee().getM_id());
                 }
 
                 // si nous ne sommes pas au dernier tronçon, on affiche la manoeuvre à effectuer au prochain noeud
@@ -67,10 +72,10 @@ public class VueFeuilleRoutePapier {
                     if(t.getDepart()==t2.getArrivee()){
                             r+="  . Faites demi-tour \n";
                     }
-                    else if (Math.abs(angle - Math.PI / 2) < 0.6) {
+                    else if (Math.abs(angle - Math.PI / 2)%(2*Math.PI) < 0.6) {
                             r += "  . Tournez à droite.\n";
                     }
-                    else if (Math.abs(angle + Math.PI / 2) < 0.6) {
+                    else if (Math.abs(angle + Math.PI / 2)%(Math.PI / 2) < 0.6) {
                             r += "  . Tournez à gauche.\n";
                     }
 
@@ -83,12 +88,6 @@ public class VueFeuilleRoutePapier {
                 longueur += t.getM_longueur();
             }
 
-            longueur += t.getM_longueur();
-
-
-            if (t.getArrivee().hasLivraison()) {
-                r += "  * Réalisez la livraison " + t.getArrivee().getM_livraison().getId() + "\n";
-            }
 
         }
 
