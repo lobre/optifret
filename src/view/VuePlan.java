@@ -46,8 +46,6 @@ public class VuePlan extends JPanel {
      */
     private float m_zoom;
 
-    private int m_largeur;
-    private int m_hauteur;
     private int m_x_max;
     private int m_y_max;
 
@@ -62,10 +60,6 @@ public class VuePlan extends JPanel {
      * Utilis&eacute; pour le "drag" de la VuePlan
      */
     private Point m_lastClick;
-    /**
-     * Utilis&eacute; pour le "drag" de la VuePlan
-     */
-    private Point m_lastPosition;
     /**
      * Utilis&eacute; pour le "drag" de la VuePlan
      */
@@ -117,11 +111,9 @@ public class VuePlan extends JPanel {
         m_plan = null;
         m_feuilleRoute = null;
         m_controleur = controleur;
-        m_largeur = 1;
-        m_hauteur = 1;
 
-        m_x_max = m_largeur + MARGIN;
-        m_y_max = m_hauteur + MARGIN;
+        m_x_max = MARGIN;
+        m_y_max = MARGIN;
 
         m_x_off = 0;
         m_y_off = 0;
@@ -344,14 +336,14 @@ public class VuePlan extends JPanel {
             }
             setSelectedNoeud(selected);
 
-            // En fonctino du noeud sélectionné, plusieurs actions possibles:
-            if (selected == null) {
+            // En fonction du noeud sélectionné, plusieurs actions possibles:
+            if (selected == null || selected.getM_noeud().isEntrepot()) {
                 m_controleur.hideSidebar();
             }
             else if (selected.getM_noeud().hasLivraison()) {
                 m_controleur.showInfosLivraison(selected.getM_noeud().getM_livraison());
             }
-            else if (!selected.getM_noeud().isEntrepot()) {
+            else {
                 m_controleur.showAjouterLivraison(selected.getM_noeud());
             }
             centerMapOnSelected();

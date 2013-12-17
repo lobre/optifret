@@ -1,5 +1,6 @@
 package view;
 
+import controller.Controleur;
 import model.FeuilleRoute;
 
 import javax.swing.*;
@@ -9,10 +10,13 @@ public class FenetreImprimerFeuilleRoute extends JDialog {
     private JPanel contentPane;
     private JButton m_buttonFermer;
     private JTextArea m_textArea;
+    private JButton m_enregistrerButton;
 
+    private Controleur m_controleur;
     private VueFeuilleRoutePapier m_vueFeuilleRoute;
 
-    public FenetreImprimerFeuilleRoute(FeuilleRoute feuilleRoute) {
+    public FenetreImprimerFeuilleRoute(Controleur controleur, FeuilleRoute feuilleRoute) {
+        m_controleur = controleur;
         m_vueFeuilleRoute = new VueFeuilleRoutePapier(feuilleRoute);
         m_textArea.setText(m_vueFeuilleRoute.getVersionPapier());
         setContentPane(contentPane);
@@ -20,7 +24,12 @@ public class FenetreImprimerFeuilleRoute extends JDialog {
         getRootPane().setDefaultButton(m_buttonFermer);
 
 
-        // TODO : Rajouter un bouton qui permet de sauvegarder la feuille de route dans un fichier texte
+        m_enregistrerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                m_controleur.enregistrerFeuilleRoute(m_vueFeuilleRoute);
+            }
+        });
         m_buttonFermer.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
