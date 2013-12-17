@@ -22,17 +22,17 @@ public class VueTroncon {
     private static int LARGEUR_TRONCON = VueNoeud.RAYON_DEFAUT / 2;
 
     private static Stroke STROKE_TRONCON = new BasicStroke(LARGEUR_TRONCON * 2);
-    private static Stroke STROKE_MIDLINE = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{7}, 0);
+    private static Stroke STROKE_MIDLINE = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0,
+                                                           new float[]{7}, 0);
     private static Stroke STROKE_CHEMIN = new BasicStroke(2);
 
     private static int NOMBRE_COULEURS = 8;
-    private static Color tableauCouleurs[] = new Color[] {new Color(166, 20, 40), new Color(222, 63, 0), new Color(214, 202, 27), new Color(48, 177, 39), new Color(161, 4, 177), Color.CYAN, Color.PINK, Color.BLACK};
+    private static Color tableauCouleurs[] = new Color[] {new Color(166, 20, 40), new Color(222, 97, 3),
+                                                          new Color(214, 202, 27), new Color(48, 177, 39),
+                                                          new Color(161, 4, 177), Color.CYAN, Color.PINK, Color.BLACK};
 
     private static int RUE_FONTSIZE = 6;
     private static Font RUE_FONT = new Font("Arial", Font.PLAIN, RUE_FONTSIZE);
-    private static int RUE_Y_OFFSET = 5;
-
-    private static double ANGLE_TOLERANCE = Math.PI / 10;
 
     /**
      * Constructeur de la VueTroncon
@@ -64,7 +64,7 @@ public class VueTroncon {
         g2.setColor(COULEUR_TRONCON);
 
         double angle = m_troncon.getAngle();
-        int offset = - LARGEUR_TRONCON;
+        int offset = LARGEUR_TRONCON;
         int dx = (int) (offset * Math.cos(Math.PI / 2 + angle));
         int dy = (int) (offset * Math.sin(Math.PI / 2 + angle));
 
@@ -117,7 +117,7 @@ public class VueTroncon {
             Chemin chemin = m_chemins.get(i);
             g2.setColor(getCouleurChemin(chemin));
 
-            double offset = - LARGEUR_TRONCON + getCheminOffset(i);
+            double offset = LARGEUR_TRONCON + getCheminOffset(i);
             int dx = (int) (offset * Math.cos(Math.PI / 2 + angle));
             int dy = (int) (offset * Math.sin(Math.PI / 2 + angle));
 
@@ -148,9 +148,9 @@ public class VueTroncon {
 
         int t_x = (x1 + x2) / 2;
         int t_y = (y1 + y2) / 2;
-        if (Math.abs(angle - Math.PI / 2) < ANGLE_TOLERANCE) {
-            t_y += RUE_Y_OFFSET;
-        }
+
+        //t_x += ((5 + 2 * LARGEUR_TRONCON) * Math.cos(angle + Math.PI / 2));
+        //t_y += ((5 + 2 * LARGEUR_TRONCON) * Math.sin(angle + Math.PI / 2));
 
         g2.drawString(m_troncon.getM_nom(), t_x, t_y);
     }

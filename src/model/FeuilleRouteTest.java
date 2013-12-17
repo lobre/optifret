@@ -10,7 +10,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
+import java.util.List;
 
 import static java.lang.System.out;
 import static java.text.MessageFormat.format;
@@ -78,14 +78,11 @@ public class FeuilleRouteTest {
                     livraison.getId(), livraison.getAdresse().getM_x(), livraison.getAdresse().getM_y(), livraison.getHeureLivraison().toString()));
         }
         out.println("");
-        Map<Livraison, PlageHoraire> m_reSchedule = feuilleRoute.getM_reSchedule();
-        out.println(format("Il y a {0,number} livraison(s) réalisable(s) uniquement dans une autre plage horaire.", m_reSchedule.size()));
-        for (Map.Entry<Livraison, PlageHoraire> entry : m_reSchedule.entrySet()) {
-            out.println(format("Livraison {0,number} doit être réalisée entre {3} et {4} \n" +
-                    "                          au lieu de {1} et {2} \n" +
-                    "                          Heure prévue : {5}",
-                    entry.getKey().getId(), entry.getKey().getPlage().getHeureDebut().toString(), entry.getKey().getPlage().getHeureFin().toString(),
-                    entry.getValue().getHeureDebut().toString(), entry.getValue().getHeureFin().toString(), entry.getKey().getHeureLivraison().toString()));
+        List<Livraison> reSchedule = feuilleRoute.getM_reSchedule();
+        out.println(format("Il y a {0,number} livraison(s) réalisable(s) uniquement en dehors de leur plage horaire.", reSchedule.size()));
+        for (Livraison livraison : reSchedule) {
+            out.println(format("Livraison {0,number,0} sera effectuée à {1} alors qu''elle était prévue entre {2} et {3}.",
+                    livraison.getId(), livraison.getHeureLivraison().toString(), livraison.getPlage().getHeureDebut().toString(), livraison.getPlage().getHeureFin().toString()));
         }
     }
 
