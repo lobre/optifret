@@ -1,0 +1,53 @@
+###########################################
+#  Version papier de la feuille de route  #
+###########################################
+
+- Effectuez le départ depuis l'entrepot.
+
+  . Suivre la rue h0 sur 439 mètres.
+  . Tournez à gauche.
+  . Suivre la rue v0 sur 4253 mètres.
+  * Réalisez la livraison 1 adresse 13
+  . Suivre la rue v0 sur 288 mètres.
+  * Réalisez la livraison 2 adresse 14
+  . Tournez à gauche.
+  . Suivre la rue v0 sur 822 mètres.
+  . Suivre la rue h17 sur 869 mètres.
+  . Tournez à droite.
+  . Suivre la rue v3 sur 304 mètres.
+  . Tournez à gauche.
+  . Suivre la rue h18 sur 298 mètres.
+  * Réalisez la livraison 5 adresse 98
+  . Faites demi-tour 
+  . Suivre la rue h18 sur 298 mètres.
+  . Tournez à droite.
+  . Suivre la rue v3 sur 304 mètres.
+  . Tournez à gauche.
+  . Suivre la rue h17 sur 184 mètres.
+  . Tournez à droite.
+  . Suivre la rue v2 sur 243 mètres.
+  * Réalisez la livraison 8 adresse 56
+  . Suivre la rue v2 sur 726 mètres.
+  . Tournez à droite.
+  . Suivre la rue h14 sur 144 mètres.
+  . Tournez à gauche.
+  . Suivre la rue v3 sur 255 mètres.
+  * Réalisez la livraison 7 adresse 73
+  . Suivre la rue v3 sur 1551 mètres.
+  * Réalisez la livraison 3 adresse 68
+  . Tournez à droite.
+  . Suivre la rue h8 sur 410 mètres.
+  . Suivre la rue v4 sur 212 mètres.
+  . Tournez à gauche.
+  . Suivre la rue h7 sur 204 mètres.
+  * Réalisez la livraison 6 adresse 67
+  . Tournez à gauche.
+  . Suivre la rue v3 sur 1175 mètres.
+  . Tournez à gauche.
+  . Suivre la rue h3 sur 441 mètres.
+  * Réalisez la livraison 4 adresse 43
+  . Tournez à droite.
+  . Suivre la rue v2 sur 978 mètres.
+  * Vous êtes de retour à l'entrepôt 40
+
+  - Fin de la tournée.
