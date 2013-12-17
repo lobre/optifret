@@ -17,7 +17,7 @@ public class VueNoeud {
 
     public static int RAYON_DEFAUT = 13;
     private static int RAYON_LIVRAISON = 17;
-    private static int RAYON_ENTREPOT = 22;
+    private static int RAYON_ENTREPOT = 24;
 
     // Facteur par lequel les coordonées de la vue sont amplifiées par rapport à ceux du modèle
     public static int AMPLIFICATION_FACTOR = 2;
@@ -67,9 +67,8 @@ public class VueNoeud {
             } else {
                 message = Integer.toString(m_noeud.getM_id());
             }
-
-            int text_x = x + r - (int) (message.length() * FONT_SIZE * 0.3);
-            int text_y = y + r + (int) (FONT_SIZE * 0.3);
+            int text_x = x + r - g2.getFontMetrics().stringWidth(message) / 2;
+            int text_y = y + r + g2.getFontMetrics().getHeight() / 3;
 
             g2.drawString(message, text_x, text_y);
         }
