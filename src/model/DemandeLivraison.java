@@ -82,6 +82,17 @@ public class DemandeLivraison {
     //
 
     /**
+     * Affecte à null les heures de passage effectif des livraisons de la demande de livraison this.
+     */
+    public void razHeuresLivraisons() {
+        for (PlageHoraire plageHoraire : m_plagesHoraires) {
+            for (Livraison livraison : plageHoraire.getM_livraisons()) {
+                livraison.setHeureLivraison(null);
+            }
+        }
+    }
+
+    /**
      * Obtient un ID numérique servant à identifier les livraisons. Cet ID est garanti unique, non utilisé pour une
      * autre livraison parmi l'ensemble des livraisons présentes dans toutes les plage horaire.
      *
@@ -191,6 +202,7 @@ public class DemandeLivraison {
 
     /**
      * Signale si la demande de livraison est vide (ne contient aucune livraison).
+     *
      * @return true si la demande de livraison ne contient aucune livraison, false sinon.
      */
     public boolean isEmpty() {
