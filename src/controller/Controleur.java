@@ -21,7 +21,7 @@ import java.io.*;
  */
 public class Controleur {
 
-    private static final int DUREE_CALCUL = 3000;
+    private static final int DUREE_CALCUL = 5000;
     private static final String FEUILLES_ROUTE_FOLDER = "feuilles_route";
     private static final String XML_DATA_FOLDER = "xml_data";
     /**

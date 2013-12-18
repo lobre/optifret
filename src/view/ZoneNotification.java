@@ -7,7 +7,7 @@ import java.util.TimerTask;
 
 public class ZoneNotification extends JLabel {
 
-    private static final long NOTIFICATION_TIMEOUT = 3000;
+    private static final long NOTIFICATION_TIMEOUT = 8000;
     private Font m_font;
     private Timer m_timer;
 

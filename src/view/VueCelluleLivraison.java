@@ -29,8 +29,8 @@ class VueCelluleLivraison extends JLabel implements ListCellRenderer<Object> {
         }
         else {
             Livraison livraison = (Livraison) value;
-            repr = String.format("Livraison %s | Client %s", Integer.toString(livraison.getId()),
-                    Integer.toString(livraison.getNoClient()));
+            repr = String.format("%s | Livraison %s", livraison.getPlage().toString(),
+                    Integer.toString(livraison.getId()));
             if (livraison.isHorsHoraire()) {
                 setForeground(Color.RED);
                 setFont(BOLD_FONT);
