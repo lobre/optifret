@@ -138,6 +138,7 @@ public class Controleur {
     public void chargerPlan() {
         try {
             m_demandeLivraison = null;
+            updateListeLivraisons();
 
             File fichierXML = ouvrirFichier();
 
@@ -208,6 +209,9 @@ public class Controleur {
             annulerFeuilleRoute();
 
             m_window.getM_vuePlan().repaint();
+
+            updateListeLivraisons();
+
         } catch (ParseXmlException e) {
             m_window.getM_zoneNotification().setErrorMessage("Erreur: impossible de charger la demande de livraison" +
                     " demandée. Cause : " + e.getMessage());
@@ -245,14 +249,26 @@ public class Controleur {
                     "dédiée.");
         }
 
-        System.out.println(m_feuilleRoute.getM_reSchedule());
-
         m_window.getM_vuePlan().setFeuilleRoute(m_feuilleRoute);
 
         m_window.getM_zoneNotification().setSuccessMessage("Feuille de route calculée avec succès !");
 
+        updateListeLivraisons();
+
         // Active l'action "Éditer version papier"
         m_window.getM_menuFichier().getItem(2).setEnabled(true);
+    }
+
+    public void updateListeLivraisons() {
+        if (m_feuilleRoute != null) {
+            m_window.getVueListeLivraisons().setLivraisons(m_feuilleRoute.getLivraisons());
+        }
+        else if (m_demandeLivraison != null) {
+            m_window.getVueListeLivraisons().setLivraisons(m_demandeLivraison.getLivraisons());
+        }
+        else {
+            m_window.getVueListeLivraisons().raz();
+        }
     }
 
     /**
@@ -309,6 +325,7 @@ public class Controleur {
         m_commandes.executer(new CommandeAjout(m_demandeLivraison, livraison));
 
         annulerFeuilleRoute();
+        updateListeLivraisons();
     }
 
     /**
@@ -321,6 +338,7 @@ public class Controleur {
         m_commandes.executer(new CommandeSuppression(m_demandeLivraison, livraison));
 
         annulerFeuilleRoute();
+        updateListeLivraisons();
     }
 
     /**
@@ -330,6 +348,7 @@ public class Controleur {
         boolean executed = m_commandes.reexecuter();
         if (executed) {
             annulerFeuilleRoute();
+            updateListeLivraisons();
 
             hideSidebar();
             m_window.getM_vuePlan().repaint();
@@ -343,6 +362,8 @@ public class Controleur {
         boolean canceled = m_commandes.annuler();
         if (canceled) {
             annulerFeuilleRoute();
+            updateListeLivraisons();
+
             hideSidebar();
             m_window.getM_vuePlan().repaint();
         }
@@ -383,4 +404,9 @@ public class Controleur {
     public void hideSidebar() {
         m_window.hideSidebar();
     }
+
+    public void selectionLivraison(Livraison livraison) {
+        m_window.getM_vuePlan().selectLivraison(livraison);
+    }
 }
+

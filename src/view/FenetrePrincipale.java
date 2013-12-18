@@ -40,6 +40,8 @@ public class FenetrePrincipale {
     private JLabel m_horaireLivraison;
     private BarreOutils m_barreOutils;
     private JPanel m_topWrapper;
+    private VueListeLivraisons m_vueListeLivraisons;
+    private JScrollPane m_scrollPane;
 
 
     /**
@@ -109,15 +111,18 @@ public class FenetrePrincipale {
 
         // Affichage de la fenêtre
         m_frame.setVisible(true);
+
     }
 
     /**
      * Cr&eacute;ation des composants personnalis&eacute;s
      */
      private void createUIComponents() {
-        // Intialisation de la vu du Plan
-        m_vuePlan = new VuePlan(m_controleur);
-        m_barreOutils = new BarreOutils(m_controleur);
+         // Intialisation de la vu du Plan
+         m_vuePlan = new VuePlan(m_controleur);
+         m_barreOutils = new BarreOutils(m_controleur);
+         m_vueListeLivraisons = new VueListeLivraisons(m_controleur);
+
     }
 
     /**
@@ -178,24 +183,6 @@ public class FenetrePrincipale {
             }
         });
 
-           /*
-        m_frame.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                m_vuePlan.centerMapOnSelected();
-            }
-        });
-
-        m_sidebar.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentShown(ComponentEvent e) {
-                m_vuePlan.centerMapOnSelected();
-            }
-           @Override
-        public void componentHidden(ComponentEvent e){
-                m_vuePlan.centerMapOnSelected();
-            }
-        });*/
         //numéroclient checker
         m_clientTextField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -394,4 +381,9 @@ public class FenetrePrincipale {
     public JFrame getM_frame() {
         return m_frame;
     }
+
+    public VueListeLivraisons getVueListeLivraisons() {
+        return m_vueListeLivraisons;
+    }
+
 }

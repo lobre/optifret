@@ -221,6 +221,14 @@ public class DemandeLivraison {
         return true;
     }
 
+    public ArrayList<Livraison> getLivraisons() {
+        ArrayList<Livraison> livraisons = new ArrayList<>();
+        for (PlageHoraire ph : m_plagesHoraires) {
+            livraisons.addAll(ph.getM_livraisons());
+        }
+        return livraisons;
+    }
+
 
     /**
      * Calcule le poids optimal du trajet entre un noeud particulier du graphe et les noeuds d'ordre i.

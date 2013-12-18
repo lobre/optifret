@@ -288,6 +288,10 @@
           </component>
         </children>
       </grid>
+      <component id="aa678" class="view.VueListeLivraisons" binding="m_vueListeLivraisons" custom-create="true">
+        <constraints border-constraint="West"/>
+        <properties/>
+      </component>
     </children>
   </grid>
 </form>

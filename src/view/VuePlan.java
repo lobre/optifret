@@ -492,4 +492,10 @@ public class VuePlan extends JPanel {
     }
 
 
+    public void selectLivraison(Livraison livraison) {
+        setSelectedNoeud(m_noeuds.get(livraison.getAdresse().getM_id()));
+        centerMapOnSelected();
+    }
+
+
 }

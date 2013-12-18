@@ -223,6 +223,15 @@ public class FeuilleRoute {
         return noeuds;
     }
 
+    public ArrayList<Livraison> getLivraisons() {
+        ArrayList<Livraison> livraisons = new ArrayList<>();
+        for (Noeud noeud : getNodes()) {
+            if (noeud.hasLivraison()) {
+                livraisons.add(noeud.getM_livraison());
+            }
+        }
+        return livraisons;
+    }
     public ArrayList<Troncon> getTroncons() {
         ArrayList<Troncon> troncons = new ArrayList<>();
         for (Chemin chemin : m_chemins) {
