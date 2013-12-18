@@ -9,8 +9,10 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.*;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 
 /**
@@ -60,6 +62,7 @@ public class FenetrePrincipale {
 
     /**
      * Contr&ocirc;leur de l'application.
+     *
      * @see controller.Controleur
      */
     private Controleur m_controleur;
@@ -77,6 +80,7 @@ public class FenetrePrincipale {
 
     /**
      * Constructeur de la fen&ecirc;tre principale.
+     *
      * @param controleur contr&ocirc;leur de l'application
      */
     public FenetrePrincipale(Controleur controleur) {
@@ -117,11 +121,11 @@ public class FenetrePrincipale {
     /**
      * Cr&eacute;ation des composants personnalis&eacute;s
      */
-     private void createUIComponents() {
-         // Intialisation de la vu du Plan
-         m_vuePlan = new VuePlan(m_controleur);
-         m_barreOutils = new BarreOutils(m_controleur);
-         m_vueListeLivraisons = new VueListeLivraisons(m_controleur);
+    private void createUIComponents() {
+        // Intialisation de la vu du Plan
+        m_vuePlan = new VuePlan(m_controleur);
+        m_barreOutils = new BarreOutils(m_controleur);
+        m_vueListeLivraisons = new VueListeLivraisons(m_controleur);
 
     }
 
@@ -199,12 +203,11 @@ public class FenetrePrincipale {
             public void changedUpdate(DocumentEvent e) {
                 changed();
             }
-            public void changed(){
-                if (m_clientTextField.getText().equals(""))
-                {
+
+            public void changed() {
+                if (m_clientTextField.getText().equals("")) {
                     m_ajouterButton.setEnabled(false);
-                }
-                else{
+                } else {
                     m_ajouterButton.setEnabled(true);
                 }
             }
@@ -313,6 +316,7 @@ public class FenetrePrincipale {
     /**
      * Active une barre lat&eacute;rale affichant des informations sur une livraison, ainsi qu'un bouton permettant de
      * supprimer cette derni&egrave;re.
+     *
      * @param livraison la livraison dont les informations doivent &ecirc;tre affich&eacute;es
      */
     public void showInfosLivraison(Livraison livraison) {
@@ -333,8 +337,7 @@ public class FenetrePrincipale {
             if (livraison.isHorsHoraire()) {
                 m_horaireLivraison.setForeground(Color.RED);
             }
-        }
-        else {
+        } else {
             m_horaireLivraison.setText(" - ");
         }
 
@@ -349,6 +352,7 @@ public class FenetrePrincipale {
      * Active une barre lat&eacute;rale affichant des informations sur un noeud et permettant &agrave; l'utilisateur d'y ajouter
      * une livraison en choisissant num&eacute;ro de client et plage horaire parmi celles existantes dans la demande de
      * livraison en cours.
+     *
      * @param noeud le noeud o&ugrave; doit &ecirc;tre ajout&eacute;e la livraison saisie par l'utilisateur
      */
     public void showAjouterLivraison(Noeud noeud) {

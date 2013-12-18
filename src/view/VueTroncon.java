@@ -7,8 +7,9 @@ import model.Troncon;
 
 import java.awt.*;
 import java.util.ArrayList;
+
 /**
- Vue d'un objet Troncon et (&eacute;ventuellement) des chemins le traversant
+ * Vue d'un objet Troncon et (&eacute;ventuellement) des chemins le traversant
  */
 public class VueTroncon {
 
@@ -23,19 +24,20 @@ public class VueTroncon {
 
     private static final Stroke STROKE_TRONCON = new BasicStroke(LARGEUR_TRONCON * 2);
     private static final Stroke STROKE_MIDLINE = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0,
-                                                           new float[]{7}, 0);
+            new float[]{7}, 0);
     private static final Stroke STROKE_CHEMIN = new BasicStroke(2);
 
     private static final int NOMBRE_COULEURS = 8;
-    private static final Color tableauCouleurs[] = new Color[] {new Color(166, 20, 40), new Color(222, 97, 3),
-                                                          new Color(214, 202, 27), new Color(48, 177, 39),
-                                                          new Color(161, 4, 177), Color.CYAN, Color.PINK, Color.BLACK};
+    private static final Color tableauCouleurs[] = new Color[]{new Color(166, 20, 40), new Color(222, 97, 3),
+            new Color(214, 202, 27), new Color(48, 177, 39),
+            new Color(161, 4, 177), Color.CYAN, Color.PINK, Color.BLACK};
 
     private static final Font RUE_FONT = new Font("Arial", Font.PLAIN, 7);
     private static final Color RUE_COLOR = COULEUR_TRONCON.brighter();
 
     /**
      * Constructeur de la VueTroncon
+     *
      * @param troncon le Troncon &agrave; repr&eacute;senter
      * @see model.Troncon
      */
@@ -46,17 +48,17 @@ public class VueTroncon {
     }
 
     // Methods
-    private double getCheminOffset(int position){
-        if (m_chemins.size() == 1){
+    private double getCheminOffset(int position) {
+        if (m_chemins.size() == 1) {
             return 0;
-        }
-        else {
-            return - 0.5 * LARGEUR_TRONCON + 1.0 * LARGEUR_TRONCON * position  / (m_chemins.size() - 1);
+        } else {
+            return -0.5 * LARGEUR_TRONCON + 1.0 * LARGEUR_TRONCON * position / (m_chemins.size() - 1);
         }
     }
 
     /**
      * Dessine la base du tron&ccedil;on (sans chemin ni ligne s&eacute;paratrice)
+     *
      * @param g2 le contexte Graphics2D sur lequel se fait le dessin
      */
     public void drawBase(Graphics2D g2) {
@@ -79,6 +81,7 @@ public class VueTroncon {
     /**
      * Dessine une ligne s&eacute;paratrice si ce tron&ccedil;on est l'une des deux voies d'un chemin &agrave;
      * double voie.
+     *
      * @param g2 le contexte Graphics2D sur lequel se fait le dessin
      */
     public void drawMidline(Graphics2D g2) {
@@ -98,6 +101,7 @@ public class VueTroncon {
 
     /**
      * Dessine les chemins qui passe par le tron&ccedil;on repr&eacute;sent&eacute;, s'il y en a.
+     *
      * @param g2 le contexte Graphics2D sur lequel se fait le dessin
      */
     public void drawChemins(Graphics2D g2) {
@@ -128,6 +132,7 @@ public class VueTroncon {
 
     /**
      * Dessine le nom de la rue dont fait partie le tron&ccedil;on.
+     *
      * @param g2 le contexte Graphics2D sur lequel se fait le dessin
      */
     public void drawNomRue(Graphics2D g2) {
@@ -157,16 +162,17 @@ public class VueTroncon {
     /**
      * R&eacute;initialise la liste de chemins qui passent par le tron&ccedil;on.
      */
-    public void supprimerChemins(){
+    public void supprimerChemins() {
         m_chemins.clear();
     }
 
     /**
      * Définit la couleur du chemin qui passe par le tronçon selon sa nature.
+     *
      * @param chemin le chemin dont la couleur doit être déterminée
      * @return la couleur avec laquelle le chemin doit être dessiné
      */
-    private Color getCouleurChemin(Chemin chemin){
+    private Color getCouleurChemin(Chemin chemin) {
         //Retourne la couleur associee au chemin
         Noeud depart = chemin.getDepart();
         Noeud arrivee = chemin.getArrivee();
@@ -180,6 +186,7 @@ public class VueTroncon {
 
     /**
      * Renvoie la couleur associée aux chemins d'une plage horaire.
+     *
      * @param plage la plage horaire dont la couleur doit être renvoyée.
      * @return Color, la couleur de la plage horaire.
      */
@@ -189,15 +196,18 @@ public class VueTroncon {
 
     /**
      * Ajoute un chemin &agrave; la liste des chemins passant par le tron&ccedil;on
+     *
      * @param chemin un Chemin passant par le tron&ccedil;on représenté
      */
-    public void ajouterChemin(Chemin chemin){
+    public void ajouterChemin(Chemin chemin) {
         m_chemins.add(chemin);
     }
 
     // Getters/Setters
+
     /**
      * Indique si le tron&ccedil;on repr&eacute;sent&eacute; est l'une des deux voies d'une rue &agrave; double voie.
+     *
      * @param doubleVoie booléen quiset à true si le tronçon est une voie d'une rue à double voie.
      */
     public void setDoubleVoie(Boolean doubleVoie) {

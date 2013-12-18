@@ -15,11 +15,12 @@ import static com.sun.org.apache.xalan.internal.lib.ExsltMath.abs;
 /**
  * Vue d'un objet Plan. Affiche les noeuds et les tron&ccedil;ons les reliant (qu'ils soient &agrave; double sens
  * ou &agrave; sens unique), peut aussi &ecirc;tre zoom&eacute; et d&eacute;cal&eacute; avec la souris.
+ *
  * @see model.Plan
  */
 public class VuePlan extends JPanel {
 
-    private static int FACTOR_MINI_DRAG =4;
+    private static int FACTOR_MINI_DRAG = 4;
 
     /**
      * Le plan repr&eacute;sent&eacute; par la VuePlan
@@ -102,6 +103,7 @@ public class VuePlan extends JPanel {
 
     /**
      * Cr&eacute;ation de la VuePlan.
+     *
      * @param controleur le contr&ocirc;leur de l'application
      */
     public VuePlan(Controleur controleur) {
@@ -140,6 +142,7 @@ public class VuePlan extends JPanel {
 
     /**
      * Mise en place du plan repr&eacute;sent&eacute; par la VuePlan
+     *
      * @param plan le plan &agrave; repr&eacute;senter
      * @see model.Plan
      */
@@ -179,6 +182,7 @@ public class VuePlan extends JPanel {
 
     /**
      * Mise en place de la feuille de route de la livraison courante.
+     *
      * @param feuilleRoute la feuille de route &agrave; afficher
      * @see model.FeuilleRoute
      */
@@ -218,6 +222,7 @@ public class VuePlan extends JPanel {
      * Change le noeud actuellement s&eacute;lectionn&eacute;. Se centre sur le noeud et affiche la fen&ecirc;tre d'ajout de livraison si
      * le noeud n'en contient pas, ou la fen&ecirc;tre d'infos/suppression de livraison s'il en contient une. Si le nouveau noeud s&eacute;lectionn&eacute; est
      * nul (null), cache la barre lat&eacute;rale.
+     *
      * @param selected le noeud actuellement s&eacute;lectionn&eacute;
      */
     private void setSelectedNoeud(VueNoeud selected) {
@@ -237,6 +242,7 @@ public class VuePlan extends JPanel {
 
     /**
      * Change le noeud actuellement survol&eacute;. (Le rayon de ce noeud est amplifi&eacute; dans la vue)
+     *
      * @param focused le noeud actuellement survol&eacute;
      */
     private void setFocusedNoeud(VueNoeud focused) {
@@ -256,6 +262,7 @@ public class VuePlan extends JPanel {
 
     /**
      * Remise &agrave; z&eacute;ro des VueTroncon (suppression des chemins affich&eacute;s)
+     *
      * @see VueTroncon
      */
     public void resetTroncons() {
@@ -293,6 +300,7 @@ public class VuePlan extends JPanel {
 
     /**
      * Renvoie la VueNoeud qui se trouve aux coordonn&eacute;es (x, y) de la VuePlan
+     *
      * @param x coordon&eacute;e x du noeud recherch&eacute;.
      * @param y coordon&eacute;e y du noeud recherch&eacute;.
      * @return un VueNoeud si un noeud a &eacute;t&eacute; cliqu&eacute;, sinon null.
@@ -324,32 +332,30 @@ public class VuePlan extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-            super.mouseClicked(e);
+                super.mouseClicked(e);
 
-            // Mise à jour de valeurs utiles pour le déplacement par "drag" de la vue
-            m_lastClick = MouseInfo.getPointerInfo().getLocation();
-            m_lastPositionDrag = new Point(m_x_off, m_y_off);
+                // Mise à jour de valeurs utiles pour le déplacement par "drag" de la vue
+                m_lastClick = MouseInfo.getPointerInfo().getLocation();
+                m_lastPositionDrag = new Point(m_x_off, m_y_off);
 
-            if (m_controleur.getDemandeLivraison() == null) {
-                return;
-            }
-            VueNoeud selected = getClickedNoeud(e.getX(), e.getY());
-            if (selected == m_selectedNoeud) {
-                return;
-            }
-            setSelectedNoeud(selected);
+                if (m_controleur.getDemandeLivraison() == null) {
+                    return;
+                }
+                VueNoeud selected = getClickedNoeud(e.getX(), e.getY());
+                if (selected == m_selectedNoeud) {
+                    return;
+                }
+                setSelectedNoeud(selected);
 
-            // En fonction du noeud sélectionné, plusieurs actions possibles:
-            if (selected == null || selected.getNoeud().isEntrepot()) {
-                m_controleur.hideSidebar();
-            }
-            else if (selected.getNoeud().hasLivraison()) {
-                m_controleur.showInfosLivraison(selected.getNoeud().getLivraison());
-            }
-            else {
-                m_controleur.showAjouterLivraison(selected.getNoeud());
-            }
-            centerMapOnSelected();
+                // En fonction du noeud sélectionné, plusieurs actions possibles:
+                if (selected == null || selected.getNoeud().isEntrepot()) {
+                    m_controleur.hideSidebar();
+                } else if (selected.getNoeud().hasLivraison()) {
+                    m_controleur.showInfosLivraison(selected.getNoeud().getLivraison());
+                } else {
+                    m_controleur.showAjouterLivraison(selected.getNoeud());
+                }
+                centerMapOnSelected();
 
             }
 
@@ -362,20 +368,20 @@ public class VuePlan extends JPanel {
                 super.mouseDragged(e);
 
                 Point p = MouseInfo.getPointerInfo().getLocation();
-                int x= (int) (m_lastPositionDrag.getX() + p.getX() - m_lastClick.getX());
-                int y =  (int) (m_lastPositionDrag.getY() + p.getY() - m_lastClick.getY());
+                int x = (int) (m_lastPositionDrag.getX() + p.getX() - m_lastClick.getX());
+                int y = (int) (m_lastPositionDrag.getY() + p.getY() - m_lastClick.getY());
 
-                int largeurMap=(int)(m_x_max*m_zoom);
-                int hauteurMap=(int)(m_y_max*m_zoom);
-                boolean isNotTooDown= y > (getHeight())/ FACTOR_MINI_DRAG -hauteurMap ;
-                boolean isNotTooUp= y < ((-getHeight())/ FACTOR_MINI_DRAG +getHeight());
-                boolean isNotTooRight=x < (getWidth()-getWidth()/ FACTOR_MINI_DRAG) ;
-                boolean isNotTooLeft= x> (-largeurMap+getWidth()/ FACTOR_MINI_DRAG);
+                int largeurMap = (int) (m_x_max * m_zoom);
+                int hauteurMap = (int) (m_y_max * m_zoom);
+                boolean isNotTooDown = y > (getHeight()) / FACTOR_MINI_DRAG - hauteurMap;
+                boolean isNotTooUp = y < ((-getHeight()) / FACTOR_MINI_DRAG + getHeight());
+                boolean isNotTooRight = x < (getWidth() - getWidth() / FACTOR_MINI_DRAG);
+                boolean isNotTooLeft = x > (-largeurMap + getWidth() / FACTOR_MINI_DRAG);
                 if (isNotTooDown && isNotTooUp) {
                     m_y_off = y;
                 }
-                if (isNotTooLeft && isNotTooRight){
-                     m_x_off =  x;
+                if (isNotTooLeft && isNotTooRight) {
+                    m_x_off = x;
                 }
                 repaint();
             }
@@ -408,7 +414,7 @@ public class VuePlan extends JPanel {
                 // Mise à jour de valeurs utiles pour le déplacement par "drag" de la vue
                 m_lastClick = MouseInfo.getPointerInfo().getLocation();
 
-                float deltaZoom = - m_zoom * (float) e.getWheelRotation() / 10;
+                float deltaZoom = -m_zoom * (float) e.getWheelRotation() / 10;
 
                 // Vrai si la vue plan est trop petite
                 boolean tropPetit = deltaZoom < 0 && m_x_max * m_zoom < LARGEUR_MINI;
@@ -435,6 +441,7 @@ public class VuePlan extends JPanel {
      * Dessine le plan repr&eacute;sent&eacute; ainsi que les points de livraison et l'entrepot si une demande de livraison a &eacute;t&eacute;
      * charg&eacute;e, et les chemins si une feuille de route a &eacute;t&eacute; calcul&eacute;e.
      * Les op&eacute;rations de dessin sont d&eacute;l&eacute;gu&eacute;es aux vues de chaque entit&eacute; (VueNoeud, VueTroncon)
+     *
      * @param g l'objet Graphics o&ugrave; se fait le rendu
      */
     @Override
@@ -468,8 +475,8 @@ public class VuePlan extends JPanel {
         }
         // Dessin des chemins sur les tronçons
         for (VueTroncon vueTroncon : m_troncons.values()) {
-             vueTroncon.drawChemins(g2);
-             vueTroncon.drawNomRue(g2);
+            vueTroncon.drawChemins(g2);
+            vueTroncon.drawNomRue(g2);
         }
 
         // Dessin des noeuds
@@ -495,6 +502,7 @@ public class VuePlan extends JPanel {
 
     /**
      * S&eacute;lectionne une le noeud/adresse d'une livraison et centre la map dessus.
+     *
      * @param livraison la livraison &agrave; s&eacute;lectionner
      */
     public void selectLivraison(Livraison livraison) {

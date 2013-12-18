@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Vue affichant une liste de livraisons et permettant de les s&eacute;lectionner
  */
-public class VueListeLivraisons extends JScrollPane{
+public class VueListeLivraisons extends JScrollPane {
 
     private DefaultListModel m_listModel;
     private JList m_jListe;
@@ -44,7 +44,7 @@ public class VueListeLivraisons extends JScrollPane{
                 if (m_vide) {
                     return;
                 }
-                JList list = (JList)evt.getSource();
+                JList list = (JList) evt.getSource();
                 int index = list.locationToIndex(evt.getPoint());
                 m_controleur.selectionLivraison(m_livraisons.get(index));
             }

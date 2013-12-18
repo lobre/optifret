@@ -5,6 +5,11 @@ import java.awt.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * Composant graphique permettant d'afficher un message de notification.
+ * Les messages affich&eacute;s peuvent &ecirc;tre de diff&eacute;rents types (information, erreur, succ&egrave;s)
+ * et ont des apparences diff&eacute;rentes.
+ */
 public class ZoneNotification extends JLabel {
 
     private static final long NOTIFICATION_TIMEOUT = 8000;
@@ -18,6 +23,9 @@ public class ZoneNotification extends JLabel {
     private static Color COULEUR_SUCCES = new Color(42, 210, 48);
     private static Color COULEUR_ERREUR = new Color(230, 68, 25);
 
+    /**
+     * Construteur ed la zone de notification
+     */
     public ZoneNotification() {
         super("", SwingConstants.CENTER);
         m_timer = new Timer();
@@ -30,6 +38,10 @@ public class ZoneNotification extends JLabel {
         setPreferredSize(new Dimension(LARGEUR_DEFAUT, HAUTEUR_DEFAUT));
     }
 
+    /**
+     * Affiche un message "succ&egrave;s"
+     * @param text message &agrave; afficher
+     */
     public void setSuccessMessage(String text) {
         setBackground(COULEUR_SUCCES);
         getFontMetrics(getFont()).stringWidth(text);
@@ -37,12 +49,22 @@ public class ZoneNotification extends JLabel {
         hideAfterTimeout();
     }
 
+
+    /**
+     * Affiche un message "erreur"
+     * @param text message &agrave; afficher
+     */
     public void setErrorMessage(String text) {
         setBackground(COULEUR_ERREUR);
         setText(text);
         hideAfterTimeout();
     }
 
+
+    /**
+     * Affiche un message "info"
+     * @param text message &agrave; afficher
+     */
     public void setInfoMessage(String text) {
         setBackground(COULEUR_INFO);
         setText(text);

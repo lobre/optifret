@@ -6,6 +6,7 @@ import java.io.File;
 
 /**
  * Bouton de la barre d'outils.
+ *
  * @see view.BarreOutils
  */
 public class BoutonBarreOutils extends JButton {

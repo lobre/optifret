@@ -6,6 +6,9 @@ import model.FeuilleRoute;
 import javax.swing.*;
 import java.awt.event.*;
 
+/**
+ * Fen&ecirc;tre affichant la version texte de l'itin&eacute;raire d'une tourn&eacute;e (Feuille de route)
+ */
 public class FenetreImprimerFeuilleRoute extends JDialog {
     private JPanel contentPane;
     private JButton m_buttonFermer;
@@ -15,6 +18,12 @@ public class FenetreImprimerFeuilleRoute extends JDialog {
     private Controleur m_controleur;
     private VueFeuilleRoutePapier m_vueFeuilleRoute;
 
+    /**
+     * Constructeur de la fen&ecirc;tre
+     *
+     * @param controleur   contr&ocirc;leur de l'application
+     * @param feuilleRoute feuille de route dont la version texte doit &ecirc;tre affich&eacute;e
+     */
     public FenetreImprimerFeuilleRoute(Controleur controleur, FeuilleRoute feuilleRoute) {
         m_controleur = controleur;
         m_vueFeuilleRoute = new VueFeuilleRoutePapier(feuilleRoute);
