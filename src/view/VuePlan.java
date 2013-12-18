@@ -284,11 +284,12 @@ public class VuePlan extends JPanel {
     //Fonction de recentrage du plan sur le noeud selectionné. Si aucun noeud selectionné, même position qu'avant.
     public void centerMapOnSelected() {
         if (m_selectedNoeud == null) {
+            getParent().repaint();
             return;
         }
 
-        m_x_off = (int) (-m_selectedNoeud.getM_x() * m_zoom - getX() + (getParent().getWidth() / 2));
-        m_y_off = (int) (-m_selectedNoeud.getM_y() * m_zoom - getY() + (getParent().getHeight() / 2));
+        m_x_off = (int) (-m_selectedNoeud.getM_x() * m_zoom + (getParent().getWidth() / 2));
+        m_y_off = (int) (-m_selectedNoeud.getM_y() * m_zoom + (getParent().getHeight() / 2));
         getParent().repaint();
     }
 

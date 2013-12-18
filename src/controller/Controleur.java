@@ -220,6 +220,8 @@ public class Controleur {
                     " demandée. Cause : " + e.getMessage());
             annulerFeuilleRoute();
             m_plan.resetNoeuds();
+            m_demandeLivraison=null;
+            annulerFeuilleRoute();
         }
     }
 
