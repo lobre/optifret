@@ -114,6 +114,9 @@ public class VuePlan extends JPanel {
         m_feuilleRoute = null;
         m_controleur = controleur;
 
+        m_noeuds = new HashMap<Integer, VueNoeud>();
+        m_troncons = new HashMap<Pair, VueTroncon>();
+
         m_x_max = MARGIN;
         m_y_max = MARGIN;
 
@@ -495,6 +498,7 @@ public class VuePlan extends JPanel {
     public void selectLivraison(Livraison livraison) {
         setSelectedNoeud(m_noeuds.get(livraison.getAdresse().getM_id()));
         centerMapOnSelected();
+        m_controleur.showInfosLivraison(livraison);
     }
 
 

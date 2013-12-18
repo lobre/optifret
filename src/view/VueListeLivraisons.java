@@ -9,9 +9,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-/**
- * Created by ahmed on 18/12/13.
- */
 public class VueListeLivraisons extends JScrollPane{
 
     private DefaultListModel m_listModel;
@@ -28,11 +25,12 @@ public class VueListeLivraisons extends JScrollPane{
         m_controleur = controleur;
 
         m_listModel = new DefaultListModel();
-        m_listModel.addElement("Aucune livraison n'est chargée");
+        m_listModel.addElement(null);
 
         m_jListe = new JList(m_listModel);
         m_jListe.setForeground(Color.BLACK);
         m_jListe.setVisibleRowCount(-1);
+        m_jListe.setCellRenderer(new VueCelluleLivraison());
 
         getViewport().setView(m_jListe);
 
@@ -56,16 +54,14 @@ public class VueListeLivraisons extends JScrollPane{
         m_listModel.clear();
 
         for (final Livraison livraison : m_livraisons) {
-            String repr = String.format("Livraison %s | Client %s", Integer.toString(livraison.getId()),
-                    Integer.toString(livraison.getNoClient()));
-            m_listModel.addElement(repr);
+            m_listModel.addElement(livraison);
         }
     }
 
     public void raz() {
         m_vide = true;
         m_listModel.clear();
-        m_listModel.addElement("Aucune livraison n'est chargée");
+        m_listModel.addElement(null);
 
     }
 

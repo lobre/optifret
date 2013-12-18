@@ -33,7 +33,7 @@ public class Livraison {
      */
     public Livraison(PlageHoraire plage) {
         m_plage = plage;
-        m_heureLivraison=null;
+        m_heureLivraison = null;
     }
 
     /**

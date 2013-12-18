@@ -138,6 +138,7 @@ public class Controleur {
     public void chargerPlan() {
         try {
             m_demandeLivraison = null;
+            annulerFeuilleRoute();
             updateListeLivraisons();
 
             File fichierXML = ouvrirFichier();
@@ -215,6 +216,7 @@ public class Controleur {
         } catch (ParseXmlException e) {
             m_window.getM_zoneNotification().setErrorMessage("Erreur: impossible de charger la demande de livraison" +
                     " demandée. Cause : " + e.getMessage());
+            annulerFeuilleRoute();
             m_plan.resetNoeuds();
         }
     }
@@ -376,7 +378,9 @@ public class Controleur {
         m_feuilleRoute = null;
         m_window.getM_vuePlan().setFeuilleRoute(null);
         m_window.getM_vuePlan().resetTroncons();
-        m_demandeLivraison.razHeuresLivraisons();
+        if (m_demandeLivraison != null) {
+            m_demandeLivraison.razHeuresLivraisons();
+        }
     }
 
     /**
