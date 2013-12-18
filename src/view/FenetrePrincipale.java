@@ -339,12 +339,17 @@ public class FenetrePrincipale {
         m_labelAdresse.setText(Integer.toString(livraison.getAdresse().getM_id()));
         m_labelCoordonnees.setText(livraison.getAdresse().toString());
         m_labelPlageHoraire.setText(livraison.getPlage().toString());
+        m_horaireLivraison.setForeground(Color.BLACK);
         if (livraison.getHeureLivraison() != null) {
             m_horaireLivraison.setText(livraison.getHeureLivraison().toString());
+            if (livraison.isHorsHoraire()) {
+                m_horaireLivraison.setForeground(Color.RED);
+            }
         }
         else {
             m_horaireLivraison.setText(" - ");
         }
+
 
         panelInfosLivraison.setVisible(true);
         panelAjouterLivraison.setVisible(false);
