@@ -9,7 +9,6 @@ import view.FenetreImprimerFeuilleRoute;
 import view.FenetrePrincipale;
 import view.VueFeuilleRoutePapier;
 
-import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -17,15 +16,27 @@ import java.awt.*;
 import java.io.*;
 
 /**
- * Classe Controleur
+ * Contr&ocirc;leur de l'application
  */
 public class Controleur {
 
-    private static final int DUREE_CALCUL = 5000;
-    private static final String FEUILLES_ROUTE_FOLDER = "feuilles_route";
-    private static final String XML_DATA_FOLDER = "xml_data";
     /**
-     * Interface de l'application
+     * Dur&eacute;e du calcul de la feuille de route
+     */
+    private static final int DUREE_CALCUL = 5000;
+
+    /**
+     * Dossier o&ugrave; sont enregistr&eacute;es les feuilles de route papier par d&eacute;faut
+     */
+    private static final String FEUILLES_ROUTE_FOLDER = "feuilles_route";
+
+    /**
+     * Dossier o&ugrave; se trouvent les plans et les demandes de livraison par d&eacute;faut
+     */
+    private static final String XML_DATA_FOLDER = "xml_data";
+
+    /**
+     * Fen&ecirc;tre principale de l'application
      */
     private FenetrePrincipale m_window;
 
@@ -49,20 +60,6 @@ public class Controleur {
      */
     private HistoriqueCommandes m_commandes;
 
-
-    // Point d'entrée de l'application:
-    public static void main(String[] args) {
-        // Paramètre Swing pour utiliser une apparence native
-
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-            System.err.println("Interface native non gérée, fallback sur l'interface Swing par défaut.");
-        }
-
-        new Controleur();
-    }
-
     /**
      * Constructeur de la classe
      */
@@ -75,17 +72,13 @@ public class Controleur {
         m_window = new FenetrePrincipale(this);
     }
 
-    public DemandeLivraison getM_demandeLivraison() {
-        return m_demandeLivraison;
-    }
-
     /**
      * Permet de choisir un fichier et en r&eacute;cup&egrave;re le chemin
      *
      * @return une instance de File correspondante au fichier choisi
      */
     private File ouvrirFichier() {
-        FileDialog fileDialog = new FileDialog(m_window.getM_frame());
+        FileDialog fileDialog = new FileDialog(m_window.getFrame());
         fileDialog.setModal(true);
 
         FilenameFilter filter = new CustomFilenameFilter(".xml");
@@ -100,6 +93,13 @@ public class Controleur {
         if (filename != null) {
             return new File(fileDialog.getDirectory(), fileDialog.getFile());
         } else {
+            m_demandeLivraison = null;
+            annulerFeuilleRoute();
+            updateListeLivraisons();
+            m_window.getVuePlan().repaint();
+            m_window.getVuePlan().resetTroncons();
+            m_plan.resetNoeuds();
+
             return null;
         }
     }
@@ -116,7 +116,7 @@ public class Controleur {
         try {
             dBuilder = dbFactory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
-            m_window.getM_zoneNotification().setErrorMessage("Impossible d'instantier le parseur XML");
+            m_window.getZoneNotification().setErrorMessage("Impossible d'instantier le parseur XML");
         }
 
         try {
@@ -124,7 +124,7 @@ public class Controleur {
             doc.getDocumentElement().normalize();
             return doc;
         } catch (SAXException | IOException | NullPointerException e) {
-            m_window.getM_zoneNotification().setErrorMessage("Impossible d'ouvrir le fichier XML demandé");
+            m_window.getZoneNotification().setErrorMessage("Impossible d'ouvrir le fichier XML demandé");
             return null;
         }
     }
@@ -138,8 +138,11 @@ public class Controleur {
     public void chargerPlan() {
         try {
             m_demandeLivraison = null;
+            // Annule la feuille de livraison (s'il y en avait une)
             annulerFeuilleRoute();
-            updateListeLivraisons();
+
+            // Remet à zéro la liste des livraisons de la sidebar
+            m_window.getVueListeLivraisons().raz();
 
             File fichierXML = ouvrirFichier();
 
@@ -152,17 +155,19 @@ public class Controleur {
             m_plan = new Plan();
             m_plan.fromXML(doc.getDocumentElement());
 
-            m_window.getM_vuePlan().setPlan(m_plan);
-            m_window.getM_zoneNotification().setSuccessMessage("Le plan '" + fichierXML.getName() + "' a été chargé avec succès !");
+            m_window.getVuePlan().setPlan(m_plan);
+            m_window.getZoneNotification().setSuccessMessage("Le plan '" + fichierXML.getName() + "' a été chargé avec succès !");
 
             // Active l'action "Charger une demande de livraison"
-            m_window.getM_menuFichier().getItem(1).setEnabled(true);
+            m_window.getMenuFichier().getItem(1).setEnabled(true);
+
             // Désactive le menu "Édition"
-            m_window.getM_menuEdition().setEnabled(false);
+            m_window.getMenuEdition().setEnabled(false);
+
             // Désactive l'action "Éditer version papier"
-            m_window.getM_menuFichier().getItem(2).setEnabled(false);
+            m_window.getMenuFichier().getItem(2).setEnabled(false);
         } catch (ParseXmlException e) {
-            m_window.getM_zoneNotification().setErrorMessage("Erreur: impossible de charger le plan demandé. Cause : "
+            m_window.getZoneNotification().setErrorMessage("Erreur: impossible de charger le plan demandé. Cause : "
                     + e.getMessage());
         }
     }
@@ -177,10 +182,13 @@ public class Controleur {
      */
     public void chargerDemandeLivraison() {
         try {
+            annulerDemandeLivraison();
+
+            // Remet à zéro la liste des livraisons de la sidebar
             m_window.getVueListeLivraisons().raz();
 
             if (m_plan == null) {
-                m_window.getM_zoneNotification().setErrorMessage("Veuillez d'abord charger un plan avant de charger une demande de livraison.");
+                m_window.getZoneNotification().setErrorMessage("Veuillez d'abord charger un plan avant de charger une demande de livraison.");
                 return;
             }
 
@@ -194,34 +202,29 @@ public class Controleur {
             m_plan.resetNoeuds();
 
             // On parse la demande de livraison
-            m_demandeLivraison = new DemandeLivraison(m_window.getM_vuePlan().getPlan());
+            m_demandeLivraison = new DemandeLivraison(m_window.getVuePlan().getPlan());
             m_demandeLivraison.fromXML(doc.getDocumentElement());
 
 
-            m_window.getM_zoneNotification().setSuccessMessage("La demande de livraison  '" + fichierXML.getName() + "' a été chargée avec succès !");
+            m_window.getZoneNotification().setSuccessMessage("La demande de livraison  '" + fichierXML.getName() + "' a été chargée avec succès !");
 
             // Désactive l'action "Éditer version papier" et annule la feuille de route
             m_feuilleRoute = null;
-            m_window.getM_vuePlan().setFeuilleRoute(null);
-            m_window.getM_menuFichier().getItem(2).setEnabled(false);
+            m_window.getVuePlan().setFeuilleRoute(null);
+            m_window.getMenuFichier().getItem(2).setEnabled(false);
 
             // Active le menu "Édition"
-            m_window.getM_menuEdition().setEnabled(true);
+            m_window.getMenuEdition().setEnabled(true);
 
-            // Annule la feuille de route actuelle, s'il y en avait une
-            annulerFeuilleRoute();
-
-            m_window.getM_vuePlan().repaint();
+            m_window.getVuePlan().repaint();
 
             updateListeLivraisons();
 
         } catch (ParseXmlException e) {
-            m_window.getM_zoneNotification().setErrorMessage("Erreur: impossible de charger la demande de livraison" +
+            m_window.getZoneNotification().setErrorMessage("Erreur: impossible de charger la demande de livraison" +
                     " demandée. Cause : " + e.getMessage());
-            annulerFeuilleRoute();
-            m_plan.resetNoeuds();
-            m_demandeLivraison=null;
-            annulerFeuilleRoute();
+
+            annulerDemandeLivraison();
         }
     }
 
@@ -232,39 +235,44 @@ public class Controleur {
      */
     public void calculerFeuilleRoute() {
         if (m_demandeLivraison == null) {
-            m_window.getM_zoneNotification().setErrorMessage("Impossible de calculer une feuille de route sans " +
+            m_window.getZoneNotification().setErrorMessage("Impossible de calculer une feuille de route sans " +
                     "demande de livraison.");
             return;
         }
         else if (m_demandeLivraison.isEmpty()) {
-            m_window.getM_zoneNotification().setErrorMessage("Impossible de calculer la feuille de route d'une" +
+            m_window.getZoneNotification().setErrorMessage("Impossible de calculer la feuille de route d'une" +
                     "demande de livraison vide");
             return;
         }
 
+        annulerFeuilleRoute();
+
         m_feuilleRoute = m_demandeLivraison.calculerFeuilleDeRoute(DUREE_CALCUL);
 
         if (m_feuilleRoute.getEtatFeuille() == FeuilleRoute.EtatFeuille.INSOLUBLE) {
-            m_window.getM_zoneNotification().setErrorMessage("Impossible de calculer la feuille de route: Demande de" +
+            m_window.getZoneNotification().setErrorMessage("Impossible de calculer la feuille de route: Demande de" +
                     "livraison insoluble ou trop complexe.");
             annulerFeuilleRoute();
             return;
         }
-        else if (m_feuilleRoute.getM_reSchedule().size() != 0) {
-            m_window.getM_zoneNotification().setErrorMessage("Certaines livraisons dépassent leur plage horaire " +
+        else if (m_feuilleRoute.getReSchedule().size() != 0) {
+            m_window.getZoneNotification().setErrorMessage("Certaines livraisons dépassent leur plage horaire " +
                     "dédiée.");
         }
 
-        m_window.getM_vuePlan().setFeuilleRoute(m_feuilleRoute);
+        m_window.getVuePlan().setFeuilleRoute(m_feuilleRoute);
 
-        m_window.getM_zoneNotification().setSuccessMessage("Feuille de route calculée avec succès !");
+        m_window.getZoneNotification().setSuccessMessage("Feuille de route calculée avec succès !");
 
         updateListeLivraisons();
 
         // Active l'action "Éditer version papier"
-        m_window.getM_menuFichier().getItem(2).setEnabled(true);
+        m_window.getMenuFichier().getItem(2).setEnabled(true);
     }
 
+    /**
+     * Met à jour la sidebar montrant la liste des livraisons
+     */
     public void updateListeLivraisons() {
         if (m_feuilleRoute != null) {
             m_window.getVueListeLivraisons().setLivraisons(m_feuilleRoute.getLivraisons());
@@ -282,7 +290,7 @@ public class Controleur {
      */
     public void editerFeuilleRoutePapier() {
         if (m_feuilleRoute == null) {
-            m_window.getM_zoneNotification().setErrorMessage("Veuillez d'abord calculer une feuille de route avant " +
+            m_window.getZoneNotification().setErrorMessage("Veuillez d'abord calculer une feuille de route avant " +
                     "d'éditer une version papier");
             return;
         }
@@ -293,10 +301,10 @@ public class Controleur {
 
     /**
      * Enregistrer la version papier d'une feuille de route
-     * @return true si la feuille de route a correctement été enregistrée, false sinon.
+     * @return true si la feuille de route a correctement &eacute;t&eacute; enregistr&eacute;e, false sinon.
      */
     public boolean enregistrerFeuilleRoute(VueFeuilleRoutePapier vueFeuilleRoute) {
-        FileDialog fileDialog = new FileDialog(m_window.getM_frame());
+        FileDialog fileDialog = new FileDialog(m_window.getFrame());
         fileDialog.setModal(true);
 
         fileDialog.setDirectory(FEUILLES_ROUTE_FOLDER);
@@ -358,7 +366,7 @@ public class Controleur {
             updateListeLivraisons();
 
             hideSidebar();
-            m_window.getM_vuePlan().repaint();
+            m_window.getVuePlan().repaint();
         }
     }
 
@@ -372,7 +380,7 @@ public class Controleur {
             updateListeLivraisons();
 
             hideSidebar();
-            m_window.getM_vuePlan().repaint();
+            m_window.getVuePlan().repaint();
         }
     }
 
@@ -381,13 +389,23 @@ public class Controleur {
      */
     private void annulerFeuilleRoute() {
         m_feuilleRoute = null;
-        m_window.getM_vuePlan().setFeuilleRoute(null);
-        m_window.getM_vuePlan().resetTroncons();
+        m_window.getVuePlan().setFeuilleRoute(null);
+        m_window.getVuePlan().resetTroncons();
         if (m_demandeLivraison != null) {
             m_demandeLivraison.razHeuresLivraisons();
         }
+
+        m_window.getVuePlan().repaint();
     }
 
+    /**
+     * Annulation de la demande de livraison (s'il y en a une)
+     */
+    private void annulerDemandeLivraison() {
+        m_demandeLivraison = null;
+        m_plan.resetNoeuds();
+        annulerFeuilleRoute();
+    }
     /**
      * Affiche le panel contenant les informations d'une livraison
      *
@@ -414,8 +432,17 @@ public class Controleur {
         m_window.hideSidebar();
     }
 
+    /**
+     * Sélectionne une livraison dans la fenêtre et met le focus dessus
+     * @param livraison la livraison à sélectionner
+     */
     public void selectionLivraison(Livraison livraison) {
-        m_window.getM_vuePlan().selectLivraison(livraison);
+        m_window.getVuePlan().selectLivraison(livraison);
     }
+
+    public DemandeLivraison getDemandeLivraison() {
+        return m_demandeLivraison;
+    }
+
 }
 

@@ -5,6 +5,9 @@ import model.Livraison;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Classe de rendu d'un &eacute;l&eacute;ment de la liste des livraisons. Affiche les livraisons en retard en surbrillance.
+ */
 class VueCelluleLivraison extends JLabel implements ListCellRenderer<Object> {
     private static final Font DEFAULT_FONT = new Font("Arial", Font.PLAIN, 13);
     private static final Font BOLD_FONT = new Font("Arial", Font.BOLD, 13);

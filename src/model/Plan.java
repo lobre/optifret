@@ -19,7 +19,6 @@ public class Plan {
     static public int PARSE_ERROR = -1;
     static public int PARSE_OK = 0;
 
-    private Noeud m_racine;
     private HashMap<Integer, Noeud> m_noeuds;
     private ArrayList<Troncon> m_troncons;
 
@@ -45,8 +44,8 @@ public class Plan {
      */
     public void resetNoeuds() {
         for (Noeud n : m_noeuds.values()) {
-            n.setM_entrepot(false);
-            n.setM_livraison(null);
+            n.setEntrepot(false);
+            n.setLivraison(null);
         }
     }
 
@@ -73,9 +72,9 @@ public class Plan {
             if (status != Noeud.PARSE_OK) {
                 throw new ParseXmlException("parsing noeud vide");
             }
-            if (noeuds.get(noeud.getM_id())==null)
+            if (noeuds.get(noeud.getId())==null)
             {
-                noeuds.put(noeud.getM_id(), noeud);
+                noeuds.put(noeud.getId(), noeud);
             }
             else {
                 throw new ParseXmlException("Id noeud non-unique");
@@ -93,12 +92,11 @@ public class Plan {
             }
 
             // Mise à jour de la liste de tous les tronçons
-            troncons.addAll(noeud.getM_troncons());
+            troncons.addAll(noeud.getTroncons());
 
         }
 
         m_noeuds = noeuds;
-        m_racine = noeuds.get(0);
         m_troncons = troncons;
 
         return Plan.PARSE_OK;
@@ -109,31 +107,15 @@ public class Plan {
     // Accessor methods
     //
 
-    public Noeud getM_racine() {
-        return m_racine;
-    }
-
-    public void setM_racine(Noeud m_racine) {
-        this.m_racine = m_racine;
-    }
-
     public Noeud getNoeudParID(int id) {
         return m_noeuds.containsKey(id) ? m_noeuds.get(id) : null;
     }
 
-    public HashMap<Integer, Noeud> getM_noeuds() {
+    public HashMap<Integer, Noeud> getNoeuds() {
         return m_noeuds;
     }
 
-    public void setM_noeuds(HashMap<Integer, Noeud> m_noeuds) {
-        this.m_noeuds = m_noeuds;
-    }
-
-    public void setM_troncons(ArrayList<Troncon> m_troncons) {
-        this.m_troncons = m_troncons;
-    }
-
-    public ArrayList<Troncon> getM_troncons() {
+    public ArrayList<Troncon> getTroncons() {
         return m_troncons;
     }
 

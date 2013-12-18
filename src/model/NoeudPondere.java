@@ -21,27 +21,27 @@ public class NoeudPondere {
 
     //Getter-setter
 
-    public void setM_poids(Double m_poids) {
+    public void setPoids(Double m_poids) {
         this.m_poids = m_poids;
     }
 
     public int get_id() {
-        return this.m_noeud.getM_id();
+        return this.m_noeud.getId();
     }
 
-    public Noeud getM_noeud() {
+    public Noeud getNoeud() {
         return m_noeud;
     }
 
-    public Double getM_poids() {
+    public Double getPoids() {
         return m_poids;
     }
 
-    public void setM_rejointDepuis(Troncon m_rejointDepuis) {
+    public void setRejointDepuis(Troncon m_rejointDepuis) {
         this.m_rejointDepuis = m_rejointDepuis;
     }
 
-    public Troncon getM_rejointDepuis() {
+    public Troncon getRejointDepuis() {
         return m_rejointDepuis;
     }
 }

@@ -35,33 +35,28 @@ public class VueFeuilleRoutePapier {
 
             //verifie que le l'arrivée du troncon est bien un noeud de la liste des noeuds de la feuille de route.
             boolean pointDansNoeudsFeuille = (indexNodeFeuilleRoute < nodesFeuilleRoute.size() &&
-                    nodesFeuilleRoute.get(indexNodeFeuilleRoute).getM_id()==t.getArrivee().getM_id()) ;
+                    nodesFeuilleRoute.get(indexNodeFeuilleRoute).getId()==t.getArrivee().getId()) ;
 
             /*si on change de rue, ou bien si on est au dernier Troncon, ou encore si on arrive à un point de livraison
             du chemin :    */
-            if ( ((i<troncons.size()-1) && !troncons.get(i+1).getM_nom().equals(t.getM_nom())) || dernierTroncon ||
+            if ( ((i<troncons.size()-1) && !troncons.get(i+1).getNom().equals(t.getNom())) || dernierTroncon ||
                     (i>0 && t.getArrivee().hasLivraison()) && pointDansNoeudsFeuille) {
                 //mise à jour de la longueur
-                longueur += t.getM_longueur();
+                longueur += t.getLongueur();
 
                 //on suit la rue jusqu'au bout, donc on affiche la distance calculée depuis que l'on est dans cette rue
-                r += "  . Suivre la rue " +  t.getM_nom() + " sur " + longueur + " mètres.\n";
+                r += "  . Suivre la rue " +  t.getNom() + " sur " + longueur + " mètres.\n";
                 longueur = 0;
 
                 // On peut alors arriver à un noeud de livraison que l'on doit livrer ou à l'entrepot à la fin de la tournée
                 if (t.getArrivee().hasLivraison() && pointDansNoeudsFeuille) {
-                    r += " \n*****\n** " + t.getArrivee().getM_livraison().getHeureLivraison().toString()+ " \n** Réalisez la livraison " + t.getArrivee().getM_livraison().getId() + " adresse "+
-                            t.getArrivee().getM_id() +"\n** Client "+t.getArrivee().getM_livraison().getNoClient() +"  \n***** \n \n";
+                    r += " \n*****\n** " + t.getArrivee().getLivraison().getHeureLivraison().toString()+ " \n** Réalisez la livraison " + t.getArrivee().getLivraison().getId() + " adresse "+
+                            t.getArrivee().getId() +"\n** Client "+t.getArrivee().getLivraison().getNoClient() +"  \n***** \n \n";
                     indexNodeFeuilleRoute++;
-                    pointDansNoeudsFeuille = (indexNodeFeuilleRoute < nodesFeuilleRoute.size() &&
-                            nodesFeuilleRoute.get(indexNodeFeuilleRoute).getM_id()==t.getArrivee().getM_id());
-
                 }
                 else if (t.getArrivee().isEntrepot() && pointDansNoeudsFeuille){
-                    r += "  * Vous êtes de retour à l'entrepôt " + t.getArrivee().getM_id() + "\n";
+                    r += "  * Vous êtes de retour à l'entrepôt " + t.getArrivee().getId() + "\n";
                     indexNodeFeuilleRoute++;
-                    pointDansNoeudsFeuille = (indexNodeFeuilleRoute < nodesFeuilleRoute.size() &&
-                            nodesFeuilleRoute.get(indexNodeFeuilleRoute).getM_id()==t.getArrivee().getM_id());
                 }
 
                 // si nous ne sommes pas au dernier tronçon, on affiche la manoeuvre à effectuer au prochain noeud
@@ -94,7 +89,7 @@ public class VueFeuilleRoutePapier {
             /*si on est toujours dans la même rue, pas dans un cas particulier, alors on ajoute la distance du troncon
              à celle calculée depuis le début de la rue */
             else{
-                longueur += t.getM_longueur();
+                longueur += t.getLongueur();
             }
 
 

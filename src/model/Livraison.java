@@ -14,9 +14,7 @@ public class Livraison {
     // Fields
     //
     private int m_id;
-    private int m_retard = 0;
     private int m_noClient;
-    private boolean m_effectuee = false;
 
     private PlageHoraire m_plage;
 
@@ -47,7 +45,7 @@ public class Livraison {
         m_id = id;
         m_noClient = client;
         m_adresse = adresse;
-        m_adresse.setM_livraison(this);
+        m_adresse.setLivraison(this);
         m_plage = plage;
     }
 
@@ -60,7 +58,7 @@ public class Livraison {
             m_noClient = Integer.parseInt(eLivraison.getAttribute("client"));
             int adNoeud = Integer.parseInt(eLivraison.getAttribute("adresse"));
             m_adresse = plan.getNoeudParID(adNoeud);
-            for (Livraison l: plage.getM_livraisons()){
+            for (Livraison l: plage.getLivraisons()){
                 if (l.getId() == m_id){
                     throw new ParseXmlException("id livraison non-unique");
                 }
@@ -71,7 +69,7 @@ public class Livraison {
         } catch (NullPointerException ne) {
             return PARSE_ERROR;
         }
-        m_adresse.setM_livraison(this);
+        m_adresse.setLivraison(this);
         return PARSE_OK;
     }
 
@@ -118,8 +116,7 @@ public class Livraison {
     }
 
     public boolean isHorsHoraire(){
-        if (m_heureLivraison!=null && (m_heureLivraison.compareTo(m_plage.getHeureFin())>0 ||
-                m_heureLivraison.compareTo(m_plage.getHeureFin())==0)){
+        if (m_heureLivraison !=null && m_heureLivraison.compareTo(m_plage.getHeureFin())>=0) {
             return true;
         }
         else{
@@ -129,10 +126,5 @@ public class Livraison {
     public Heure getHeureLivraison() {
         return m_heureLivraison;
     }
-
-
-    //
-    // Other methods
-    //
 
 }

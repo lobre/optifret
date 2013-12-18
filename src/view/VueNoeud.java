@@ -4,9 +4,10 @@ import model.Noeud;
 
 import java.awt.*;
 
+/**
+ * Vue d'un noeud dans la map. Peut avoir plusieurs états (sélectionné, survolé, ...)
+ */
 public class VueNoeud {
-
-
     private Noeud m_noeud;
 
     private boolean m_selected;
@@ -23,7 +24,6 @@ public class VueNoeud {
     public static int AMPLIFICATION_FACTOR = 2;
 
     private static double FOCUS_FACTOR = 1.5;
-    private static int BORDER_WIDTH = 1;
 
     private static int FONT_SIZE = 16;
     private static Font ID_FONT = new Font("Arial", Font.BOLD, FONT_SIZE);
@@ -38,23 +38,23 @@ public class VueNoeud {
 
     public void draw(Graphics2D g2) {
 
-        int r = getM_rayon();
+        int r = getRayon();
         if (!m_noeud.isEntrepot() && (m_selected || m_focused)) {
             r *= FOCUS_FACTOR;
         }
 
-        int x = getM_x() - r;
-        int y = getM_y() - r;
+        int x = getX() - r;
+        int y = getY() - r;
 
-        Color color = getM_couleur();
+        Color color = getCouleur();
 
-        if (m_noeud.hasLivraison() && m_noeud.getM_livraison().isHorsHoraire()) {
+        if (m_noeud.hasLivraison() && m_noeud.getLivraison().isHorsHoraire()) {
             r += 3;
         }
 
         // Ombre du cercle
-      //  g2.setColor(color.darker());
-       // g2.fillOval(x, y, 2 * (r + 1), 2 * (r + 1));
+        g2.setColor(color.darker());
+        g2.fillOval(x, y, 2 * (r + 1), 2 * (r + 1));
 
 
         // Remplissage du cercle
@@ -65,15 +65,15 @@ public class VueNoeud {
         if (m_selected || m_noeud.isEntrepot() || m_noeud.hasLivraison() ) {
             g2.setFont(ID_FONT);
             String message;
-            if(m_noeud.hasLivraison() && m_noeud.getM_livraison().isHorsHoraire()){
+            if(m_noeud.hasLivraison() && m_noeud.getLivraison().isHorsHoraire()){
                 message = "!";
                 g2.setColor(Color.WHITE);
             }else if (m_noeud.isEntrepot()) {
                 message = "E";
-                g2.setColor(getM_couleur().darker());
+                g2.setColor(getCouleur().darker());
             } else {
-                message = Integer.toString(m_noeud.getM_id());
-                g2.setColor(getM_couleur().darker());
+                message = Integer.toString(m_noeud.getId());
+                g2.setColor(getCouleur().darker());
             }
             int text_x = x + r - g2.getFontMetrics().stringWidth(message) / 2;
             int text_y = y + r + g2.getFontMetrics().getHeight() / 3;
@@ -85,19 +85,19 @@ public class VueNoeud {
 
     // Getters/Setters
 
-    public Noeud getM_noeud() {
+    public Noeud getNoeud() {
         return m_noeud;
     }
 
-    public int getM_x() {
-        return m_noeud.getM_x() * AMPLIFICATION_FACTOR;
+    public int getX() {
+        return m_noeud.getX() * AMPLIFICATION_FACTOR;
     }
 
-    public int getM_y() {
-        return m_noeud.getM_y() * AMPLIFICATION_FACTOR;
+    public int getY() {
+        return m_noeud.getY() * AMPLIFICATION_FACTOR;
     }
 
-    public int getM_rayon() {
+    public int getRayon() {
         if (m_noeud.isEntrepot()) {
             return RAYON_ENTREPOT;
         } else if (m_noeud.hasLivraison()) {
@@ -107,16 +107,16 @@ public class VueNoeud {
         }
     }
 
-    public Color getM_couleur() {
+    public Color getCouleur() {
         Color color = COULEUR_DEFAUT;
         if (m_noeud.isEntrepot()) {
             color = COULEUR_ENTREPOT;
         }
         else if (m_noeud.hasLivraison()) {
-            if (m_noeud.getM_livraison().isHorsHoraire())  {
-                color= new Color(255, 0, 0); // TODO a mettre en haut;
+            if (m_noeud.getLivraison().isHorsHoraire())  {
+                color = COULEUR_LIVRAISON_HORSHORAIRE;
             } else {
-                color = VueTroncon.getCouleurPlageHoraire(m_noeud.getM_livraison().getPlage());
+                color = VueTroncon.getCouleurPlageHoraire(m_noeud.getLivraison().getPlage());
             }
         }
 
@@ -127,11 +127,11 @@ public class VueNoeud {
         return color;
     }
 
-    public void setM_selected(boolean m_selected) {
+    public void setSelected(boolean m_selected) {
         this.m_selected = m_selected;
     }
 
-    public void setM_focused(boolean m_focused) {
+    public void setFocused(boolean m_focused) {
         this.m_focused = m_focused;
     }
 }

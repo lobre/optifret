@@ -87,7 +87,7 @@ public class FeuilleRoute {
         boolean estSoluble = true;
         // Résolution du cas initial
         Chemin chemin = m_chemins.get(1);
-        PlageHoraire plageHoraire = m_demandeLivraison.getM_plagesHoraires().get(pH);
+        PlageHoraire plageHoraire = m_demandeLivraison.getPlagesHoraires().get(pH);
         Noeud depart = chemin.getDepart();
         Livraison livraison = getLivraisonPourUnNoeudEtUnePlage(depart, plageHoraire);
         Heure heureLivraison = plageHoraire.getHeureDebut();
@@ -100,13 +100,13 @@ public class FeuilleRoute {
             // i==1 <--> Première livraison. On postule que l'heure de cette livraison est l'heure de début de sa plage.
             chemin = m_chemins.get(i);
             depart = chemin.getDepart();
-            plageHoraire = m_demandeLivraison.getM_plagesHoraires().get(pH);
+            plageHoraire = m_demandeLivraison.getPlagesHoraires().get(pH);
             livraison = getLivraisonPourUnNoeudEtUnePlage(depart, plageHoraire);
             if (livraison == null) {
                 // On cherche cette livraison dans une autre plage.
-                if (++pH < m_demandeLivraison.getM_plagesHoraires().size()) {
-                    for (; pH < m_demandeLivraison.getM_plagesHoraires().size() && m_demandeLivraison.getM_plagesHoraires().get(pH) != null && livraison == null; pH++) {
-                        plageHoraire = m_demandeLivraison.getM_plagesHoraires().get(pH);
+                if (++pH < m_demandeLivraison.getPlagesHoraires().size()) {
+                    for (; pH < m_demandeLivraison.getPlagesHoraires().size() && m_demandeLivraison.getPlagesHoraires().get(pH) != null && livraison == null; pH++) {
+                        plageHoraire = m_demandeLivraison.getPlagesHoraires().get(pH);
                         livraison = getLivraisonPourUnNoeudEtUnePlage(depart, plageHoraire);
                     }
                     pH--;
@@ -117,8 +117,8 @@ public class FeuilleRoute {
                     break;
                 }
             }
-            heureLivraison = new Duree(cost[getReverseMatch(chemin.getDepart().getM_id(), matches)]
-                    [getReverseMatch(chemin.getArrivee().getM_id(), matches)]).ajouterA(departDerniereLivraison);
+            heureLivraison = new Duree(cost[getReverseMatch(chemin.getDepart().getId(), matches)]
+                    [getReverseMatch(chemin.getArrivee().getId(), matches)]).ajouterA(departDerniereLivraison);
             if (plageHoraire.getHeureFin().estAvant(heureLivraison)) {
                 // Livraison en retard : on prévient la secrétaire du retard et du fait qu'il faut reschedule cette livraison.
                 // On passe la feuille de route en état SOLUBLE car au moins une livraison dépasse de sa plage.
@@ -152,8 +152,8 @@ public class FeuilleRoute {
      * @return la livraison correspondant au critère, null si aucune livraison ne correspondait.
      */
     private Livraison getLivraisonPourUnNoeudEtUnePlage(Noeud noeud, PlageHoraire plageHoraire) {
-        for (Livraison livraison : plageHoraire.getM_livraisons()) {
-            if (livraison.getAdresse().getM_id() == noeud.getM_id()) {
+        for (Livraison livraison : plageHoraire.getLivraisons()) {
+            if (livraison.getAdresse().getId() == noeud.getId()) {
                 return livraison;
             }
         }
@@ -162,7 +162,7 @@ public class FeuilleRoute {
 
     private void fill(TSP tsp, Map<Integer, Map<Integer, Chemin>> chemins, int[] matches, int[][] cost) {
         int[] tspNext = tsp.getNext();
-        int idEntrepot = getReverseMatch(m_demandeLivraison.getEntrepot().getM_id(), matches);
+        int idEntrepot = getReverseMatch(m_demandeLivraison.getEntrepot().getId(), matches);
         int from = idEntrepot;
         int to = tspNext[from];
         do {
@@ -183,11 +183,11 @@ public class FeuilleRoute {
         return m_chemins;
     }
 
-    public LinkedList<Livraison> getM_livraisonsOrdonnees() {
+    public LinkedList<Livraison> getLivraisonsOrdonnees() {
         return m_livraisonsOrdonnees;
     }
 
-    public List<Livraison> getM_reSchedule() {
+    public List<Livraison> getReSchedule() {
         return m_reSchedule;
     }
 
@@ -210,15 +210,8 @@ public class FeuilleRoute {
 
     public ArrayList<Noeud> getNodes() {
         ArrayList<Noeud> noeuds = new ArrayList<>();
-        int i = 0;
         for (Chemin c : m_chemins) {
-            if ((i > 0) && c.getDepart().getM_id() != noeuds.get(i).getM_id()) {
-                noeuds.add(c.getDepart());
-                System.out.println(c.getDepart().getM_id());
-            }
             noeuds.add(c.getArrivee());
-            System.out.println(c.getArrivee().getM_id());
-
         }
         return noeuds;
     }
@@ -227,7 +220,7 @@ public class FeuilleRoute {
         ArrayList<Livraison> livraisons = new ArrayList<>();
         for (Noeud noeud : getNodes()) {
             if (noeud.hasLivraison()) {
-                livraisons.add(noeud.getM_livraison());
+                livraisons.add(noeud.getLivraison());
             }
         }
         return livraisons;

@@ -19,22 +19,22 @@ public class DijkstraTest {
     @Test(expected = IllegalArgumentException.class)
     public void testPlanInvalide() {
         Plan plan = obtenirPlan(cheminXml);
-        Noeud noeudDepart = plan.getM_noeuds().get(0);
-        Noeud noeudArrivee = plan.getM_noeuds().get(1);
+        Noeud noeudDepart = plan.getNoeuds().get(0);
+        Noeud noeudArrivee = plan.getNoeuds().get(1);
         Chemin resultat = Dijkstra.dijkstra_c(noeudDepart, noeudArrivee, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testNoeudInvalide() {
         Plan plan = obtenirPlan(cheminXml);
-        Noeud noeudDepart = plan.getM_noeuds().get(0);
+        Noeud noeudDepart = plan.getNoeuds().get(0);
         Chemin resultat = Dijkstra.dijkstra_c(noeudDepart, null, plan);
     }
 
     @Test
     public void testeDijkstraLongueur0() {
         Plan plan = obtenirPlan(cheminXml);
-        Noeud noeudDepart = plan.getM_noeuds().get(0);
+        Noeud noeudDepart = plan.getNoeuds().get(0);
         Chemin resultat = Dijkstra.dijkstra_c(noeudDepart, noeudDepart, plan);
         assertTrue(resultat.getListeTroncons().size() == 0);
     }
@@ -42,25 +42,25 @@ public class DijkstraTest {
     @Test
     public void testeDijkstraLongueur1() {
         Plan plan = obtenirPlan(cheminXml);
-        Noeud noeudDepart = plan.getM_noeuds().get(0);
-        Noeud noeudArrivee = plan.getM_noeuds().get(1);
+        Noeud noeudDepart = plan.getNoeuds().get(0);
+        Noeud noeudArrivee = plan.getNoeuds().get(1);
         Chemin resultat = Dijkstra.dijkstra_c(noeudDepart, noeudArrivee, plan);
-        assertTrue(resultat.getListeTroncons().getFirst().getDepart().getM_id() == noeudDepart.getM_id());
-        assertTrue(resultat.getListeTroncons().getLast().getArrivee().getM_id() == noeudArrivee.getM_id());
+        assertTrue(resultat.getListeTroncons().getFirst().getDepart().getId() == noeudDepart.getId());
+        assertTrue(resultat.getListeTroncons().getLast().getArrivee().getId() == noeudArrivee.getId());
         assertTrue(resultat.getListeTroncons().size() == 1);
     }
 
     @Test
     public void testeDijkstraLongueurN() {
         Plan plan = obtenirPlan(cheminXml);
-        Noeud noeudDepart = plan.getM_noeuds().get(0);
-        Noeud noeudArrivee = plan.getM_noeuds().get(4);
-        System.out.println(noeudArrivee.getM_id());
+        Noeud noeudDepart = plan.getNoeuds().get(0);
+        Noeud noeudArrivee = plan.getNoeuds().get(4);
+        System.out.println(noeudArrivee.getId());
         Chemin resultat = Dijkstra.dijkstra_c(noeudDepart, noeudArrivee, plan);
-        assertTrue(resultat.getListeTroncons().getFirst().getDepart().getM_id() == noeudDepart.getM_id());
-        assertTrue(resultat.getListeTroncons().getLast().getArrivee().getM_id() == noeudArrivee.getM_id());
+        assertTrue(resultat.getListeTroncons().getFirst().getDepart().getId() == noeudDepart.getId());
+        assertTrue(resultat.getListeTroncons().getLast().getArrivee().getId() == noeudArrivee.getId());
         assertTrue(resultat.getListeTroncons().size() == 3);
-        assertTrue(resultat.getListeTroncons().get(1).getArrivee().getM_id() == 2);
+        assertTrue(resultat.getListeTroncons().get(1).getArrivee().getId() == 2);
     }
 
     public static Plan obtenirPlan(String chemin) {

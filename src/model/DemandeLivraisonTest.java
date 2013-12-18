@@ -60,12 +60,12 @@ public class DemandeLivraisonTest {
     @Test
     public void testFromXMLNormal(){
         DemandeLivraison myDemande= parseur( "xml_tests/livraison.xml");
-        assertTrue(myDemande.getEntrepot().getM_id() == 14)   ;
-        assertTrue(myDemande.getM_plagesHoraires().get(0).getHeureDebut().toString().equals(new Heure(8,0,0).toString())) ;
-        assertTrue(myDemande.getM_plagesHoraires().get(0).getHeureFin().toString().equals(new Heure(9,30,0).toString())) ;
-        assertTrue(myDemande.getM_plagesHoraires().get(0).getM_livraisons().get(0).getId()==1); ;
-        assertTrue(myDemande.getM_plagesHoraires().get(0).getM_livraisons().get(0).getAdresse().getM_id()==77); ;
-        assertTrue(myDemande.getM_plagesHoraires().get(0).getM_livraisons().get(0).getNoClient()==608); ;
+        assertTrue(myDemande.getEntrepot().getId() == 14)   ;
+        assertTrue(myDemande.getPlagesHoraires().get(0).getHeureDebut().toString().equals(new Heure(8,0,0).toString())) ;
+        assertTrue(myDemande.getPlagesHoraires().get(0).getHeureFin().toString().equals(new Heure(9,30,0).toString())) ;
+        assertTrue(myDemande.getPlagesHoraires().get(0).getLivraisons().get(0).getId()==1); ;
+        assertTrue(myDemande.getPlagesHoraires().get(0).getLivraisons().get(0).getAdresse().getId()==77); ;
+        assertTrue(myDemande.getPlagesHoraires().get(0).getLivraisons().get(0).getNoClient()==608); ;
     }
 
 

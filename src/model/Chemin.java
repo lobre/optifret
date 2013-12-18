@@ -35,7 +35,7 @@ public class Chemin {
     public int getLongueur() {
         int longueur = 0;
         for (Troncon troncon : listeTroncons) {
-            longueur += troncon.getM_longueur()/troncon.getM_vitesse();
+            longueur += troncon.getLongueur()/troncon.getVitesse();
         }
         return longueur;
     }

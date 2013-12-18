@@ -68,10 +68,10 @@ public class VueTroncon {
         int dx = (int) (offset * Math.cos(Math.PI / 2 + angle));
         int dy = (int) (offset * Math.sin(Math.PI / 2 + angle));
 
-        int x1 = m_troncon.getArrivee().getM_x() * VueNoeud.AMPLIFICATION_FACTOR;
-        int y1 = m_troncon.getArrivee().getM_y() * VueNoeud.AMPLIFICATION_FACTOR;
-        int x2 = m_troncon.getDepart().getM_x() * VueNoeud.AMPLIFICATION_FACTOR;
-        int y2 = m_troncon.getDepart().getM_y() * VueNoeud.AMPLIFICATION_FACTOR;
+        int x1 = m_troncon.getArrivee().getX() * VueNoeud.AMPLIFICATION_FACTOR;
+        int y1 = m_troncon.getArrivee().getY() * VueNoeud.AMPLIFICATION_FACTOR;
+        int x2 = m_troncon.getDepart().getX() * VueNoeud.AMPLIFICATION_FACTOR;
+        int y2 = m_troncon.getDepart().getY() * VueNoeud.AMPLIFICATION_FACTOR;
 
         g2.drawLine(x1 + dx, y1 + dy, x2 + dx, y2 + dy);
     }
@@ -86,10 +86,10 @@ public class VueTroncon {
             return;
         }
 
-        int x1 = m_troncon.getArrivee().getM_x() * VueNoeud.AMPLIFICATION_FACTOR;
-        int y1 = m_troncon.getArrivee().getM_y() * VueNoeud.AMPLIFICATION_FACTOR;
-        int x2 = m_troncon.getDepart().getM_x() * VueNoeud.AMPLIFICATION_FACTOR;
-        int y2 = m_troncon.getDepart().getM_y() * VueNoeud.AMPLIFICATION_FACTOR;
+        int x1 = m_troncon.getArrivee().getX() * VueNoeud.AMPLIFICATION_FACTOR;
+        int y1 = m_troncon.getArrivee().getY() * VueNoeud.AMPLIFICATION_FACTOR;
+        int x2 = m_troncon.getDepart().getX() * VueNoeud.AMPLIFICATION_FACTOR;
+        int y2 = m_troncon.getDepart().getY() * VueNoeud.AMPLIFICATION_FACTOR;
 
         g2.setColor(COULEUR_MIDLINE);
         g2.setStroke(STROKE_MIDLINE);
@@ -105,10 +105,10 @@ public class VueTroncon {
             return;
         }
 
-        int x1 = m_troncon.getArrivee().getM_x() * VueNoeud.AMPLIFICATION_FACTOR;
-        int y1 = m_troncon.getArrivee().getM_y() * VueNoeud.AMPLIFICATION_FACTOR;
-        int x2 = m_troncon.getDepart().getM_x() * VueNoeud.AMPLIFICATION_FACTOR;
-        int y2 = m_troncon.getDepart().getM_y() * VueNoeud.AMPLIFICATION_FACTOR;
+        int x1 = m_troncon.getArrivee().getX() * VueNoeud.AMPLIFICATION_FACTOR;
+        int y1 = m_troncon.getArrivee().getY() * VueNoeud.AMPLIFICATION_FACTOR;
+        int x2 = m_troncon.getDepart().getX() * VueNoeud.AMPLIFICATION_FACTOR;
+        int y2 = m_troncon.getDepart().getY() * VueNoeud.AMPLIFICATION_FACTOR;
         double angle = m_troncon.getAngle();
 
         g2.setStroke(STROKE_CHEMIN);
@@ -140,10 +140,10 @@ public class VueTroncon {
         g2.setFont(RUE_FONT);
 
         double angle = m_troncon.getAngle();
-        int x1 = m_troncon.getArrivee().getM_x() * VueNoeud.AMPLIFICATION_FACTOR;
-        int y1 = m_troncon.getArrivee().getM_y() * VueNoeud.AMPLIFICATION_FACTOR;
-        int x2 = m_troncon.getDepart().getM_x() * VueNoeud.AMPLIFICATION_FACTOR;
-        int y2 = m_troncon.getDepart().getM_y() * VueNoeud.AMPLIFICATION_FACTOR;
+        int x1 = m_troncon.getArrivee().getX() * VueNoeud.AMPLIFICATION_FACTOR;
+        int y1 = m_troncon.getArrivee().getY() * VueNoeud.AMPLIFICATION_FACTOR;
+        int x2 = m_troncon.getDepart().getX() * VueNoeud.AMPLIFICATION_FACTOR;
+        int y2 = m_troncon.getDepart().getY() * VueNoeud.AMPLIFICATION_FACTOR;
 
         int t_x = (x1 + x2) / 2;
         int t_y = (y1 + y2) / 2;
@@ -151,7 +151,7 @@ public class VueTroncon {
         //t_x += ((5 + 2 * LARGEUR_TRONCON) * Math.cos(angle + Math.PI / 2));
         //t_y += ((5 + 2 * LARGEUR_TRONCON) * Math.sin(angle + Math.PI / 2));
 
-        g2.drawString(m_troncon.getM_nom(), t_x, t_y);
+        g2.drawString(m_troncon.getNom(), t_x, t_y);
     }
 
     /**
@@ -171,10 +171,10 @@ public class VueTroncon {
         Noeud depart = chemin.getDepart();
         Noeud arrivee = chemin.getArrivee();
         boolean noLivraison = !depart.hasLivraison() || !arrivee.hasLivraison();
-        if (noLivraison || (depart.getM_livraison().getPlage() != arrivee.getM_livraison().getPlage())) {
+        if (noLivraison || (depart.getLivraison().getPlage() != arrivee.getLivraison().getPlage())) {
             return COULEUR_CHEMIN_NEUTRE;
         } else {
-            return getCouleurPlageHoraire(depart.getM_livraison().getPlage());
+            return getCouleurPlageHoraire(depart.getLivraison().getPlage());
         }
     }
 
@@ -184,7 +184,7 @@ public class VueTroncon {
      * @return Color, la couleur de la plage horaire.
      */
     public static Color getCouleurPlageHoraire(PlageHoraire plage) {
-        return tableauCouleurs[plage.getM_indice() % NOMBRE_COULEURS];
+        return tableauCouleurs[plage.getIndice() % NOMBRE_COULEURS];
     }
 
     /**
@@ -200,7 +200,7 @@ public class VueTroncon {
      * Indique si le tron&ccedil;on repr&eacute;sent&eacute; est l'une des deux voies d'une rue &agrave; double voie.
      * @param doubleVoie booléen quiset à true si le tronçon est une voie d'une rue à double voie.
      */
-    public void setM_doubleVoie(Boolean doubleVoie) {
+    public void setDoubleVoie(Boolean doubleVoie) {
         m_doubleVoie = doubleVoie;
     }
 

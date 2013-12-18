@@ -41,15 +41,15 @@ public class Troncon {
     //
 
 
-    public String getM_nom() {
+    public String getNom() {
         return m_nom;
     }
 
-    public float getM_longueur() {
+    public float getLongueur() {
         return m_longueur;
     }
 
-    public float getM_vitesse() {
+    public float getVitesse() {
         return m_vitesse;
     }
 
@@ -97,11 +97,11 @@ public class Troncon {
     }
 
     public Boolean estDeSensPositif(){
-        return m_depart.getM_id() < m_arrivee.getM_id();
+        return m_depart.getId() < m_arrivee.getId();
     }
 
     public double getAngle() {
-        return Math.atan2(m_arrivee.getM_y() - m_depart.getM_y(), m_arrivee.getM_x() - m_depart.getM_x());
+        return Math.atan2(m_arrivee.getY() - m_depart.getY(), m_arrivee.getX() - m_depart.getX());
     }
 
     public double angleAvec(Troncon t2) {

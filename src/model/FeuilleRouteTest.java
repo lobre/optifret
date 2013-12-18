@@ -66,19 +66,19 @@ public class FeuilleRouteTest {
             j = 0;
             for (Troncon troncon : chemin.getListeTroncons()) {
                 out.println(format("Chemin {0,number,0}, tronçon {1,number,0} : de {2,number,0} à {3,number,0}.",
-                        i, j, troncon.getDepart().getM_id(), troncon.getArrivee().getM_id()));
+                        i, j, troncon.getDepart().getId(), troncon.getArrivee().getId()));
                 j++;
             }
             ++i;
         }
         assertTrue("Failed to generate FeuilleRoute", j > 0 && i > 0);
         out.println("");
-        for (Livraison livraison : feuilleRoute.getM_livraisonsOrdonnees()) {
+        for (Livraison livraison : feuilleRoute.getLivraisonsOrdonnees()) {
             out.println(format("Livraison {0,number} réalisée en {1,number}:{2,number} à {3}",
-                    livraison.getId(), livraison.getAdresse().getM_x(), livraison.getAdresse().getM_y(), livraison.getHeureLivraison().toString()));
+                    livraison.getId(), livraison.getAdresse().getX(), livraison.getAdresse().getY(), livraison.getHeureLivraison().toString()));
         }
         out.println("");
-        List<Livraison> reSchedule = feuilleRoute.getM_reSchedule();
+        List<Livraison> reSchedule = feuilleRoute.getReSchedule();
         out.println(format("Il y a {0,number} livraison(s) réalisable(s) uniquement en dehors de leur plage horaire.", reSchedule.size()));
         for (Livraison livraison : reSchedule) {
             out.println(format("Livraison {0,number,0} sera effectuée à {1} alors qu''elle était prévue entre {2} et {3}.",

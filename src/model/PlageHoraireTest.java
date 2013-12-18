@@ -4,13 +4,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created with IntelliJ IDEA.
- * User: karimalaoui
- * Date: 17/12/2013
- * Time: 21:08
- * To change this template use File | Settings | File Templates.
- */
 public class PlageHoraireTest {
 
     Heure heure1 = new Heure(10,0,0);

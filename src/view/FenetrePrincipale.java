@@ -162,9 +162,9 @@ public class FenetrePrincipale {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    PlageHoraire ph = m_controleur.getM_demandeLivraison().getM_plagesHoraires().get(m_plagesHoraires.getSelectedIndex());
+                    PlageHoraire ph = m_controleur.getDemandeLivraison().getPlagesHoraires().get(m_plagesHoraires.getSelectedIndex());
                     int client = Integer.parseInt(m_clientTextField.getText());
-                    Livraison livraison = new Livraison(m_controleur.getM_demandeLivraison().getUniqueID(), client, m_selectedNoeud, ph);
+                    Livraison livraison = new Livraison(m_controleur.getDemandeLivraison().getUniqueID(), client, m_selectedNoeud, ph);
                     m_controleur.ajouterLivraison(livraison);
                     hideSidebar();
                 } catch (NumberFormatException exception) {
@@ -214,19 +214,19 @@ public class FenetrePrincipale {
     }
 
     // Accessors
-    public ZoneNotification getM_zoneNotification() {
+    public ZoneNotification getZoneNotification() {
         return m_zoneNotification;
     }
 
-    public VuePlan getM_vuePlan() {
+    public VuePlan getVuePlan() {
         return m_vuePlan;
     }
 
-    public JMenu getM_menuFichier() {
+    public JMenu getMenuFichier() {
         return m_menuFichier;
     }
 
-    public JMenu getM_menuEdition() {
+    public JMenu getMenuEdition() {
         return m_menuEdition;
     }
 
@@ -324,7 +324,7 @@ public class FenetrePrincipale {
 
         m_notificationInfos.setInfoMessage(String.format("Livraison n°%s sur la plage %s", id, plage));
         m_labelNumClient.setText(Integer.toString(livraison.getNoClient()));
-        m_labelAdresse.setText(Integer.toString(livraison.getAdresse().getM_id()));
+        m_labelAdresse.setText(Integer.toString(livraison.getAdresse().getId()));
         m_labelCoordonnees.setText(livraison.getAdresse().toString());
         m_labelPlageHoraire.setText(livraison.getPlage().toString());
         m_horaireLivraison.setForeground(Color.BLACK);
@@ -355,11 +355,11 @@ public class FenetrePrincipale {
 
         m_selectedNoeud = noeud;
         m_plagesHoraires.removeAllItems();
-        for (PlageHoraire ph : m_controleur.getM_demandeLivraison().getM_plagesHoraires()) {
+        for (PlageHoraire ph : m_controleur.getDemandeLivraison().getPlagesHoraires()) {
             m_plagesHoraires.addItem(ph.toString());
         }
 
-        m_adresseNouvelleLivraison.setText(Integer.toString(noeud.getM_id()));
+        m_adresseNouvelleLivraison.setText(Integer.toString(noeud.getId()));
 
         // Zone de notification
         m_notificationAjout.setInfoMessage("Ajout d'une livraison");
@@ -379,7 +379,7 @@ public class FenetrePrincipale {
     }
 
     // Getters/Setters
-    public JFrame getM_frame() {
+    public JFrame getFrame() {
         return m_frame;
     }
 

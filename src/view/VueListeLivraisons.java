@@ -9,6 +9,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+/**
+ * Vue affichant une liste de livraisons et permettant de les s&eacute;lectionner
+ */
 public class VueListeLivraisons extends JScrollPane{
 
     private DefaultListModel m_listModel;

@@ -43,7 +43,7 @@ public class DemandeLivraison {
         return m_entrepot;
     }
 
-    public ArrayList<PlageHoraire> getM_plagesHoraires() {
+    public ArrayList<PlageHoraire> getPlagesHoraires() {
         return m_plagesHoraires;
     }
 
@@ -88,7 +88,7 @@ public class DemandeLivraison {
      */
     public void razHeuresLivraisons() {
         for (PlageHoraire plageHoraire : m_plagesHoraires) {
-            for (Livraison livraison : plageHoraire.getM_livraisons()) {
+            for (Livraison livraison : plageHoraire.getLivraisons()) {
                 livraison.setHeureLivraison(null);
             }
         }
@@ -103,7 +103,7 @@ public class DemandeLivraison {
     public int getUniqueID() {
         int maxID = 0;
         for (PlageHoraire ph : m_plagesHoraires) {
-            for (Livraison livraison : ph.getM_livraisons()) {
+            for (Livraison livraison : ph.getLivraisons()) {
                 maxID = livraison.getId() > maxID ? livraison.getId() : maxID;
             }
         }
@@ -156,7 +156,7 @@ public class DemandeLivraison {
         if (m_entrepot == null) {
             throw new ParseXmlException("Adresse de l'entrepot introuvable");
         }
-        m_entrepot.setM_entrepot(true);
+        m_entrepot.setEntrepot(true);
 
         //récupération des plages horaires
         NodeList n_plages = racineXML.getElementsByTagName("PlagesHoraires");
@@ -199,8 +199,8 @@ public class DemandeLivraison {
                 // Chevauchement de deux plages horaires
                 throw new ParseXmlException("Plages horaires en conflit");
             }
-            ph1.setM_indice(i);
-            ph2.setM_indice(i + 1);
+            ph1.setIndice(i);
+            ph2.setIndice(i + 1);
         }
 
         return true;
@@ -213,7 +213,7 @@ public class DemandeLivraison {
      */
     public boolean isEmpty() {
         for (PlageHoraire ph : m_plagesHoraires) {
-            if (ph.getM_livraisons().size() != 0) {
+            if (ph.getLivraisons().size() != 0) {
                 return false;
             }
         }
@@ -224,7 +224,7 @@ public class DemandeLivraison {
     public ArrayList<Livraison> getLivraisons() {
         ArrayList<Livraison> livraisons = new ArrayList<>();
         for (PlageHoraire ph : m_plagesHoraires) {
-            livraisons.addAll(ph.getM_livraisons());
+            livraisons.addAll(ph.getLivraisons());
         }
         return livraisons;
     }
@@ -239,10 +239,10 @@ public class DemandeLivraison {
      * @param plan  l'environnement de calcul
      */
     private void doSomeFirstCalc(PlageHoraire i, Noeud noeud, GraphImpl graph, Plan plan) {
-        for (Livraison livraison : i.getM_livraisons()) {
+        for (Livraison livraison : i.getLivraisons()) {
             Chemin chemin = Dijkstra.dijkstra_c(noeud, livraison.getAdresse(), plan);
-            int id1 = noeud.getM_id();
-            int id2 = livraison.getAdresse().getM_id();
+            int id1 = noeud.getId();
+            int id2 = livraison.getAdresse().getId();
             fillCost(id1, id2, chemin.getLongueur(), graph);
             fillChemin(id1, id2, chemin);
         }
@@ -258,20 +258,20 @@ public class DemandeLivraison {
      * @param plan    l'environnement de calcul
      */
     private void doSomeCalc(PlageHoraire i, PlageHoraire iPluzun, GraphImpl graph, Plan plan) {
-        for (Livraison livraison : i.getM_livraisons()) {
-            for (Livraison autreLivraisonDeRangI : i.getM_livraisons()) {
+        for (Livraison livraison : i.getLivraisons()) {
+            for (Livraison autreLivraisonDeRangI : i.getLivraisons()) {
                 if (!livraison.equals(autreLivraisonDeRangI)) {
                     Chemin chemin = Dijkstra.dijkstra_c(livraison.getAdresse(), autreLivraisonDeRangI.getAdresse(), plan);
-                    int id1 = livraison.getAdresse().getM_id();
-                    int id2 = autreLivraisonDeRangI.getAdresse().getM_id();
+                    int id1 = livraison.getAdresse().getId();
+                    int id2 = autreLivraisonDeRangI.getAdresse().getId();
                     fillCost(id1, id2, chemin.getLongueur(), graph);
                     fillChemin(id1, id2, chemin);
                 }
             }
-            for (Livraison autreLivraisonDeRangIPluzun : iPluzun.getM_livraisons()) {
+            for (Livraison autreLivraisonDeRangIPluzun : iPluzun.getLivraisons()) {
                 Chemin chemin = Dijkstra.dijkstra_c(livraison.getAdresse(), autreLivraisonDeRangIPluzun.getAdresse(), plan);
-                int id1 = livraison.getAdresse().getM_id();
-                int id2 = autreLivraisonDeRangIPluzun.getAdresse().getM_id();
+                int id1 = livraison.getAdresse().getId();
+                int id2 = autreLivraisonDeRangIPluzun.getAdresse().getId();
                 fillCost(id1, id2, chemin.getLongueur(), graph);
                 fillChemin(id1, id2, chemin);
             }
@@ -288,19 +288,19 @@ public class DemandeLivraison {
      * @param plan  l'environnement de calcul
      */
     private void doSomeOtherCalc(PlageHoraire i, Noeud noeud, GraphImpl graph, Plan plan) {
-        for (Livraison livraison : i.getM_livraisons()) {
-            for (Livraison autreLivraisonDeRangI : i.getM_livraisons()) {
+        for (Livraison livraison : i.getLivraisons()) {
+            for (Livraison autreLivraisonDeRangI : i.getLivraisons()) {
                 if (!livraison.equals(autreLivraisonDeRangI)) {
                     Chemin chemin = Dijkstra.dijkstra_c(livraison.getAdresse(), autreLivraisonDeRangI.getAdresse(), plan);
-                    int id1 = livraison.getAdresse().getM_id();
-                    int id2 = autreLivraisonDeRangI.getAdresse().getM_id();
+                    int id1 = livraison.getAdresse().getId();
+                    int id2 = autreLivraisonDeRangI.getAdresse().getId();
                     fillCost(id1, id2, chemin.getLongueur(), graph);
                     fillChemin(id1, id2, chemin);
                 }
             }
             Chemin chemin = Dijkstra.dijkstra_c(livraison.getAdresse(), noeud, plan);
-            int id1 = livraison.getAdresse().getM_id();
-            int id2 = noeud.getM_id();
+            int id1 = livraison.getAdresse().getId();
+            int id2 = noeud.getId();
             fillCost(id1, id2, chemin.getLongueur(), graph);
             fillChemin(id1, id2, chemin);
         }

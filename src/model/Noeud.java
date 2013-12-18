@@ -119,31 +119,31 @@ public class Noeud {
         return " x = " + m_x + ", y = " + m_y;
     }
 
-    public int getM_id() {
+    public int getId() {
         return m_id;
     }
 
-    public int getM_x() {
+    public int getX() {
         return m_x;
     }
 
-    public int getM_y() {
+    public int getY() {
         return m_y;
     }
 
-    public ArrayList<Troncon> getM_troncons() {
+    public ArrayList<Troncon> getTroncons() {
         return m_troncons;
     }
 
-    public void setM_livraison(Livraison m_livraison) {
+    public void setLivraison(Livraison m_livraison) {
         this.m_livraison = m_livraison;
     }
 
-    public Livraison getM_livraison() {
+    public Livraison getLivraison() {
         return m_livraison;
     }
 
-    public void setM_entrepot(boolean m_entrepot) {
+    public void setEntrepot(boolean m_entrepot) {
         this.m_entrepot = m_entrepot;
     }
 
