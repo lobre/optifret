@@ -178,6 +178,7 @@ public class Controleur {
     public void chargerDemandeLivraison() {
         try {
             m_window.getVueListeLivraisons().raz();
+
             if (m_plan == null) {
                 m_window.getM_zoneNotification().setErrorMessage("Veuillez d'abord charger un plan avant de charger une demande de livraison.");
                 return;
@@ -341,6 +342,7 @@ public class Controleur {
         m_commandes.executer(new CommandeSuppression(m_demandeLivraison, livraison));
 
         annulerFeuilleRoute();
+        updateListeLivraisons();
         updateListeLivraisons();
     }
 

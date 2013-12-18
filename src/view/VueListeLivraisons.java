@@ -46,6 +46,8 @@ public class VueListeLivraisons extends JScrollPane{
                 m_controleur.selectionLivraison(m_livraisons.get(index));
             }
         });
+
+        setPreferredSize(new Dimension(250, -1));
     }
 
     public void setLivraisons(ArrayList<Livraison> livraisons) {
