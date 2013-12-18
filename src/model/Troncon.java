@@ -6,7 +6,7 @@ import org.w3c.dom.Element;
 import java.util.HashMap;
 
 /**
- * Class Troncon
+ * Tron&ccedil;on: relie deux noeuds sur une certaine longueur, avec une certaine vitesse moyenne.
  */
 public class Troncon {
 
@@ -14,8 +14,8 @@ public class Troncon {
     // Fields
     //
 
-    public static int PARSE_OK = 0;
-    public static int PARSE_ERROR = -1;
+    public static final int PARSE_OK = 0;
+    public static final int PARSE_ERROR = -1;
 
     private String m_nom;
     private float m_longueur;

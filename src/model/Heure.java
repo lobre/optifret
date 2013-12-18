@@ -15,8 +15,8 @@ public class Heure {
     private int m_minutes;
     private int m_secondes;
 
-    public static int PARSE_OK = 0;
-    public static int PARSE_ERROR = -1;
+    public static final int PARSE_OK = 0;
+    public static final int PARSE_ERROR = -1;
 
     //
     // Constructors

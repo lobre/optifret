@@ -13,15 +13,29 @@ public class VueNoeud {
     private boolean m_selected;
     private boolean m_focused;
 
-    private static Color COULEUR_DEFAUT = new Color(202, 216, 255);
-    private static Color COULEUR_ENTREPOT = new Color(193, 28, 185);
+    /**
+     * Couleur d'un noeud "normal"
+     */
+    private static final Color COULEUR_DEFAUT = new Color(202, 216, 255);
+    /**
+     * Couleur de l'entrepot
+     */
+    private static final Color COULEUR_ENTREPOT = new Color(193, 28, 185);
+    /**
+     * Couleur d'une livraison hors-horaire
+     */
     private static final Color COULEUR_LIVRAISON_HORSHORAIRE = new Color(207, 0, 11);
-    public static int RAYON_DEFAUT = 13;
-    private static int RAYON_LIVRAISON = 17;
-    private static int RAYON_ENTREPOT = 24;
 
-    // Facteur par lequel les coordonées de la vue sont amplifiées par rapport à ceux du modèle
-    public static int AMPLIFICATION_FACTOR = 2;
+    /**
+     * Rayon (par d&eacute;faut) du noeud
+     */
+    public static final int RAYON_DEFAUT = 13;
+    private static final int RAYON_LIVRAISON = 17;
+    private static final int RAYON_ENTREPOT = 24;
+    /**
+     *  Facteur par lequel les coordon&eacute;es de la vue sont amplifi&eacute;es par rapport &agrave; ceux du mod&egrave;le
+     */
+    public static final int AMPLIFICATION_FACTOR = 2;
 
     private static double FOCUS_FACTOR = 1.5;
 
@@ -34,8 +48,37 @@ public class VueNoeud {
         m_selected = false;
     }
 
-    // Methods
+    //
+    // Getters/Setters
+    //
+    public Noeud getNoeud() {
+        return m_noeud;
+    }
 
+    public int getX() {
+        return m_noeud.getX() * AMPLIFICATION_FACTOR;
+    }
+
+    public int getY() {
+        return m_noeud.getY() * AMPLIFICATION_FACTOR;
+    }
+
+    public void setSelected(boolean m_selected) {
+        this.m_selected = m_selected;
+    }
+
+    public void setFocused(boolean m_focused) {
+        this.m_focused = m_focused;
+    }
+
+    //
+    // Other methods
+    //
+
+    /**
+     * M&eacute;thode de dessin du noeud repr&eacute;sent&eacute; par la VueNoeud.
+     * @param g2 contexte graphique dans lequel doit &ecirc;tre dessin&eacute; le noeud
+     */
     public void draw(Graphics2D g2) {
 
         int r = getRayon();
@@ -83,20 +126,10 @@ public class VueNoeud {
     }
 
 
-    // Getters/Setters
-
-    public Noeud getNoeud() {
-        return m_noeud;
-    }
-
-    public int getX() {
-        return m_noeud.getX() * AMPLIFICATION_FACTOR;
-    }
-
-    public int getY() {
-        return m_noeud.getY() * AMPLIFICATION_FACTOR;
-    }
-
+    /**
+     * Donne le rayon de la VueNoeud en fonction de la nature du noeud
+     * @return rayon de la VueNoeud
+     */
     public int getRayon() {
         if (m_noeud.isEntrepot()) {
             return RAYON_ENTREPOT;
@@ -107,6 +140,13 @@ public class VueNoeud {
         }
     }
 
+    /**
+     * Donne la couleur du noeud en fonction de la nature du noeud (entrepot, livraison, livraison en retard) et de
+     * l'&eacute;tat de la VueNoeud (s&eacute;lectionn&eacute;e, survol&eacute;e)
+     * @see model.Noeud
+     * @see model.Livraison
+     * @return couleur de la VueNoeud
+     */
     public Color getCouleur() {
         Color color = COULEUR_DEFAUT;
         if (m_noeud.isEntrepot()) {
@@ -126,12 +166,5 @@ public class VueNoeud {
         return color;
     }
 
-    public void setSelected(boolean m_selected) {
-        this.m_selected = m_selected;
-    }
-
-    public void setFocused(boolean m_focused) {
-        this.m_focused = m_focused;
-    }
 }
 
