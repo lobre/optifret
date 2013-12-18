@@ -6,7 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 
 class VueCelluleLivraison extends JLabel implements ListCellRenderer<Object> {
-    private static final Font DEFAULT_FONT = new Font("Arial", Font.BOLD, 13);
+    private static final Font DEFAULT_FONT = new Font("Arial", Font.PLAIN, 13);
+    private static final Font BOLD_FONT = new Font("Arial", Font.BOLD, 13);
     private static final Color BACKGROUND_SELECTED = VuePlan.COULEUR_BACKGROUND ;//new Color(36, 61, 217);
 
 
@@ -32,6 +33,7 @@ class VueCelluleLivraison extends JLabel implements ListCellRenderer<Object> {
                     Integer.toString(livraison.getNoClient()));
             if (livraison.isHorsHoraire()) {
                 setForeground(Color.RED);
+                setFont(BOLD_FONT);
             }
         }
 
