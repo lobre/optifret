@@ -386,6 +386,7 @@ public class VuePlan extends JPanel {
                     setFocusedNoeud(clickedNoeud);
                     repaint();
                 }
+
             }
 
 

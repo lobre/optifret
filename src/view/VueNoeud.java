@@ -53,8 +53,8 @@ public class VueNoeud {
         }
 
         // Ombre du cercle
-        g2.setColor(color.darker());
-        g2.fillOval(x, y, 2 * (r + 1), 2 * (r + 1));
+      //  g2.setColor(color.darker());
+       // g2.fillOval(x, y, 2 * (r + 1), 2 * (r + 1));
 
 
         // Remplissage du cercle
@@ -70,8 +70,10 @@ public class VueNoeud {
                 g2.setColor(Color.WHITE);
             }else if (m_noeud.isEntrepot()) {
                 message = "E";
+                g2.setColor(getM_couleur().darker());
             } else {
                 message = Integer.toString(m_noeud.getM_id());
+                g2.setColor(getM_couleur().darker());
             }
             int text_x = x + r - g2.getFontMetrics().stringWidth(message) / 2;
             int text_y = y + r + g2.getFontMetrics().getHeight() / 3;
