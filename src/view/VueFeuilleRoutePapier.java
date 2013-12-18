@@ -68,15 +68,24 @@ public class VueFeuilleRoutePapier {
                 if (!dernierTroncon) {
                     Troncon t2 = troncons.get(i + 1);
                     double angle = t.angleAvec(t2);
-
                     if(t.getDepart()==t2.getArrivee()){
                             r+="  . Faites demi-tour \n";
                     }
-                    else if (Math.abs(angle - Math.PI / 2)%(2*Math.PI) < 0.6) {
+                    else if ((Math.cos(angle) < 0.5) &&((Math.sin(angle))>0)) {
+
                             r += "  . Tournez à droite.\n";
                     }
-                    else if (Math.abs(angle + Math.PI / 2)%(Math.PI) < 0.6) {
-                            r += "  . Tournez à gauche.\n";
+                    else if ((Math.cos(angle) < 0.7) &&((Math.sin(angle))>0)) {
+
+                            r += "  . Tournez légèrement à droite.\n";
+                    }
+                    else if ((Math.cos(angle) < 0.5) &&((Math.sin(angle))<0)) {
+
+                            r += "  . Tournez  à gauche.\n";
+                    }
+                    else if ((Math.cos(angle) < 0.7) &&((Math.sin(angle))<0)) {
+
+                            r += "  . Tournez légèrement à gauche.\n";
                     }
 
 

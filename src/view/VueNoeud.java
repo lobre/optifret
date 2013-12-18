@@ -62,6 +62,21 @@ public class VueNoeud {
         g2.fillOval(x, y, 2 * r, 2 * r);
 
 
+       /* if ((m_noeud.hasLivraison() && m_noeud.getM_livraison().isHorsHoraire()))      {
+            g2.setStroke(new BasicStroke(BORDER_WIDTH+1,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND));
+            g2.setColor(new Color(255, 0, 9));
+            Point hPoint=new Point((int)(getM_x()+0.1*r),(int)(y+0.1*r));
+            Point bgPoint=new Point((int)(x+0.40*r),(int)(getM_y()+((float)15/21)*r));
+            Point bdPoint=new Point((int)(getM_x()+0.60*r),(int)(getM_y()+(((float)15/21)*r)));
+             
+            Point hPoint=new Point((int)(getM_x()-0.1*r),(int)(y-(2.0/3)*r));
+            Point bgPoint=new Point((int)(x-0.66*r),(int)(getM_y()+(1.66)*r));
+            Point bdPoint=new Point((int)(getM_x()+1.66*r),(int)(getM_y()+(((float)1.66)*r))); 
+
+            g2.drawLine((int)hPoint.getX(),(int)hPoint.getY(),(int)bgPoint.getX(),(int)bgPoint.getY());
+            g2.drawLine((int)bgPoint.getX(),(int)bgPoint.getY(),(int)bdPoint.getX(),(int)bdPoint.getY());
+            g2.drawLine((int)hPoint.getX(),(int)hPoint.getY(),(int)bdPoint.getX(),(int)bdPoint.getY()); 
+        }*/
 
         // Si un noeud est sélectionné, on affiche son ID ; Si c'est un entrepot, on affiche un grand E par dessus
         if (m_selected || m_noeud.isEntrepot() || m_noeud.hasLivraison() ) {
@@ -113,8 +128,8 @@ public class VueNoeud {
             color = COULEUR_ENTREPOT;
         }
         else if (m_noeud.hasLivraison()) {
-            if (m_noeud.getM_livraison().isHorsHoraire()) {
-                return COULEUR_LIVRAISON_HORSHORAIRE;
+            if (m_noeud.getM_livraison().isHorsHoraire())  {
+                color= new Color(255, 0, 0); // TODO a mettre en haut;
             } else {
                 color = VueTroncon.getCouleurPlageHoraire(m_noeud.getM_livraison().getPlage());
             }
