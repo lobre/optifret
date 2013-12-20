@@ -126,11 +126,11 @@ public class DemandeLivraison {
      */
     public FeuilleRoute calculerFeuilleDeRoute(int timeLimit) {
         GraphImpl graph = new GraphImpl();
-        doSomeFirstCalc(m_plagesHoraires.get(0), m_entrepot, graph, m_plan);
+        remplirGrapheAvecPEtI(m_plagesHoraires.get(0), m_entrepot, graph, m_plan);
         for (int i = 0; i < m_plagesHoraires.size() - 1; i++) {
-            doSomeCalc(m_plagesHoraires.get(i), m_plagesHoraires.get(i + 1), graph, m_plan);
+            remplirGrapheAvecIEtIPluzun(m_plagesHoraires.get(i), m_plagesHoraires.get(i + 1), graph, m_plan);
         }
-        doSomeOtherCalc(m_plagesHoraires.get(m_plagesHoraires.size() - 1), m_entrepot, graph, m_plan);
+        remplirGrapheAvecIEtP(m_plagesHoraires.get(m_plagesHoraires.size() - 1), m_entrepot, graph, m_plan);
 
         TSP tsp = new TSP(graph);
         // On tente de le résoudre en X\1000 secondes.
@@ -252,7 +252,7 @@ public class DemandeLivraison {
      * @param graph graphe à remplir
      * @param plan  l'environnement de calcul
      */
-    private void doSomeFirstCalc(PlageHoraire i, Noeud noeud, GraphImpl graph, Plan plan) {
+    private void remplirGrapheAvecPEtI(PlageHoraire i, Noeud noeud, GraphImpl graph, Plan plan) {
         for (Livraison livraison : i.getLivraisons()) {
             Chemin chemin = Dijkstra.dijkstra_c(noeud, livraison.getAdresse(), plan);
             int id1 = noeud.getId();
@@ -271,7 +271,7 @@ public class DemandeLivraison {
      * @param graph   graphe à remplir
      * @param plan    l'environnement de calcul
      */
-    private void doSomeCalc(PlageHoraire i, PlageHoraire iPluzun, GraphImpl graph, Plan plan) {
+    private void remplirGrapheAvecIEtIPluzun(PlageHoraire i, PlageHoraire iPluzun, GraphImpl graph, Plan plan) {
         for (Livraison livraison : i.getLivraisons()) {
             for (Livraison autreLivraisonDeRangI : i.getLivraisons()) {
                 if (!livraison.equals(autreLivraisonDeRangI)) {
@@ -301,7 +301,7 @@ public class DemandeLivraison {
      * @param graph graphe à remplir
      * @param plan  l'environnement de calcul
      */
-    private void doSomeOtherCalc(PlageHoraire i, Noeud noeud, GraphImpl graph, Plan plan) {
+    private void remplirGrapheAvecIEtP(PlageHoraire i, Noeud noeud, GraphImpl graph, Plan plan) {
         for (Livraison livraison : i.getLivraisons()) {
             for (Livraison autreLivraisonDeRangI : i.getLivraisons()) {
                 if (!livraison.equals(autreLivraisonDeRangI)) {
