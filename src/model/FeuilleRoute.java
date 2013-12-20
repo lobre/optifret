@@ -31,13 +31,13 @@ public class FeuilleRoute {
     //
 
     /**
-     * TODO : javadoc here
+     * Crée un objet de type feuille de route construit à partir des paramètres donnés.
      *
-     * @param tsp
-     * @param chemins
-     * @param matches
-     * @param cost
-     * @param demandeLivraison
+     * @param tsp              une TSP résolue.
+     * @param chemins          correspondance entre un point de départ, une arrivée, et le chemin associé.
+     * @param matches          correspondance entre les identifiants de la TSP (idTSP) et ceux du modèle.
+     * @param cost             correspondance entre un point de départ (idTSP), une arrivée et le poids du plus court chemin entre eux.
+     * @param demandeLivraison la demande de livraison à l'origine de la feuille de route.
      */
     public FeuilleRoute(TSP tsp, Map<Integer, Map<Integer, Chemin>> chemins, int[] matches, int[][] cost, DemandeLivraison demandeLivraison) {
         m_demandeLivraison = demandeLivraison;
@@ -179,35 +179,42 @@ public class FeuilleRoute {
     //
     // Accessor methods
     //
+
+    /**
+     * @return la liste ordonnée des chemins correspondant à cette feuille de route.
+     */
     public List<Chemin> getChemins() {
         return m_chemins;
     }
 
+    /**
+     * @return la liste ordonnée des livraisons associées à cette feuille de route.
+     */
     public LinkedList<Livraison> getLivraisonsOrdonnees() {
         return m_livraisonsOrdonnees;
     }
 
+    /**
+     * @return la liste des livraisons ne pouvant pas être livrées dans la plage horaire voulue.
+     */
     public List<Livraison> getReSchedule() {
         return m_reSchedule;
     }
 
+    /**
+     * @return l'état de la feuille :
+     *         - INSOLUBLE : il n'existe aucun itinéraire permettant d'assurer toutes les livraisons demandées.
+     *         - RESOLU : il existe un itinéraire, optimal ou non, permettant d'assurer dans l'horaire toutes les livraisons demandées.
+     *         - SOLUBLE : il existe un itinéraire, optimal ou non, permettant d'assurer toutes les livraisons demandées. Cependant,
+     *         au moins une livraison ne peut être effectuée dans l'horaire.
+     */
     public EtatFeuille getEtatFeuille() {
         return m_etat;
     }
 
-    //
-    // Other methods
-    //
-
-    private int getReverseMatch(int idPoint, int[] matches) {
-        for (int i = 0; i < matches.length; i++) {
-            if (matches[i] == idPoint)
-                return i;
-        }
-        return -1;
-    }
-
-
+    /**
+     * @return la liste des noeuds du graphe.
+     */
     public ArrayList<Noeud> getNodes() {
         ArrayList<Noeud> noeuds = new ArrayList<>();
         for (Chemin c : m_chemins) {
@@ -216,6 +223,9 @@ public class FeuilleRoute {
         return noeuds;
     }
 
+    /**
+     * @return la liste des livraisons à desservir.
+     */
     public ArrayList<Livraison> getLivraisons() {
         ArrayList<Livraison> livraisons = new ArrayList<>();
         for (Noeud noeud : getNodes()) {
@@ -225,6 +235,10 @@ public class FeuilleRoute {
         }
         return livraisons;
     }
+
+    /**
+     * @return la liste des tronçons du graphe.
+     */
     public ArrayList<Troncon> getTroncons() {
         ArrayList<Troncon> troncons = new ArrayList<>();
         for (Chemin chemin : m_chemins) {
@@ -233,7 +247,22 @@ public class FeuilleRoute {
         return troncons;
     }
 
+    //
+    // Other methods
+    //
 
+
+    private int getReverseMatch(int idPoint, int[] matches) {
+        for (int i = 0; i < matches.length; i++) {
+            if (matches[i] == idPoint)
+                return i;
+        }
+        return -1;
+    }
+
+    /**
+     * Définit une durée en secondes.
+     */
     private class Duree {
         private int m_secondes;
 
