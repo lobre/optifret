@@ -50,10 +50,10 @@ public class FeuilleRoute {
                 m_etat = EtatFeuille.INSOLUBLE;
                 break;
             case OPTIMAL_SOLUTION_FOUND:
-                fill(tsp, chemins, matches, cost);
+                remplir(tsp, chemins, matches, cost);
                 break;
             case SOLUTION_FOUND:
-                fill(tsp, chemins, matches, cost);
+                remplir(tsp, chemins, matches, cost);
                 break;
             case NO_SOLUTION_FOUND:
                 m_etat = EtatFeuille.INSOLUBLE;
@@ -61,10 +61,6 @@ public class FeuilleRoute {
             default:
                 throw new EnumConstantNotPresentException(SolutionState.class, tsp.getSolutionState().name());
         }
-    }
-
-    private boolean contains(PlageHoraire plageHoraire, Heure heure) {
-        return (heure.estAvant(plageHoraire.getHeureFin()) && plageHoraire.getHeureDebut().estAvant(heure));
     }
 
     /**
@@ -161,7 +157,7 @@ public class FeuilleRoute {
         return null;
     }
 
-    private void fill(TSP tsp, Map<Integer, Map<Integer, Chemin>> chemins, int[] matches, int[][] cost) {
+    private void remplir(TSP tsp, Map<Integer, Map<Integer, Chemin>> chemins, int[] matches, int[][] cost) {
         int[] tspNext = tsp.getNext();
         int idEntrepot = getReverseMatch(m_demandeLivraison.getEntrepot().getId(), matches);
         int from = idEntrepot;
