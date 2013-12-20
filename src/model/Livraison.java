@@ -81,6 +81,7 @@ public class Livraison {
 
     /**
      * Donne l'id de la livraison
+     *
      * @return l'id de la livraison
      */
     public int getId() {
@@ -89,6 +90,7 @@ public class Livraison {
 
     /**
      * Donne l'id du client de la livraison
+     *
      * @return l'id du client de la livraison
      */
     public int getNoClient() {
@@ -97,6 +99,7 @@ public class Livraison {
 
     /**
      * Donne la plage horaire correspondant &agrave; la livraison
+     *
      * @return la plage horaire correspondant &agrave; la livraison
      */
     public PlageHoraire getPlage() {
@@ -105,6 +108,7 @@ public class Livraison {
 
     /**
      * Donne le noeud associ&eacute; &agrave; la livraison
+     *
      * @return le noeud associ&eacute; &agrave; la livraison
      */
     public Noeud getAdresse() {
@@ -119,7 +123,7 @@ public class Livraison {
     public void setHeureLivraison(Heure m_heureLivraison) {
         this.m_heureLivraison = m_heureLivraison;
     }
-
+    
     /**
      * Indique si la livraison dépasse sa plage horaire.
      * @return vrai si la livraison est prévue, et qu'elle dépasse la fin de sa plage horaire, faux sinon
@@ -127,9 +131,10 @@ public class Livraison {
     public boolean isHorsHoraire(){
         if (m_heureLivraison !=null && m_heureLivraison.compareTo(m_plage.getHeureFin())>=0) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
+
+
 }
