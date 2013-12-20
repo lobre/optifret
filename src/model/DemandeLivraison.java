@@ -28,6 +28,7 @@ public class DemandeLivraison {
 
     /**
      * Constructeur d'une demande de livraison
+     *
      * @param plan le plan de la zone g&eacute;ographique sur laquelle se fait la demande de livraison.
      */
     public DemandeLivraison(Plan plan) {
@@ -39,10 +40,17 @@ public class DemandeLivraison {
     //
     // Accessor methods
     //
+
+    /**
+     * @return le Nœud où est basé l'entrepôt.
+     */
     public Noeud getEntrepot() {
         return m_entrepot;
     }
 
+    /**
+     * @return la liste ordonnée des plages horaires corncernées par cette demande de livraison.
+     */
     public ArrayList<PlageHoraire> getPlagesHoraires() {
         return m_plagesHoraires;
     }
@@ -188,6 +196,7 @@ public class DemandeLivraison {
 
     /**
      * Valide les plages horaires de la demande de livraison: v&eacute;rifie qu'il n y a pas de chevauchement.
+     *
      * @return true s'il n y a pas de chevauchement de plages horaires, false sinon.
      */
     private boolean plagesValides() {
@@ -221,6 +230,11 @@ public class DemandeLivraison {
         return true;
     }
 
+    /**
+     * Permet d'obtenir la liste des livraisons prévues par la demande this.
+     *
+     * @return
+     */
     public ArrayList<Livraison> getLivraisons() {
         ArrayList<Livraison> livraisons = new ArrayList<>();
         for (PlageHoraire ph : m_plagesHoraires) {
