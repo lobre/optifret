@@ -111,10 +111,19 @@ public class Livraison {
         return m_adresse;
     }
 
+
+    public Heure getHeureLivraison() {
+        return m_heureLivraison;
+    }
+
     public void setHeureLivraison(Heure m_heureLivraison) {
         this.m_heureLivraison = m_heureLivraison;
     }
 
+    /**
+     * Indique si la livraison dépasse sa plage horaire.
+     * @return vrai si la livraison est prévue, et qu'elle dépasse la fin de sa plage horaire, faux sinon
+     */
     public boolean isHorsHoraire(){
         if (m_heureLivraison !=null && m_heureLivraison.compareTo(m_plage.getHeureFin())>=0) {
             return true;
@@ -123,8 +132,4 @@ public class Livraison {
             return false;
         }
     }
-    public Heure getHeureLivraison() {
-        return m_heureLivraison;
-    }
-
 }

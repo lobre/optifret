@@ -3,6 +3,9 @@ package controller;
 import model.DemandeLivraison;
 import model.Livraison;
 
+/**
+ * Commande d'ajout d'une livraison.
+ */
 public class CommandeAjout extends Commande {
 
     public CommandeAjout(DemandeLivraison demandeLivraison, Livraison livraison) {

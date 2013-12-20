@@ -16,7 +16,7 @@ public class FenetreImprimerFeuilleRoute extends JDialog {
     private JButton m_enregistrerButton;
 
     private Controleur m_controleur;
-    private VueFeuilleRoutePapier m_vueFeuilleRoute;
+    private VueTexteFeuilleRoute m_vueFeuilleRoute;
 
     /**
      * Constructeur de la fen&ecirc;tre
@@ -26,8 +26,8 @@ public class FenetreImprimerFeuilleRoute extends JDialog {
      */
     public FenetreImprimerFeuilleRoute(Controleur controleur, FeuilleRoute feuilleRoute) {
         m_controleur = controleur;
-        m_vueFeuilleRoute = new VueFeuilleRoutePapier(feuilleRoute);
-        m_textArea.setText(m_vueFeuilleRoute.getVersionPapier());
+        m_vueFeuilleRoute = new VueTexteFeuilleRoute(feuilleRoute);
+        m_textArea.setText(m_vueFeuilleRoute.getTexte());
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(m_buttonFermer);

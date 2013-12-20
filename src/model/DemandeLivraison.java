@@ -181,9 +181,7 @@ public class DemandeLivraison {
             //nouvelle plage horaire
             Element e_plage = (Element) liste_plages.item(i);
             PlageHoraire plage = new PlageHoraire();
-            if (plage.fromXML(e_plage, m_plan) != PlageHoraire.PARSE_OK) {
-                throw new ParseXmlException("Plage horaire invalide");
-            }
+            plage.fromXML(e_plage, m_plan);
             this.ajouterPlageH(plage);
         }
 

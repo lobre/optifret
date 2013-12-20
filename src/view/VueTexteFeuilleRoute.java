@@ -9,15 +9,23 @@ import java.util.ArrayList;
 /**
  *  Vue texte d'une feuille de route
  */
-public class VueFeuilleRoutePapier {
+public class VueTexteFeuilleRoute {
 
     private FeuilleRoute m_feuilleRoute;
 
-    public VueFeuilleRoutePapier(FeuilleRoute feuilleRoute) {
+    /**
+     * Constructeur de VueTexteFeuilleRoute
+     * @param feuilleRoute la feuille de route qui doit être représentée sous format texte
+     */
+    public VueTexteFeuilleRoute(FeuilleRoute feuilleRoute) {
         m_feuilleRoute = feuilleRoute;
     }
 
-    public String getVersionPapier() {
+    /**
+     * Renvoie la représentation textuelle de la feuille de route représentée
+     * @return représentaiton textuelle de la feuille de route représentée
+     */
+    public String getTexte() {
         String r = new String();
         ArrayList<Troncon> troncons = m_feuilleRoute.getTroncons();
         int longueur = 0;
@@ -87,7 +95,6 @@ public class VueFeuilleRoutePapier {
         }
 
         r += "\n  - Fin de la tournée.\n";
-
 
         return r;
     }

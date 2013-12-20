@@ -12,7 +12,9 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.junit.Assert.assertTrue;
-
+/**
+ * Tests unitaires de la classe DemandeLivraison.
+ */
 public class DemandeLivraisonTest {
 
     static final String cheminXml = "xml_tests/planTestDijkstra.xml";

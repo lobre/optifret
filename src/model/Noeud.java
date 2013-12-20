@@ -8,7 +8,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Class Noeud
+ * Noeud du plan d'une zone g&eacute;ographique. A un ID unique (dans un plan) et un couple de coordonn&eacute;es (x et y).
+ * Il peut &ecirc;tre un entrep&ocirc;t et peut &ecirc;tre li&eacute; &agrave; une livraison. Il est reli&eacute;
+ * &agrave; un ou plusieurs noeuds via des tron&ccedil;ons.
+ * @see Plan
+ * @see Troncon
  */
 public class Noeud {
 
@@ -68,9 +72,9 @@ public class Noeud {
     }
 
     /**
-     * Définie les attributs m_id, m_x et m_y de l'instance
+     * D&eacute;finie les attributs m_id, m_x et m_y de l'instance
      * @param noeud_xml balise 'Noeud' contenant les attributs 'id', 'x' et 'y'
-     * @return PARSE_OK, si tous les attributs ont pu être définis
+     * @return PARSE_OK, si tous les attributs ont pu &ecirc;tre d&eacute;finis
      *         PARSE_ERROR, sinon
      */
     public int fromXML(Element noeud_xml) {
@@ -147,6 +151,10 @@ public class Noeud {
         this.m_entrepot = m_entrepot;
     }
 
+    /**
+     * Indique si le noeud est un entrep&ocirc;t.
+     * @return true si le Noeud est un entrep&ocirc;t.
+     */
     public boolean isEntrepot() {
         return m_entrepot;
     }

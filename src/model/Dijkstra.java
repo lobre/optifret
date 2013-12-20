@@ -3,6 +3,9 @@ package model;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+/**
+ * Classe permettant de trouver le plus court chemin entre deux noeuds en utilisant l'algorithme de Dijkstra.
+ */
 public class Dijkstra {
 
     /**

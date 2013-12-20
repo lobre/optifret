@@ -8,16 +8,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Class Plan
+ * Plan: Ensemble de noeuds sont liés par des tronçons.
+ * @see model.Noeud
+ * @see model.Troncon
  */
 public class Plan {
 
     //
     // Fields
     //
-
-    static public int PARSE_ERROR = -1;
-    static public int PARSE_OK = 0;
 
     private HashMap<Integer, Noeud> m_noeuds;
     private ArrayList<Troncon> m_troncons;
@@ -52,9 +51,8 @@ public class Plan {
     /**
      * Instancie les noeuds et le tronçons composant l'instance de Plan
      * @param racineXML balise 'Reseau' contenant des balises 'Noeud'
-     * @return          PARSE_OK, si l'instanciation est réussie
      */
-    public int fromXML(Element racineXML) {
+    public void fromXML(Element racineXML) {
         HashMap<Integer, Noeud> noeuds = new HashMap<Integer, Noeud>();
         ArrayList<Troncon> troncons = new ArrayList<Troncon>();
 
@@ -88,7 +86,7 @@ public class Plan {
             Noeud noeud = noeuds.get(i);
             int status = noeud.tronconsFromXML(noeud_xml, noeuds);
             if (status != Noeud.PARSE_OK) {
-                return Plan.PARSE_ERROR;
+                throw new ParseXmlException("Noeud introuvable ou invalide.");
             }
 
             // Mise à jour de la liste de tous les tronçons
@@ -98,9 +96,6 @@ public class Plan {
 
         m_noeuds = noeuds;
         m_troncons = troncons;
-
-        return Plan.PARSE_OK;
-
     }
 
     //

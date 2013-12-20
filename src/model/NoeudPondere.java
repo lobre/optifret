@@ -1,13 +1,9 @@
 package model;
 
 /**
- * Created with IntelliJ IDEA.
- * User: karimalaoui
- * Date: 05/12/2013
- * Time: 14:47
- * To change this template use File | Settings | File Templates.
+ * Noeud pond&eacute;r&eacute;. Utile pour le calcul de feuilles de routes, via Djikstra
+ * @see Dijkstra
  */
-
 public class NoeudPondere {
     private final Noeud m_noeud;
     private Double m_poids;

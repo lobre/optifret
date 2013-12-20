@@ -8,12 +8,11 @@ import java.util.ArrayList;
 
 
 /**
- * Class PlageHoraire
+ * Plage horaire: contient une ou plusieurs livraisons qui doivent être faite à partir d'un horaire de début et
+ * jusqu'à un horaire de fin.
  */
 public class PlageHoraire implements Comparable<PlageHoraire> {
 
-    static public int PARSE_ERROR = -1;
-    static public int PARSE_OK = 0;
     //
     // Fields
     //
@@ -49,7 +48,13 @@ public class PlageHoraire implements Comparable<PlageHoraire> {
         return m_heureDebut.getTotalSeconds() - ph.getHeureDebut().getTotalSeconds();
     }
 
-    public int fromXML(Element e_plage, Plan plan) throws ParseXmlException {
+    /**
+     * Parse une plage horaire depuis sa représentation XML
+     * @param e_plage une représentation XML d'une plage horaire
+     * @param plan le plan auquel est reliée la plage plage horaire
+     * @throws ParseXmlException si une erreure de parsing s'est produite
+     */
+    public void fromXML(Element e_plage, Plan plan) throws ParseXmlException {
 
         //récupération heures de début et de départ
         String h1 = e_plage.getAttribute("heureDebut");
@@ -57,7 +62,7 @@ public class PlageHoraire implements Comparable<PlageHoraire> {
         Heure hDepart = new Heure();
         Heure hFin = new Heure();
 
-        if (hDepart.fromString(h1) == PARSE_ERROR || hFin.fromString(h2) == PARSE_ERROR || !hDepart.estAvant(hFin)) {
+        if (hDepart.fromString(h1) == Heure.PARSE_ERROR || hFin.fromString(h2) == Heure.PARSE_ERROR || !hDepart.estAvant(hFin)) {
             throw new ParseXmlException("Heure non valide");
         }
         this.setHeureDebut(hDepart);
@@ -77,7 +82,6 @@ public class PlageHoraire implements Comparable<PlageHoraire> {
             this.addLivraison(livraison);
         }
 
-        return PARSE_OK;
     }
     //
     // Accessor methods

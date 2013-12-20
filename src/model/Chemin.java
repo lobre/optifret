@@ -4,7 +4,7 @@ package model;
 import java.util.LinkedList;
 
 /**
- * Class Chemin
+ * Chemin: ensemble de tron&ccedil;ons reliant deux noeuds sp&eacute;cifiques (parmi l'entrep&ocirc;t, les livraisons).
  */
 public class Chemin {
 

@@ -7,7 +7,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import view.FenetreImprimerFeuilleRoute;
 import view.FenetrePrincipale;
-import view.VueFeuilleRoutePapier;
+import view.VueTexteFeuilleRoute;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -303,7 +303,7 @@ public class Controleur {
      * Enregistrer la version papier d'une feuille de route
      * @return true si la feuille de route a correctement &eacute;t&eacute; enregistr&eacute;e, false sinon.
      */
-    public boolean enregistrerFeuilleRoute(VueFeuilleRoutePapier vueFeuilleRoute) {
+    public boolean enregistrerFeuilleRoute(VueTexteFeuilleRoute vueFeuilleRoute) {
         FileDialog fileDialog = new FileDialog(m_window.getFrame());
         fileDialog.setModal(true);
 
@@ -321,7 +321,7 @@ public class Controleur {
             } catch (FileNotFoundException | UnsupportedEncodingException e) {
                 return false;
             }
-            writer.print(vueFeuilleRoute.getVersionPapier());
+            writer.print(vueFeuilleRoute.getTexte());
             writer.close();
             return true;
         } else {

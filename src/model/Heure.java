@@ -2,7 +2,7 @@ package model;
 
 
 /**
- * Class Heure
+ * Classe heure, principalement utilis&eacute;e pour les plages horaires et heures de livraisons
  */
 public class Heure {
 
@@ -30,6 +30,11 @@ public class Heure {
         this.m_secondes = secondes;
     }
 
+    /**
+     * Op&eacute;rateur de comparaison pour les objets Heure
+     * @param a_comparer heures &agrave; laquelle on se compare
+     * @return 1 si l'heure est plus grande (plus avanc&eacute;e, chronologiquement), -1 si elle est plus petite
+     */
     public int compareTo(Heure a_comparer){
        if (this.m_heures==a_comparer.m_heures){
            if(this.m_minutes==a_comparer.m_minutes){
@@ -48,6 +53,11 @@ public class Heure {
     //
     // Methods
     //
+
+    /**
+     * Nombre total de secondes repr&eacute;sent&eacute;s par l'heure (depuis 00:00)
+     * @return nombre total de secondes
+     */
     public int getTotalSeconds() {
         return m_heures * 3600 + m_minutes * 60 + m_secondes;
     }
@@ -56,11 +66,20 @@ public class Heure {
     // Other methods
     //
 
+    /**
+     * Comparaison alternative des heures
+     * @param h heure &agrave; comparer
+     * @return vrai si l'heure est avant h, faux sinon.
+     */
     public boolean estAvant(Heure h) {
         return getTotalSeconds() < h.getTotalSeconds();
     }
 
-    //format hh:mm:ss
+    /**
+     * Parse un objet Heure depuis une repr&eacute;sentation textuelle de la forme "HH:MM:SS"
+     * @param string repr&eacute;sentation textuelle d'une heure
+     * @return PARSE_ERROR si le parsing a &eacute;chou&eacute;, PARSE_OK sinon.
+     */
     public int fromString(String string) {
 
         String[] parts = string.split(":");
@@ -89,7 +108,10 @@ public class Heure {
         return Heure.PARSE_OK;
     }
 
-    //format hh:mm:ss
+    /**
+     * Repr&eacute;sentation textuelle de l'heure dans le format HH:MM:SS
+     * @return repr&eacute;sentation textuelle de l'heure
+     */
     @Override
     public String toString() {
         return String.format("%02d", m_heures) + ":" + String.format("%02d", m_minutes) + ":" + String.format("%02d", m_secondes);

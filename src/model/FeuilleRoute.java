@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Class FeuilleRoute
+ * Feuille de route repr&eacute;sentant la tourn&eacute;e que doit effectuer le livreur pour &eacute;x&eacute;cuter
+ * une demande de livraison.
  */
 public class FeuilleRoute {
     private static final int TEMPS_ENTRE_DEUX_LIVRAISONS = 600;

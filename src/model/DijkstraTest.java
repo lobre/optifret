@@ -12,6 +12,9 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Tests unitaires de la classe Dijkstra.
+ */
 public class DijkstraTest {
 
     static final String cheminXml = "xml_tests/planTestDijkstra.xml";

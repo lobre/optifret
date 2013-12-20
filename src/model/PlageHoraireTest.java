@@ -4,6 +4,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Tests unitaire de la classe PlageHoraire
+ */
 public class PlageHoraireTest {
 
     Heure heure1 = new Heure(10,0,0);

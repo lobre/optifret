@@ -3,6 +3,9 @@ package libs;
 import java.io.File;
 import java.io.FilenameFilter;
 
+/**
+ * FilenameFilter qui accepte uniquement les fichiers .xml
+ */
 public class CustomFilenameFilter implements FilenameFilter {
     private String ext;
 

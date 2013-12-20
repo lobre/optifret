@@ -66,6 +66,13 @@ public class Troncon {
     // Other methods
     //
 
+    /**
+     * Parse la repr&eacute;sentation XML d'un Troncon.
+     * @param noeud_xml le noeud XML &agrave; parser
+     * @param depart le noeud de d&eacute;part du Troncon
+     * @param noeuds une map (id de noeud => Noeud) contenant tous les noeuds du Plan
+     * @return PARSE_OK si le parsing s'est correctement pass&eacute;, PARSE_ERROR sinon.
+     */
     public int fromXML(Element noeud_xml, Noeud depart, HashMap<Integer, Noeud> noeuds) {
 
         try {
@@ -88,14 +95,26 @@ public class Troncon {
 
     }
 
-
+    /**
+     * Renvoie une paire (Noeud de d&eacute;part, Noeud d'arriv&eacute;e)
+     * @return Paire (Noeud de d&eacute;part, Noeud d'arriv&eacute;e)
+     */
     public Pair<Noeud, Noeud> getPair() {
         return new Pair<Noeud, Noeud>(m_depart, m_arrivee);
     }
+
+    /**
+     * Renvoie une paire (Noeud d'arriv&eacute;e, Noeud de d&eacute;part)
+     * @return Paire (Noeud d'arriv&eacute;e, Noeud de d&eacute;part)
+     */
     public Pair<Noeud, Noeud> getOppositePair() {
         return new Pair<Noeud, Noeud>(m_arrivee, m_depart);
     }
 
+    /**
+     * Indique si le Troncon a un noeud de d&eacute;part &agrave; l'id inf&eacute;rieur &agrave; celui du noeud d'arriv&eacute;e. (sens arbitraire)
+     * @return vrai si le noeud de d&eacute;part a un id inf&eacute;rieur &agrave; celui du noeud d'arriv&eacute;e.
+     */
     public Boolean estDeSensPositif(){
         return m_depart.getId() < m_arrivee.getId();
     }

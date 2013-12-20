@@ -16,6 +16,9 @@ import static java.lang.System.out;
 import static java.text.MessageFormat.format;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Tests unitaires de la classe FeuilleRoute
+ */
 public class FeuilleRouteTest {
 
     @Test
