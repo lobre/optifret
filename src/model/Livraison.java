@@ -36,10 +36,11 @@ public class Livraison {
 
     /**
      * Constructeur avec param&egrave;tres
-     * @param id l'identifiant de la livraison
-     * @param client le num&eacute;ro du client correspondant
+     *
+     * @param id      l'identifiant de la livraison
+     * @param client  le num&eacute;ro du client correspondant
      * @param adresse Noeud correspondant &agrave; la livraison
-     * @param plage plage horaire de la livraison
+     * @param plage   plage horaire de la livraison
      */
     public Livraison(int id, int client, Noeud adresse, PlageHoraire plage) {
         m_id = id;
@@ -58,8 +59,8 @@ public class Livraison {
             m_noClient = Integer.parseInt(eLivraison.getAttribute("client"));
             int adNoeud = Integer.parseInt(eLivraison.getAttribute("adresse"));
             m_adresse = plan.getNoeudParID(adNoeud);
-            for (Livraison l: plage.getLivraisons()){
-                if (l.getId() == m_id){
+            for (Livraison l : plage.getLivraisons()) {
+                if (l.getId() == m_id) {
                     throw new ParseXmlException("id livraison non-unique");
                 }
             }
@@ -81,6 +82,7 @@ public class Livraison {
 
     /**
      * Donne l'id de la livraison
+     *
      * @return l'id de la livraison
      */
     public int getId() {
@@ -89,6 +91,7 @@ public class Livraison {
 
     /**
      * Donne l'id du client de la livraison
+     *
      * @return l'id du client de la livraison
      */
     public int getNoClient() {
@@ -97,6 +100,7 @@ public class Livraison {
 
     /**
      * Donne la plage horaire correspondant &agrave; la livraison
+     *
      * @return la plage horaire correspondant &agrave; la livraison
      */
     public PlageHoraire getPlage() {
@@ -105,6 +109,7 @@ public class Livraison {
 
     /**
      * Donne le noeud associ&eacute; &agrave; la livraison
+     *
      * @return le noeud associ&eacute; &agrave; la livraison
      */
     public Noeud getAdresse() {
@@ -115,14 +120,14 @@ public class Livraison {
         this.m_heureLivraison = m_heureLivraison;
     }
 
-    public boolean isHorsHoraire(){
-        if (m_heureLivraison !=null && m_heureLivraison.compareTo(m_plage.getHeureFin())>=0) {
+    public boolean isHorsHoraire() {
+        if (m_heureLivraison != null && m_heureLivraison.compareTo(m_plage.getHeureFin()) >= 0) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
+
     public Heure getHeureLivraison() {
         return m_heureLivraison;
     }
