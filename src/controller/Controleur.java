@@ -98,7 +98,9 @@ public class Controleur {
             updateListeLivraisons();
             m_window.getVuePlan().repaint();
             m_window.getVuePlan().resetTroncons();
-            m_plan.resetNoeuds();
+            if (m_plan != null) {
+                m_plan.resetNoeuds();
+            }
 
             return null;
         }
