@@ -231,7 +231,7 @@ public class DemandeLivraison {
     /**
      * Permet d'obtenir la liste des livraisons prévues par la demande this.
      *
-     * @return
+     * @return la liste des livraisons prévues par la demande de livraison.
      */
     public ArrayList<Livraison> getLivraisons() {
         ArrayList<Livraison> livraisons = new ArrayList<>();
